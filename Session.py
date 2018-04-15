@@ -3,12 +3,12 @@ from Period import Period
 class Session(Period):
     def __init__(self,period,presenter):
         super().copy(period)                  # period
-        self._presenter = presenter           # Person
+        self.__presenter = presenter           # Person
     
     def getPresenter(self):
-        return self._presenter
+        return self.__presenter
 
     def setPresenter(self,presenter):
-        self._presenter = presenter
+        self.__presenter = presenter
     
     

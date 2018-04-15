@@ -3,10 +3,10 @@ import datetime
 
 class Period:
     def __init__(self, name, descr, startDateTime, endDateTime):
-        self._name = name                     # String
-        self._descr = descr                   # String
-        self._startDateTime = startDateTime   # datetime
-        self._endDateTime = endDateTime       # datetime
+        self.__name = name                     # String
+        self.__descr = descr                   # String
+        self.__startDateTime = startDateTime   # datetime
+        self.__endDateTime = endDateTime       # datetime
 
     @classmethod
     def copy(cls,period):
@@ -17,19 +17,19 @@ class Period:
         return cls(cls.name,cls.descr,cls.startDateTime,cls.endDateTime)
     
     def getName(self):
-        return self._name
+        return self.__name
     def getDescription(self):
-        return self._descr
+        return self.__descr
     def getStartDateTime(self):
-        return self._startDateTime
+        return self.__startDateTime
     def getEndDateTime(self):
-        return self._endDateTime
+        return self.__endDateTime
 
     def setName(self, name):
-        self._name = name
+        self.__name = name
     def setDescription(self, descr):
-        self._descr = descr
+        self.__descr = descr
     def setStartDateTime(self, startDateTime):
-        self._startDateTime = startDateTime
+        self.__startDateTime = startDateTime
     def setEndDateTime(self, endDateTime):
-        self._endDateTime = endDateTime
+        self.__endDateTime = endDateTime

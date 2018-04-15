@@ -33,4 +33,4 @@ class User(Person):
     def setCurrEvents(self,currEvents):
         self.__currEvents = currEvents
     def setPastEvents(self,pastEvents):
-        sef.__pastEvents = pastEvents
+        self.__pastEvents = pastEvents
