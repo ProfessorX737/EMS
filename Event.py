@@ -1,5 +1,6 @@
 import datetime
 from Period import Period
+from User import User
 
 class Event(Period):
     def __init__(self,period,venue,convener,capacity,deregEnd):
