@@ -1,6 +1,6 @@
 from Student import *
 from Staff import *
-from datetime import *
+from datetime import datetime
 class UserManager():
     def __init__(self,students,staff):
         self.__students = students
@@ -43,20 +43,18 @@ class UserManager():
         staff.getCancelledEvents().append(event)
         staff.getPostedCurrEvents().remove(event)
     def updateEvents(event,user):
-        currTime = now().strftime('%Y-%m-%d %H:%M:%S')
-        closedEvents = []
+        currTime = datetime.datetime.now()
+        closedEvents = user.getPastEvents()
         currEvents = user.getCurrEvents()
         for e in currEvents:
             if (currTime >= e.getEndDateTime()):
                 currEvents.remove(e)
                 closedEvents.append(e)
-        user.getPastEvents.extend(closedEvents)
     def updatePostedEvents(event,staff):
-        currTime = now().strftime('%Y-%m-%d %H:%M:%S')
-        closedEvents = []
+        currTime = datetime.datetime.now()
+        closedEvents = staff.getPostedPastEvents()
         currEvents = staff.getPostedCurrEvents()
         for e in currEvents:
             if (currTime >= e.getEndDateTime()):
                 currEvents.remove(e)
                 closedEvents.append(e)
-        staff.getPostedPastEvents.extend(closedEvents)
