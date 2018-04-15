@@ -1,5 +1,5 @@
-from Event import Event
-from Session import Session
+from Event import *
+from Session import *
 
 class Seminar(Event):
     def __init__(self,period,venue,convener,capacity,deregEnd):
