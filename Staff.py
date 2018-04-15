@@ -5,11 +5,11 @@ class Staff(User):
         self.__postedCurrEvents = []
         self.__postedPastEvents = []
         self.__cancelledEvents = []
-    def postedCurrEvents(self):
+    def getPostedCurrEvents(self):
         return self.__postedCurrEvents
-    def postedPastEvents(self):
+    def getPostedPastEvents(self):
         return self.__postedPastEvents
-    def cancelledEvents(self):
+    def getCancelledEvents(self):
         return self.__cancelledEvents
     def setPostedCurrEvents(self,postedCurrEvents):
         self.__postedCurrEvents = postedCurrEvents

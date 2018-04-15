@@ -6,11 +6,11 @@ class User(Person):
         self.__password = password
         self.__currEvents = []
         self.__pastEvents = []
-    def password(self):
+    def getPassword(self):
         return self.__password
-    def currEvents(self):
+    def getCurrEvents(self):
         return self.__currEvents
-    def pastEvents(self):
+    def getPastEvents(self):
         return self.__pastEvents
     # Flask login module required functions
     def get_id(self):
@@ -21,10 +21,16 @@ class User(Person):
         return self.__isActive
     def is_anonymous(self):
         return self.__isAnonymous
+    def set_authenticated(self,isAuthenticated):
+        self.__isAuthenticated = isAuthenticated
+    def set_active(self,isActive):
+        self.__isActive = isActive
+    def set_anonymous(self,isAnonymous):
+        self.__isAnonymous = isAnonymous
     # end
     def setName(self,name):
         self.__name = name
-    def setZid(self,zid):
+    def setId(self,zid):
         self.__zid = zid
     def setEmail(self,email):
         self.__email = email
