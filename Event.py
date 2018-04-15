@@ -1,6 +1,6 @@
 import datetime
-from Period import Period
-from User import User
+from Period import *
+from User import *
 
 class Event(Period):
     def __init__(self,period,venue,convener,capacity,deregEnd):
@@ -23,7 +23,7 @@ class Event(Period):
     def isCancelled(self):
         return self.__isCancelled
     def isOpen(self):
-        return self.__endDateTime < datetime.datetime.now()  
+        return self.__endDateTime < datetime.datetime.now()
     def isFull(self):
         if len(self.__attendees) >= self.__capacity:
             return True
