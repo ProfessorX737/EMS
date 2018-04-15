@@ -10,7 +10,7 @@ class Event(Period):
         self.__capacity = capacity
         self.__deregEnd = deregEnd
         self.__isCancelled = False
-        self.___attendees = []
+        self.__attendees = []
 
     def addAttendee(self,attendee):
         if not isinstance(attendee,User):

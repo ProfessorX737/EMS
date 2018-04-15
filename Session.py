@@ -2,7 +2,7 @@ from Period import Period
 
 class Session(Period):
     def __init__(self,period,presenter):
-        super().copy(period)                  # period
+        super().copy(period)                   # period
         self.__presenter = presenter           # Person
     
     def getPresenter(self):
@@ -10,5 +10,3 @@ class Session(Period):
 
     def setPresenter(self,presenter):
         self.__presenter = presenter
-    
-    
