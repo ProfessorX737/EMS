@@ -13,15 +13,15 @@ class UserManager():
         self.__staff =staff
     def setStudents(self,students):
         self.__students = students 
-    def getCurrEvents(student):
+    def getCurrEvents(self,student):
         return student.currEvents()
-    def getPastEvents(student):
+    def getPastEvents(self,student):
         return student.pastEvents()
-    def getPostedCurrEvents(staff):
+    def getPostedCurrEvents(self,staff):
         return staff.postedCurrEvents()
-    def getPostedPastEvents(staff):
+    def getPostedPastEvents(self,staff):
         return staff.postedPastEvents()
-    def getCancelledEvents(staff):
+    def getCancelledEvents(self,staff):
         return staff.cancelledEvents()
     def addUser(self,name,zID,email,password,role):
         if (role == "trainee"):
