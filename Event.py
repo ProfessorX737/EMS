@@ -4,49 +4,49 @@ from Period import Period
 class Event(Period):
     def __init__(self,period,venue,convener,capacity,deregEnd):
         super().copy(period)
-        self._venue = venue
-        self._convener = convener
-        self._capacity = capacity
-        self._deregEnd = deregEnd
-        self._isCancelled = False
-        self._attendees = []
+        self.__venue = venue
+        self.__convener = convener
+        self.__capacity = capacity
+        self.__deregEnd = deregEnd
+        self.__isCancelled = False
+        self.___attendees = []
 
     def addAttendee(self,attendee):
         if not isinstance(attendee,User):
             return False
         if not self.isFull():
-            self._attendees.append(attendee)
+            self.__attendees.append(attendee)
             return True
         return False
 
     def isCancelled(self):
-        return self._isCancelled
+        return self.__isCancelled
     def isOpen(self):
-        return self._endDateTime < datetime.datetime.now()  
+        return self.__endDateTime < datetime.datetime.now()  
     def isFull(self):
-        if len(self._attendees) >= self._capacity:
+        if len(self.__attendees) >= self.__capacity:
             return True
         return False
     
     def getConvener(self):
-        return self._convener
+        return self.__convener
     def getVenue(self):
-        return self._venue
+        return self.__venue
     def getCapacity(self):
-        return self._capacity
+        return self.__capacity
     def getDeregEnd(self):
-        return self._deregEnd
+        return self.__deregEnd
     def getAttendees(self):
-        return self._attendees
+        return self.__attendees
 
     def setCapacity(self,capacity):
-        self._capacity = capacity
+        self.__capacity = capacity
     def setDeregEnd(self,deregEnd):
-        self._deregEnd = deregEnd
+        self.__deregEnd = deregEnd
     def setVenue(self, venue):
-        self._venue = venue
+        self.__venue = venue
     def cancelEvent(self):
-        self._isCancelled = True
+        self.__isCancelled = True
 
 
     
