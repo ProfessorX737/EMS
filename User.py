@@ -1,11 +1,14 @@
-import from Person *
+from Person import *
 class User(Person):
-    def __init__(self,name,zid,email,password,isAuthenticated,isActive,isAnonymous):
+    def __init__(self,name,zid,email,password):
         super().__init__(name,email)
         self.__zid = zid
         self.__password = password
         self.__currEvents = []
         self.__pastEvents = []
+        self.isAuthenticated = False
+        self.isActive = False
+        self.isAnonymous = False
     def getPassword(self):
         return self.__password
     def getCurrEvents(self):
