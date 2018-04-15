@@ -38,19 +38,19 @@ class UserManager():
             if (user.get_id() == zid):
                 return user        
 
-    def deregister(event, user):
+    def deregister(self,event, user):
         currEvents = user.getCurrEvents()
         for e in currEvents:
             if (e.getName() == event.getName()):
                 currEvents.remove(e)
-    def register(event,user):
+    def register(self,event,user):
         user.getCurrEvents().append(event)
-    def postEvent(event,staff):
+    def postEvent(self,event,staff):
         staff.getPostedCurrEvents().append(event)
-    def cancelEvent(event,staff):
+    def cancelEvent(self,event,staff):
         staff.getCancelledEvents().append(event)
         staff.getPostedCurrEvents().remove(event)
-    def updateEvents(event,user):
+    def updateEvents(self,event,user):
         currTime = datetime.datetime.now()
         closedEvents = user.getPastEvents()
         currEvents = user.getCurrEvents()
@@ -58,7 +58,7 @@ class UserManager():
             if (currTime >= e.getEndDateTime()):
                 currEvents.remove(e)
                 closedEvents.append(e)
-    def updatePostedEvents(event,staff):
+    def updatePostedEvents(self,event,staff):
         currTime = datetime.datetime.now()
         closedEvents = staff.getPostedPastEvents()
         currEvents = staff.getPostedCurrEvents()
