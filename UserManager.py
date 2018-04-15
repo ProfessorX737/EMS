@@ -2,12 +2,12 @@ from Student import *
 from Staff import *
 from datetime import datetime
 class UserManager():
-    def __init__(self,students,staff):
-        self.__students = students
-        self.__staff = staff
-    def students(self):
+    def __init__(self):
+        self.__students = []
+        self.__staff = []
+    def getStudents(self):
         return self.__students
-    def staff(self):
+    def getStaff(self):
         return self.__staff
     def setStaff(self,staff):
         self.__staff =staff
@@ -27,9 +27,17 @@ class UserManager():
         if (role == "trainee"):
             student = Student(name,zID,email,password)
             self.__students.append(student)
-        else
+        else:
             staff = Staff(name,zID,email,password)
             self.__staff.append(staff)
+    def getUser(self,zid):
+        for user in self.__students:
+            if (user.get_id() == zid):
+                return user
+        for user in self.__staff:
+            if (user.get_id() == zid):
+                return user        
+
     def deregister(event, user):
         currEvents = user.getCurrEvents()
         for e in currEvents:
