@@ -1,37 +1,52 @@
-import time
+import datetime
 from Period import Period
 
-class Event:
-    def __init__(self,period,capacity,deregPeriod):
-        self._period = period
+class Event(Period):
+    def __init__(self,period,venue,convener,capacity,deregEnd):
+        super().copy(period)
+        self._venue = venue
+        self._convener = convener
         self._capacity = capacity
-        self._deregPeriod = deregPeriod
+        self._deregEnd = deregEnd
         self._isCancelled = False
         self._attendees = []
-    
-    def getPeriod(self):
-        return self._period
-    def getCapacity(self):
-        return self._capacity
-    def getDeregPeriod(self):
-        return self._deregPeriod
-    def getAttendees(self):
-        retrun self._attendees
 
-    # should another use case be "As a Staff, I want to change the details of an event"
-    # As a registered user to an event, I want to be notified if important details of an event change
-    def setPeriod(self, period):
-        self._period = period
-    def setCapacity(self,capacity):
-        self._capacity = capacity
-    def setDeregPeriod(self,deregPeriod):
-        self._deregPeriod = deregPeriod
+    def addAttendee(self,attendee):
+        if not isinstance(attendee,User):
+            return False
+        if not self.isFull():
+            self._attendees.append(attendee)
+            return True
+        return False
 
     def isCancelled(self):
         return self._isCancelled
     def isOpen(self):
-        self._period.get
-        localTime = time.localtime(time.time())
-        localTime.
+        return self._endDateTime < datetime.datetime.now()  
+    def isFull(self):
+        if len(self._attendees) >= self._capacity:
+            return True
+        return False
+    
+    def getConvener(self):
+        return self._convener
+    def getVenue(self):
+        return self._venue
+    def getCapacity(self):
+        return self._capacity
+    def getDeregEnd(self):
+        return self._deregEnd
+    def getAttendees(self):
+        return self._attendees
+
+    def setCapacity(self,capacity):
+        self._capacity = capacity
+    def setDeregEnd(self,deregEnd):
+        self._deregEnd = deregEnd
+    def setVenue(self, venue):
+        self._venue = venue
+    def cancelEvent(self):
+        self._isCancelled = True
+
 
     

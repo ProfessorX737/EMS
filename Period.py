@@ -1,44 +1,35 @@
+import datetime
+#from Venue import Venue
 
 class Period:
-    def __init__(self, name, des, loc, startDate, endDate, startTime, endTime):
-        self._name = name
-        self._des = des
-        self._loc = loc
-        self._startDate = startDate
-        self._endDate = endDate
-        self._startTime = startTime
-        self._endTime = endTime
+    def __init__(self, name, descr, startDateTime, endDateTime):
+        self._name = name                     # String
+        self._descr = descr                   # String
+        self._startDateTime = startDateTime   # datetime
+        self._endDateTime = endDateTime       # datetime
+
+    @classmethod
+    def copy(cls,period):
+        cls.name = period.getName()
+        cls.descr = period.getDescription()
+        cls.startDateTime = period.getStartDateTime
+        cls.endDateTime = period.getEndDateTime
+        return cls(cls.name,cls.descr,cls.startDateTime,cls.endDateTime)
     
     def getName(self):
         return self._name
-    def getDes(self):
-        return self._des
-    def getLoc(self):
-        return self._loc
-    def getStartDate(self):
-        return self._startDate
-    def getEndDate(self):
-        return self._endDate
-    def getStartTime(self):
-        return self._startTime
-    def getEndTime(self):
-        return self._endTime
+    def getDescription(self):
+        return self._descr
+    def getStartDateTime(self):
+        return self._startDateTime
+    def getEndDateTime(self):
+        return self._endDateTime
 
-    def setName(self,name):
+    def setName(self, name):
         self._name = name
-    def setDes(self, des):
-        self._des = des
-    def setLoc(self,loc):
-        self._loc = loc
-    def setStartDate(self,startDate):
-        self._startDate = startDate
-    def setEndDate(self, endDate):
-        self._endDate = endDate
-    def setStartTime(self, startTime):
-        self._startTime = startTime
-    def setEndTime(self,endTime):
-        self._endTime = endTime
-        
-    
-
-        
+    def setDescription(self, descr):
+        self._descr = descr
+    def setStartDateTime(self, startDateTime):
+        self._startDateTime = startDateTime
+    def setEndDateTime(self, endDateTime):
+        self._endDateTime = endDateTime
