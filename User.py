@@ -1,7 +1,8 @@
 from Person import *
-class User(Person):
+from flask_login import UserMixin
+class User(UserMixin,Person):
     def __init__(self,name,zid,email,password):
-        super().__init__(name,email)
+        Person.__init__(self,name,email)
         self.__zid = zid
         self.__password = password
         self.__currEvents = []
@@ -18,19 +19,6 @@ class User(Person):
     # Flask login module required functions
     def get_id(self):
         return self.__zid
-    def is_authenticated(self):
-        return self.__isAuthenticated
-    def is_active(self):
-        return self.__isActive
-    def is_anonymous(self):
-        return self.__isAnonymous
-    def set_authenticated(self,isAuthenticated):
-        self.__isAuthenticated = isAuthenticated
-    def set_active(self,isActive):
-        self.__isActive = isActive
-    def set_anonymous(self,isAnonymous):
-        self.__isAnonymous = isAnonymous
-    # end
     def setName(self,name):
         self.__name = name
     def setId(self,zid):
