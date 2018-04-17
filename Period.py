@@ -7,14 +7,6 @@ class Period:
         self.__descr = descr                   # String
         self.__startDateTime = startDateTime   # datetime
         self.__endDateTime = endDateTime       # datetime
-
-    @classmethod
-    def copy(cls,period):
-        cls.name = period.getName()
-        cls.descr = period.getDescription()
-        cls.startDateTime = period.getStartDateTime()
-        cls.endDateTime = period.getEndDateTime()
-        return cls(cls.startDateTime,cls.endDateTime,cls.name,cls.descr)
     
     def getName(self):
         return self.__name
