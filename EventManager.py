@@ -25,5 +25,3 @@ class EventManager():
                 return False
     def addEvent(self,event):
         events.append(event)
-
-    
