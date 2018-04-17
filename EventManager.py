@@ -1,34 +1,27 @@
-from Event import *
-from User import *
-
+from Seminar import *
 class EventManager():
     def __init__(self):
-        self._venues : []
-        self._events: []
-    
-    def getVenues(self):
-        return self._venues
-        
+        self.__venues = []
+        self.__events = []
     def getEvents(self):
-        return self._events
-  
-    def addVenue(self, venue):
-        self._venues.append(venue)
-    
-    def addEvent(self, event):
-        self._events.append(event)
-        
-    def addAttendee(self, event, attendee):
-        for x in self._events:
-            if (x == event):
-                return x.addAttendee(attendee)
-            
-    # what is this function supposed to do???
-    def changeEvent(self, event):
-        pass
-        
-        
-    def getVenue(self, event):
-        for x in self._events:
-            if (x == event):
-                return x.getVenue
+        return self.__events
+    def getVenues(self):
+        return self.__venues
+    def addVenue(self,venue):
+        if (venue not in self.__venues):
+            self.__venues.append(venue)
+            return True
+        else:
+            return False
+    def addSession(self,seminar,session):
+        seminar.addSession(session)
+    def addAttendee(eventName, user):
+        for e in self.__events:
+            if (e.getName() == eventName):
+                isConfirmed = e.addAttendee(user)
+            if isConfirmed:
+                return True
+            else:
+                return False
+    def addEvent(self,event):
+        events.append(event)

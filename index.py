@@ -2,6 +2,10 @@ from flask import Flask, render_template, url_for, flash, request, redirect, ses
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user 
 from UserManager import *
+from EventManager import *
+from Event import *
+from Period import *
+
 app = Flask(__name__)
 
 login_manager = LoginManager()
@@ -9,6 +13,13 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 userManager = UserManager()
+eventManager = EventManager()
+# startDateTime, endDateTime, name="",descr=""):
+# (self,period,venue,convener,capacity,deregEnd):
+eventManager.addVenue("UNSW")
+p1 = (1,2)
+e1 = Event(p1,"UNSW","Xavier",200,1.5)
+eventManager.addEvent(e1)
 
 @login_manager.user_loader
 def loadUser(userName):
