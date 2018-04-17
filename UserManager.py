@@ -39,6 +39,7 @@ class UserManager():
                 return user        
     def getUserType(self,zid):
         u = self.getUser(zid)
+        print(u.get_id())
         if isinstance(u,Student):
             return "Student"
         else:
