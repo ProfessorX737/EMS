@@ -1,4 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>Home</h1>
+<tr>
+{% for event in eventManager.getEvents() %}
+    <td>{{event.getName()}}</td> <br/>
+    <td>{{event.getConvener()}}</td>
+
+{% endfor %}
+</tr>
+
 {% endblock %}

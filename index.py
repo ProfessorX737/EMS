@@ -17,10 +17,9 @@ eventManager = EventManager()
 # startDateTime, endDateTime, name="",descr=""):
 # (self,period,venue,convener,capacity,deregEnd):
 eventManager.addVenue("UNSW")
-p1 = (1,2)
-e1 = Event(p1,"UNSW","Xavier",200,1.5)
+e1 = Event(1,2,"coding 101","Learn how to code with xavier sensei","UNSW","Xavier",200,1.5)
 eventManager.addEvent(e1)
-
+# startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd
 @login_manager.user_loader
 def loadUser(userName):
     return userManager.getUser(userName)
@@ -50,7 +49,7 @@ def index():
         
 @app.route('/home',methods=['GET','POST'])
 def home():
-    return render_template('home.html')
+    return render_template('home.html',eventManager = eventManager)
         
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
