@@ -3,8 +3,8 @@ from Period import *
 from User import *
 
 class Event(Period):
-    def __init__(self,period,venue,convener,capacity,deregEnd):
-        super().copy(period)
+    def __init__(self,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
+        super().__init__(startDateTime,endDateTime,name,descr)
         self.__venue = venue
         self.__convener = convener
         self.__capacity = capacity
@@ -31,8 +31,8 @@ class Event(Period):
     
     def getConvener(self):
         return self.__convener
-    def getVenue(self):
-        return self.__venue
+    def getVenueName(self):
+        return self.__venue.getName()
     def getCapacity(self):
         return self.__capacity
     def getDeregEnd(self):
