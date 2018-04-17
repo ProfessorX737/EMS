@@ -37,7 +37,12 @@ class UserManager():
         for user in self.__staff:
             if (user.get_id() == zid):
                 return user        
-
+    def getUserType(self,zid):
+        u = self.getUser(zid)
+        if isinstance(u,Student):
+            return "Student"
+        else:
+            return "Staff"
     def deregister(self,event, user):
         currEvents = user.getCurrEvents()
         for e in currEvents:

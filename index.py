@@ -1,10 +1,12 @@
 from flask import Flask, render_template, url_for, flash, request, redirect, session
 import os
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user 
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from UserManager import *
 from EventManager import *
 from Event import *
 from Period import *
+from Seminar import *
+from Course import *
 
 app = Flask(__name__)
 
@@ -14,6 +16,9 @@ login_manager.login_view = "login"
 
 userManager = UserManager()
 eventManager = EventManager()
+
+userType = ""
+
 # startDateTime, endDateTime, name="",descr=""):
 # (self,period,venue,convener,capacity,deregEnd):
 eventManager.addVenue("UNSW")
@@ -37,6 +42,7 @@ def index():
     if (request.method == 'POST'):
         zid = request.form.get('zid','')
         password = request.form.get('password','')
+        userType = userManager.getUserType(current_user.get_id())
         user = loadUser(zid)
         if user is None or user.getPassword() != password:
             return redirect(url_for('index'))
@@ -49,7 +55,17 @@ def index():
         
 @app.route('/home',methods=['GET','POST'])
 def home():
-    return render_template('home.html',eventManager = eventManager)
+    # Must update events first.
+    # Sort events into courses and seminars 
+    courses = []
+    seminars = []
+    for e in eventManager.getEvents():
+        if isinstance(e,Seminar):
+            seminars.append(e)
+        elif isinstance(e,Course):
+            courses.append(e)
+
+    return render_template('home.html',seminars = seminars, courses = courses)
         
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
