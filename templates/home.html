@@ -1,4 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>Home</h1>
+<h2>Seminars</h2>
+<tr>
+{% for seminar in seminars %}
+    <td>{{seminar.getName()}}</td> <br/>
+{% endfor %}
+</tr>
+<h2> Courses </h2>
+<tr>
+    {% for seminar in seminars %}
+        <td>{{seminar.getName()}}</td> <br/>
+    {% endfor %}
+</tr>
 {% endblock %}

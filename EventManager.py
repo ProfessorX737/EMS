@@ -24,4 +24,4 @@ class EventManager():
             else:
                 return False
     def addEvent(self,event):
-        events.append(event)
+        self.__events.append(event)
