@@ -10,15 +10,17 @@ class Event(Period):
         self.__capacity = capacity
         self.__deregEnd = deregEnd
         self.__isCancelled = False
-        self.__attendees = []
+        self.__attendees = {}
 
     def addAttendee(self,attendee):
         if not isinstance(attendee,User):
             return False
         if not self.isFull():
-            self.__attendees.append(attendee)
+            self.__attendees[attendee.getName()] = attendee
             return True
         return False
+    def removeAttendee(self,attendeeName):
+        del self.__attendees[attendeeName]
 
     def isCancelled(self):
         return self.__isCancelled
