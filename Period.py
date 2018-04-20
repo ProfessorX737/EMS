@@ -2,7 +2,7 @@ import datetime
 #from Venue import Venue
 
 class Period:
-    def __init__(self,startDateTime, endDateTime, name="",descr=""):
+    def __init__(self,startDateTime,endDateTime,name="",descr=""):
         self.__name = name                     # String
         self.__descr = descr                   # String
         self.__startDateTime = startDateTime   # datetime

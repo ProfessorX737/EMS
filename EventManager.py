@@ -1,27 +1,26 @@
 from Seminar import *
-class EventManager():
+class EventManager:
     def __init__(self):
-        self.__venues = []
-        self.__events = []
+        self.__events = {}
     def getEvents(self):
-        return self.__events
-    def getVenues(self):
-        return self.__venues
-    def addVenue(self,venue):
-        if (venue not in self.__venues):
-            self.__venues.append(venue)
-            return True
-        else:
-            return False
-    def addSession(self,seminar,session):
-        seminar.addSession(session)
-    def addAttendee(eventName, user):
-        for e in self.__events:
-            if (e.getName() == eventName):
-                isConfirmed = e.addAttendee(user)
-            if isConfirmed:
-                return True
-            else:
-                return False
-    def addEvent(self,event):
-        self.__events.append(event)
+        return self.__events.values()
+    def deregisterUser(self,eventName,userName):
+        self.__events.get(eventName).removeAttendee(userName)
+    def registerUser(self,eventName,user):
+        self.__events.get(eventName).addAttendee(user)
+    def getEvent(self,eventName):
+        return self.__events.get(eventName)
+    def getPastEvents(self):
+        pastEvents = []
+        for event in self.__events.values():
+            if not event.isOpen():
+                pastEvents.append(event)
+        return pastEvents
+    def getCurrentEvents(self):
+        currentEvents = []
+        for event in self.__events.values():
+            if event.isOpen():
+                currentEvents.append(event)
+        return currentEvents
+    def cancelEvent(self,eventName):
+        self.__events.get(eventName).cancelEvent()
