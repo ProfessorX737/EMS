@@ -24,3 +24,13 @@ class EventManager:
         return currentEvents
     def cancelEvent(self,eventName):
         self.__events.get(eventName).cancelEvent()
+    def refreshEvents(self,user):
+        currentEvents = user.getCurrentEvents()
+        pastEvents = user.getPastEvents()
+        for event in currentEvents:
+            if not event.isOpen():
+                pastEvents.append(event) 
+                currentEvents.remove(event)
+            
+
+            
