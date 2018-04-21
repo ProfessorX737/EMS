@@ -12,3 +12,4 @@ class SeminarManager(EventManager):
     def getSession(self,seminarName,sessionName):
         seminar = self.__events[seminarName]
         session = seminar.getSession(sessionName)
+        return session

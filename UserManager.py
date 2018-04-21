@@ -13,10 +13,10 @@ class UserManager():
         self.__staff =staff
     def setStudents(self,students):
         self.__students = students 
-    def getCurrEvents(self,student):
-        return student.getCurrEvents()
-    def getPastEvents(self,student):
-        return student.getPastEvents()
+    def getCurrEvents(self,user):
+        return user.getCurrEvents()
+    def getPastEvents(self,user):
+        return user.getPastEvents()
     def getPostedCurrEvents(self,staff):
         return staff.getPostedCurrEvents()
     def getPostedPastEvents(self,staff):
@@ -44,31 +44,4 @@ class UserManager():
             return "Student"
         else:
             return "Staff"
-    def deregister(self,event, user):
-        currEvents = user.getCurrEvents()
-        for e in currEvents:
-            if (e.getName() == event.getName()):
-                currEvents.remove(e)
-    def register(self,event,user):
-        user.getCurrEvents().append(event)
-    def postEvent(self,event,staff):
-        staff.getPostedCurrEvents().append(event)
-    def cancelEvent(self,event,staff):
-        staff.getCancelledEvents().append(event)
-        staff.getPostedCurrEvents().remove(event)
-    def updateEvents(self,event,user):
-        currTime = datetime.datetime.now()
-        closedEvents = user.getPastEvents()
-        currEvents = user.getCurrEvents()
-        for e in currEvents:
-            if (currTime >= e.getEndDateTime()):
-                currEvents.remove(e)
-                closedEvents.append(e)
-    def updatePostedEvents(self,event,staff):
-        currTime = datetime.datetime.now()
-        closedEvents = staff.getPostedPastEvents()
-        currEvents = staff.getPostedCurrEvents()
-        for e in currEvents:
-            if (currTime >= e.getEndDateTime()):
-                currEvents.remove(e)
-                closedEvents.append(e)
+            
