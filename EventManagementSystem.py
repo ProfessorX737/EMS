@@ -39,8 +39,18 @@ class EventManagementSystem():
     def addUser(self,name,zID,email,password,role):
         self.__userManager.addUser(name,zID,email,password,role)
     def getUser(self,zid):
-        return self.__userManager.getUser(zid) 
+        return self.__userManager.getUser(zid)
     def getUserType(self,zid):
         return self.__userManager.getUserType(zid)
 
-    # venue manager methods below
+    def addVenue(self, name, loc):
+        self.__venueMan.addVenue(self, name, loc)
+
+    def removeVenue(self, name):
+        self.__venueMan.removeVenue(self, name)
+
+    def getVenues(self):
+        self.__venueMan.getVenues()
+
+    def getFreeTimes(self, name):
+        self.__venueMan.getFreeTimes(self, name)
