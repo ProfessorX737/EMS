@@ -20,6 +20,12 @@ class EventManagementSystem():
             events.append(e)
         return events
 
+    def getEvent(self,eventName):
+        event = self.__courseManager.getEvent(eventName)
+        if event is None:
+            event = self.__courseManager.getEvent(eventName)
+        return event
+
     def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         self.__courseManager.addCourse(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
 
