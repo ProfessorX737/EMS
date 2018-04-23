@@ -34,13 +34,15 @@ class Event(Period):
     def getConvener(self):
         return self.__convener
     def getVenueName(self):
-        return self.__venue.getName()
+        return self.__venue
     def getCapacity(self):
         return self.__capacity
     def getDeregEnd(self):
         return self.__deregEnd
     def getAttendees(self):
         return self.__attendees
+    def getNumAttendees(self):
+        return len(self.__attendees)
 
     def setCapacity(self,capacity):
         self.__capacity = capacity

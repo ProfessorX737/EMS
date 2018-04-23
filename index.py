@@ -54,7 +54,6 @@ def index():
             return redirect(url_for('home'))
     
     return render_template('login.html')
-
         
 @app.route('/home',methods=['GET','POST'])
 def home():
@@ -72,8 +71,17 @@ def create_event():
             ems.addCourse(form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
+        else:
+            ems.addSeminar(form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,form.convener.data,
+            form.capacity.data,form.deregEnd.data)
         # else: create seminar
     return render_template('create_event.html', form = form)
+
+@app.route("/more/<eventName>",methods=['GET','POST'])
+def moreInfo(eventName):
+    event = ems.getEvent(eventName)
+    return render_template('more_info.html',event=event)
 
 @app.route("/logout")
 def logout():
