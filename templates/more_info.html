@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
-{{eventType}}
+{% if isOwner %}
+    {% if eventType == 'Seminar' %}
+        
+    {% endif %}
+{% endif %}
 <h1>{{event.getName()}}</h1>
 <h2> Start: </h2>
 {{event.getStartDateTime()}}
@@ -13,5 +17,5 @@
 <h2> Venue </h2>
 {{event.getVenueName()}}
 <h2> Capacity </h2>
-{{event.getNumAttendees()}}
+{{event.getNumAttendees()}} / {{event.getCapacity()}}
 {% endblock %}

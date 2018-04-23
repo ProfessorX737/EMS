@@ -1,7 +1,7 @@
 from Period import *
 
 class Session(Period):
-    def __init__(self,startDateTime,endDateTime,name,descr,presenter):
+    def __init__(self,seminarName,startDateTime,endDateTime,name,descr,presenter):
         super().__init__(startDateTime,endDateTime,name,descr)                   # period
         self.__presenter = presenter           # Person
     
