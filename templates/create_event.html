@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Course Creation</h1>
+<form method="post" action="/create_event">
+    {{ form.eventType.label }}: {{ form.eventType }} <br>
+    {{ form.name.label }}: {{ form.name }} <br>
+    {{ form.description.label }}: {{ form.description }}<br>
+    {{ form.venue.label }}: {{ form.venue }}    <br>
+    {{ form.convener.label }}: {{ form.convener }}   <br>
+    {{ form.capacity.label }}: {{ form.capacity }}    <br>
+    {{ form.startDateTime.label }}: {{ form.startDateTime(placeholder='dd-mm-yyyy HH:MM') }}    <br>
+    {{ form.endDateTime.label }}: {{ form.endDateTime(placeholder='dd-mm-yyyy HH:MM') }}<br>
+    {{ form.deregEnd.label }}: {{ form.deregEnd(placeholder='dd-mm-yyyy HH:MM') }}<br>
+    {{ form.csrf_token }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}
