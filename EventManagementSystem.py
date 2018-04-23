@@ -1,6 +1,7 @@
 from CourseManager import *
 from SeminarManager import *
 from UserManager import *
+from VenueManager import *
 # from VenueManager import *
 
 class EventManagementSystem():
@@ -8,7 +9,16 @@ class EventManagementSystem():
         self.__courseManager = CourseManager()
         self.__seminarManager = SeminarManager()
         self.__userManager = UserManager()
-        # venueManager = VenueManager()
+        self.__venueManager = VenueManager()
+
+    # Get events from both managers. 
+    def getEvents(self):
+        events = []
+        for e in self.__courseManager.getEvents():
+            events.append(e)
+        for e in self.__seminarManager.getEvents():
+            events.append(e)
+        return events
 
     def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         self.__courseManager.addCourse(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
@@ -44,13 +54,13 @@ class EventManagementSystem():
         return self.__userManager.getUserType(zid)
 
     def addVenue(self, name, loc):
-        self.__venueMan.addVenue(self, name, loc)
+        self.__venueManager.addVenue(name, loc)
 
     def removeVenue(self, name):
-        self.__venueMan.removeVenue(self, name)
+        self.__venueManager.removeVenue(name)
 
     def getVenues(self):
-        self.__venueMan.getVenues()
+        self.__venueManager.getVenues()
 
     def getFreeTimes(self, name):
-        self.__venueMan.getFreeTimes(self, name)
+        self.__venueManager.getFreeTimes(name)

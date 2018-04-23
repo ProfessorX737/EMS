@@ -5,7 +5,7 @@ class SeminarManager(EventManager):
         super().__init__()
     def addSeminar(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         seminar = Seminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        self.__events[seminar.getName()] = seminar
+        self.addEvent(seminar)
     def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
         session = Session(startDateTime, endDateTime, name, descr, presenter)
         self.__events[seminarName].addSession(session)

@@ -31,6 +31,6 @@ class EventManager:
             if not event.isOpen():
                 pastEvents.append(event) 
                 currentEvents.remove(event)
-            
-
-            
+    def addEvent(self, event):
+        self.__events[event.getName()] = event
+    
