@@ -10,7 +10,7 @@
 <h2> Courses </h2>
 <ul>
     {% for course in courses %}
-        <li><a href="{{ url_for('moreInfo',eventType='Event',eventName=course.getName()) }}">{{course.getName()}}</a></li> <br/>
+        <li><a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}</a></li> <br/>
     {% endfor %}
 </ul>
 {% if userType == 'Staff' %}

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+{{eventType}}
+<h1>{{event.getName()}}</h1>
+<h2> Start: </h2>
+{{event.getStartDateTime()}}
+<h2> End: </h2>
+{{event.getEndDateTime()}}
+<h2> Description </h2>
+    {{event.getDescription()}}
+<h2> Convener </h2>
+{{event.getConvener()}}
+<h2> Venue </h2>
+{{event.getVenueName()}}
+<h2> Capacity </h2>
+{{event.getNumAttendees()}}
+{% endblock %}
