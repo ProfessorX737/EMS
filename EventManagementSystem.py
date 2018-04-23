@@ -35,10 +35,10 @@ class EventManagementSystem():
         return event
 
     def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__courseManager.addCourse(self.parseDateTime(startDateTime),self.parseDateTime(endDateTime), name, descr, venue, convener, capacity,self.parseDateTime(deregEnd))
+        self.__courseManager.addCourse(startDateTime,endDateTime, name, descr, venue, convener, capacity,deregEnd)
 
     def addSeminar(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__seminarManager.addSeminar(self.parseDateTime(startDateTime), self.parseDateTime(endDateTime), name, descr, venue, convener, capacity, self.parseDateTime(deregEnd))
+        self.__seminarManager.addSeminar(startDateTime,endDateTime, name, descr, venue, convener, capacity,deregEnd)
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
 
@@ -79,5 +79,5 @@ class EventManagementSystem():
     def getFreeTimes(self, name):
         self.__venueManager.getFreeTimes(name)
 
-    def parseDateTime(self,dateTimeString):
-        return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")
+    # def parseDateTime(self,dateTimeString):
+    #     return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")
