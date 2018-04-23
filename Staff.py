@@ -18,4 +18,5 @@ class Staff(User):
     def setCancelledEvents(self,cancelledEvents):
         self.__cancelledEvents = cancelledEvents
     
-
+    def addPostedCurrEvent(self,event):
+        self.__postedCurrEvents.append(event)

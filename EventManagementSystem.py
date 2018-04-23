@@ -2,6 +2,8 @@ from CourseManager import *
 from SeminarManager import *
 from UserManager import *
 from VenueManager import *
+from Course import *
+from Seminar import *
 import datetime
 
 class EventManagementSystem():
@@ -28,17 +30,29 @@ class EventManagementSystem():
     def getPastCourses(self):
         return self.__courseManager.getPastEvents()
 
+    def isMyEvent(self,staff,eventName):
+        for e in self.getPostedCurrEvents(staff):
+            if eventName == e.getName():
+                return True
+        return False
+
     def getEvent(self,eventName):
         event = self.__courseManager.getEvent(eventName)
         if event is None:
-            event = self.__courseManager.getEvent(eventName)
+            event = self.__seminarManager.getEvent(eventName)
         return event
 
-    def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__courseManager.addCourse(startDateTime,endDateTime, name, descr, venue, convener, capacity,deregEnd)
+    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
+        course = Course(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        self.__courseManager.addCourse(course)
+        print("Course name is ", course.getName())
+        staff.addPostedCurrEvent(course)
 
-    def addSeminar(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__seminarManager.addSeminar(startDateTime,endDateTime, name, descr, venue, convener, capacity,deregEnd)
+    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
+        seminar = Seminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        self.__seminarManager.addSeminar(seminar)
+        staff.addPostedCurrEvent(seminar)
+
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
 

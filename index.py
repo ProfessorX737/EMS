@@ -71,19 +71,23 @@ def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
-            ems.addCourse(form.startDateTime.data,form.endDateTime.data,
+            ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
         else:
-            ems.addSeminar(form.startDateTime.data,form.endDateTime.data,
+            ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
+        return redirect(url_for('home'))
     return render_template('create_event.html', form = form)
 
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
-    return render_template('more_info.html',eventType=eventType,event=event)
+    print(event)
+    isOwner = ems.isMyEvent(current_user,eventName)
+    # if staff check if this event is inside getPostedCurrEvents
+    return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event)
 
 @app.route("/logout")
 def logout():
