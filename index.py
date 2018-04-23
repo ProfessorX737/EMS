@@ -57,8 +57,18 @@ def index():
         
 @app.route('/home',methods=['GET','POST'])
 def home():
-    return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
-        
+    # Must update events first.
+    # Sort events into courses and seminars 
+    courses = []
+    seminars = []
+    for e in ems.getEvents():
+        if isinstance(e,Seminar):
+            seminars.append(e)
+        elif isinstance(e,Course):
+            courses.append(e)
+    return render_template('home.html',userType = userType,seminars = seminars, courses = courses)
+
+    
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
     return render_template('dashboard.html')
@@ -68,24 +78,19 @@ def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
-            ems.addCourse(str(form.startDateTime.data),str(form.endDateTime.data),
+            ems.addCourse(form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
-<<<<<<< HEAD
             form.capacity.data,form.deregEnd.data)
         else:
             ems.addSeminar(form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
-=======
-            form.capacity.data,str(form.deregEnd.data))
-        # else: create seminar
->>>>>>> 8a697677d8048b36d58f536201c5395775ff645f
     return render_template('create_event.html', form = form)
 
-@app.route("/more/<eventName>",methods=['GET','POST'])
-def moreInfo(eventName):
+@app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
+def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
-    return render_template('more_info.html',event=event)
+    return render_template('more_info.html',eventType=eventType,event=event)
 
 @app.route("/logout")
 def logout():
