@@ -57,21 +57,14 @@ def index():
         
 @app.route('/home',methods=['GET','POST'])
 def home():
-    # Must update events first.
-    # Sort events into courses and seminars 
-    courses = []
-    seminars = []
-    for e in ems.getEvents():
-        if isinstance(e,Seminar):
-            seminars.append(e)
-        elif isinstance(e,Course):
-            courses.append(e)
-    return render_template('home.html',userType = userType,seminars = seminars, courses = courses)
+    return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
 
     
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
-    return render_template('dashboard.html')
+    for event in ems.getPostedCurrEvents(current_user):
+        print(event.getName())
+    return render_template('dashboard.html',userType=userType,currEvents=current_user.getCurrEvents(),pastEvents=current_user.getPastEvents(),postedCurrEvents=ems.getPostedCurrEvents(current_user),postedPastEvents=ems.getPostedPastEvents(current_user))
 
 @app.route('/create_event',methods=['GET','POST'])
 def create_event():

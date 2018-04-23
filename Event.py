@@ -25,7 +25,10 @@ class Event(Period):
     def isCancelled(self):
         return self.__isCancelled
     def isOpen(self):
-        return self.getEndDateTime() < datetime.datetime.now()
+        if self.getEndDateTime() < datetime.datetime.now():
+            return False
+        else:
+            return True
     def isFull(self):
         if len(self.__attendees) >= self.__capacity:
             return True
