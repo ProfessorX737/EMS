@@ -24,3 +24,6 @@ class EventManager:
         return currentEvents
     def cancelEvent(self,eventName):
         self.__events.get(eventName).cancelEvent()
+    def addEvent(self, event):
+        self.__events[event.getName()] = event
+    

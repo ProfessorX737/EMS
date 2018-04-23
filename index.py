@@ -7,6 +7,7 @@ from Event import *
 from Period import *
 from Seminar import *
 from Course import *
+from EventManagementSystem import *
 
 app = Flask(__name__)
 
@@ -14,20 +15,24 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-userManager = UserManager()
-eventManager = EventManager()
+# userManager = UserManager()
+# eventManager = EventManager()
+ems = EventManagementSystem()
+ems.addVenue("Matthews A", "Location1")
+ems.addCourse("start", "end", "Course A", "This is description", "venue", "person", 100, "deregEnd")
+ems.addSeminar("start", "end", "Seminar A", "This is description", "venue", "person", 100, "deregEnd")
 
 userType = ""
 
 # startDateTime, endDateTime, name="",descr=""):
 # (self,period,venue,convener,capacity,deregEnd):
-eventManager.addVenue("UNSW")
-e1 = Event(1,2,"coding 101","Learn how to code with xavier sensei","UNSW","Xavier",200,1.5)
-eventManager.addEvent(e1)
+# ems.addVenue("UNSW")
+# e1 = Event(1,2,"coding 101","Learn how to code with xavier sensei","UNSW","Xavier",200,1.5)
+# ems.entManager.addEvent(e1)
 # startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd
 @login_manager.user_loader
 def loadUser(userName):
-    return userManager.getUser(userName)
+    return ems.getUser(userName)
 
 with open('user.csv') as f:
     lines = f.readlines()
@@ -35,14 +40,14 @@ with open('user.csv') as f:
         attr = line.split(',')
         # remove new line character from last elt
         attr[-1] = attr[-1].strip()
-        userManager.addUser(attr[0],attr[1],attr[2],attr[3],attr[4])
+        ems.addUser(attr[0],attr[1],attr[2],attr[3],attr[4])
         
 @app.route('/',methods=['GET','POST'])
 def index():
     if (request.method == 'POST'):
         zid = request.form.get('zid','')
         password = request.form.get('password','')
-        userType = userManager.getUserType(current_user.get_id())
+        # userType = userManager.getUserType(current_user.get_id())
         user = loadUser(zid)
         if user is None or user.getPassword() != password:
             return redirect(url_for('index'))
@@ -59,12 +64,11 @@ def home():
     # Sort events into courses and seminars 
     courses = []
     seminars = []
-    for e in eventManager.getEvents():
+    for e in ems.getEvents():
         if isinstance(e,Seminar):
             seminars.append(e)
         elif isinstance(e,Course):
             courses.append(e)
-
     return render_template('home.html',seminars = seminars, courses = courses)
         
 @app.route('/dashboard',methods=['GET','POST'])

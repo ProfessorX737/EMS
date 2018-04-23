@@ -5,4 +5,4 @@ class CourseManager(EventManager):
         super().__init__()
     def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         course = Course(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        self.__events[course.getName()] = course
+        self.addEvent(course)
