@@ -19,9 +19,6 @@ login_manager.login_view = "login"
 # userManager = UserManager()
 # eventManager = EventManager()
 ems = EventManagementSystem()
-ems.addVenue("Matthews A", "Location1")
-ems.addCourse("start", "end", "Course A", "This is description", "venue", "person", 100, "deregEnd")
-ems.addSeminar("start", "end", "Seminar A", "This is description", "venue", "person", 100, "deregEnd")
 
 # startDateTime, endDateTime, name="",descr=""):
 # (self,period,venue,convener,capacity,deregEnd):
@@ -60,16 +57,7 @@ def index():
         
 @app.route('/home',methods=['GET','POST'])
 def home():
-    # Must update events first.
-    # Sort events into courses and seminars 
-    courses = []
-    seminars = []
-    for e in ems.getEvents():
-        if isinstance(e,Seminar):
-            seminars.append(e)
-        elif isinstance(e,Course):
-            courses.append(e)
-    return render_template('home.html',userType = userType,seminars = seminars, courses = courses)
+    return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
         
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():

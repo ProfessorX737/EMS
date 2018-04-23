@@ -1,3 +1,4 @@
+import datetime
 from Seminar import *
 class EventManager:
     def __init__(self):
@@ -33,4 +34,5 @@ class EventManager:
                 currentEvents.remove(event)
     def addEvent(self, event):
         self.__events[event.getName()] = event
-    
+    def parseDateTime(self,dateTimeString):
+        return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")

@@ -2,7 +2,7 @@ from CourseManager import *
 from SeminarManager import *
 from UserManager import *
 from VenueManager import *
-# from VenueManager import *
+import datetime
 
 class EventManagementSystem():
     def __init__(self):
@@ -19,6 +19,14 @@ class EventManagementSystem():
         for e in self.__seminarManager.getEvents():
             events.append(e)
         return events
+    def getCurrentSeminars(self):
+        return self.__seminarManager.getCurrentEvents()
+    def getPastSeminars(self):
+        return self.__seminarManager.getPastEvents()
+    def getCurrentCourses(self):
+        return self.__courseManager.getCurrentEvents()
+    def getPastCourses(self):
+        return self.__courseManager.getPastEvents()
 
     def getEvent(self,eventName):
         event = self.__courseManager.getEvent(eventName)
@@ -27,10 +35,10 @@ class EventManagementSystem():
         return event
 
     def addCourse(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__courseManager.addCourse(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        self.__courseManager.addCourse(self.parseDateTime(startDateTime),self.parseDateTime(endDateTime), name, descr, venue, convener, capacity,self.parseDateTime(deregEnd))
 
     def addSeminar(self,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        self.__seminarManager.addSeminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        self.__seminarManager.addSeminar(self.parseDateTime(startDateTime), self.parseDateTime(endDateTime), name, descr, venue, convener, capacity, self.parseDateTime(deregEnd))
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
 
@@ -70,3 +78,6 @@ class EventManagementSystem():
 
     def getFreeTimes(self, name):
         self.__venueManager.getFreeTimes(name)
+
+    def parseDateTime(self,dateTimeString):
+        return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")
