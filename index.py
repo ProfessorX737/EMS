@@ -68,13 +68,18 @@ def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
-            ems.addCourse(form.startDateTime.data,form.endDateTime.data,
+            ems.addCourse(str(form.startDateTime.data),str(form.endDateTime.data),
             form.name.data,form.description.data,form.venue.data,form.convener.data,
+<<<<<<< HEAD
             form.capacity.data,form.deregEnd.data)
         else:
             ems.addSeminar(form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
+=======
+            form.capacity.data,str(form.deregEnd.data))
+        # else: create seminar
+>>>>>>> 8a697677d8048b36d58f536201c5395775ff645f
     return render_template('create_event.html', form = form)
 
 @app.route("/more/<eventName>",methods=['GET','POST'])
