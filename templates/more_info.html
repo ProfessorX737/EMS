@@ -2,7 +2,7 @@
 {% block body %}
 {% if isOwner %}
     {% if eventType == 'Seminar' %}
-        
+        <a href="{{ url_for('create_session') }}" > Create sessions </a>
     {% endif %}
 {% endif %}
 <h1>{{event.getName()}}</h1>

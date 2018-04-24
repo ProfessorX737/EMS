@@ -89,6 +89,10 @@ def moreInfo(eventType,eventName):
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event)
 
+@app.route('/create_session',methods=['GET','POST'])
+def create_session():
+    return 'hello'
+
 @app.route("/logout")
 def logout():
     logout_user()
