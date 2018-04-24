@@ -11,3 +11,6 @@ class Seminar(Event):
     
     def getSessions(self):
         return self.__sessions
+    
+    def getClassName(self):
+        return "Seminar"

@@ -1,6 +1,7 @@
 import datetime
 from Period import *
 from User import *
+import abc
 
 class Event(Period):
     def __init__(self,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
@@ -55,6 +56,10 @@ class Event(Period):
         self.__venue = venue
     def cancelEvent(self):
         self.__isCancelled = True
+
+    @abc.abstractmethod
+    def getClassName(self):
+        pass
 
 
     
