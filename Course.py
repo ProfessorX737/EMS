@@ -6,3 +6,6 @@ class Course(Event):
     
     def getPresenter(self):
         return self.getConvener()
+
+    def getClassName(self):
+        return "Course"

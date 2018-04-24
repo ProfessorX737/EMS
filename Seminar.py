@@ -7,3 +7,6 @@ class Seminar(Event):
 
     def addSession(self,session):
         self.__sessions.append(session)
+    
+    def getClassName(self):
+        return "Seminar"

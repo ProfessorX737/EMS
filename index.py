@@ -62,9 +62,12 @@ def home():
     
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
-    for event in ems.getPostedCurrEvents(current_user):
-        print(event.getName())
-    return render_template('dashboard.html',userType=userType,currEvents=current_user.getCurrEvents(),pastEvents=current_user.getPastEvents(),postedCurrEvents=ems.getPostedCurrEvents(current_user),postedPastEvents=ems.getPostedPastEvents(current_user))
+    postedCurrEvents = None
+    postedPastEvents = None
+    if userType == "Staff":
+        postedCurrEvents = ems.getPostedCurrEvents(current_user)
+        postedPastEvents = ems.getPostedPastEvents(current_user)
+    return render_template('dashboard.html',userType=userType,currEvents=current_user.getCurrEvents(),pastEvents=current_user.getPastEvents(),postedCurrEvents=postedCurrEvents,postedPastEvents=postedPastEvents)
 
 @app.route('/create_event',methods=['GET','POST'])
 def create_event():

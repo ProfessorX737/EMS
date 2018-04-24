@@ -4,26 +4,26 @@
 <h2> Registered Open Events </h2>
 <ul>
 {% for currEvent in currEvents %}
-    <li><a href="{{ url_for('moreInfo',eventType='Current Events',eventName=currEvent.getName()) }}">{{currEvent.getName()}}</a></li> <br/>
+    <li><a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventName=currEvent.getName()) }}">{{currEvent.getName()}}</a></li> <br/>
 {% endfor %}
 </ul>
 <h2> Registered Past Events </h2>
 <ul>
     {% for pastEvent in pastEvents %}
-        <li><a href="{{ url_for('moreInfo',eventType='Past Events',eventName=pastEvent.getName()) }}">{{pastEvent.getName()}}</a></li> <br/>
+        <li><a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventName=pastEvent.getName()) }}">{{pastEvent.getName()}}</a></li> <br/>
     {% endfor %}
 </ul>
 {%if userType == 'Staff'%}
   <h2> Posted Open Events </h2>
   <ul>
   {% for postedCurrEvent in postedCurrEvents %}
-      <li><a href="{{ url_for('moreInfo',eventType='Current Events',eventName=postedCurrEvent.getName()) }}">{{postedCurrEvent.getName()}}</a></li> <br/>
+      <li><a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventName=postedCurrEvent.getName()) }}">{{postedCurrEvent.getName()}}</a></li> <br/>
   {% endfor %}
   </ul>
   <h2> Posted Past Events </h2>
   <ul>
       {% for postedPastEvent in postedPastEvents %}
-          <li><a href="{{ url_for('moreInfo',eventType='Past Events',eventName=postedPastEvent.getName()) }}">{{postedPastEvent.getName()}}</a></li> <br/>
+          <li><a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventName=postedPastEvent.getName()) }}">{{postedPastEvent.getName()}}</a></li> <br/>
       {% endfor %}
   </ul>
 {% endif %}
