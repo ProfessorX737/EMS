@@ -98,6 +98,7 @@ def create_session(seminarName):
     if form.validate_on_submit():
         ems.addSession(seminarName,form.startDateTime.data,form.endDateTime.data,
         form.name.data,form.description.data,form.convener.data)
+        return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
     return render_template('create_session.html',seminarName=seminarName,form=form)
 
 @app.route("/logout")
