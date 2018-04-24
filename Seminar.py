@@ -7,3 +7,7 @@ class Seminar(Event):
 
     def addSession(self,session):
         self.__sessions.append(session)
+        print("ADDED SESSION", session.getName())
+    
+    def getSessions(self):
+        return self.__sessions

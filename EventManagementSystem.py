@@ -4,6 +4,7 @@ from UserManager import *
 from VenueManager import *
 from Course import *
 from Seminar import *
+from Session import Session
 import datetime
 
 class EventManagementSystem():
@@ -41,6 +42,8 @@ class EventManagementSystem():
         if event is None:
             event = self.__seminarManager.getEvent(eventName)
         return event
+    def getSessions(self,seminarName):
+        return self.__seminarManager.getSessions(seminarName)
 
     def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         course = Course(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
@@ -52,6 +55,9 @@ class EventManagementSystem():
         seminar = Seminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
         self.__seminarManager.addSeminar(seminar)
         staff.addPostedCurrEvent(seminar)
+    def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
+        session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
+        self.__seminarManager.addSession(seminarName,session)
 
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
