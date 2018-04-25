@@ -3,16 +3,18 @@ from Staff import *
 from datetime import datetime
 class UserManager():
     def __init__(self):
-        self.__students = []
-        self.__staff = []
+        self.__students = {}
+        self.__staff = {}
     def getStudents(self):
-        return self.__students
+        return self.__students.values()
     def getStaff(self):
-        return self.__staff
+        return self.__staff.values()
     def setStaff(self,staff):
-        self.__staff =staff
+        for s in staff:
+            self.__staff[s.get_id()] = s
     def setStudents(self,students):
-        self.__students = students 
+        for s in students:
+            self.__students[s.get_id()] = s
     def getCurrEvents(self,user):
         return user.getCurrEvents()
     def getPastEvents(self,user):
@@ -26,17 +28,15 @@ class UserManager():
     def addUser(self,name,zID,email,password,role):
         if (role == "trainee"):
             student = Student(name,zID,email,password)
-            self.__students.append(student)
+            self.__students[student.get_id()] = student
         else:
             staff = Staff(name,zID,email,password)
-            self.__staff.append(staff)
+            self.__staff[staff.get_id()] = staff
     def getUser(self,zid):
-        for user in self.__students:
-            if (user.get_id() == zid):
-                return user
-        for user in self.__staff:
-            if (user.get_id() == zid):
-                return user        
+        if zid in self.__students:
+            return self.__students.get(zid)
+        if zid in self.__staff:
+            return self.__staff.get(zid)
     def getUserType(self,zid):
         u = self.getUser(zid)
         print(u.get_id())
@@ -44,4 +44,3 @@ class UserManager():
             return "Student"
         else:
             return "Staff"
-            

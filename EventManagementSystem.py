@@ -13,7 +13,7 @@ class EventManagementSystem():
         self.__userManager = UserManager()
         self.__venueManager = VenueManager()
 
-    # Get events from both managers. 
+# ========== EventManager Methods ====================================================================
     def getEvents(self):
         events = []
         for e in self.__courseManager.getEvents():
@@ -29,7 +29,14 @@ class EventManagementSystem():
         return self.__courseManager.getCurrentEvents()
     def getPastCourses(self):
         return self.__courseManager.getPastEvents()
-
+    def registerUserToSeminar(self,seminarName,user):
+        self.__seminarManager.registerUser(seminarName,user)
+    def registerUserToCourse(self,courseName,user):
+        self.__courseManager.registerUser(courseName,user)
+    def deregisterUserFromSeminar(self,seminarName,user):
+        self.__seminarManager.deregisterUser(seminarName,user)
+    def deregisterUserFromCourse(self,courseName,user):
+        self.__courseManager.deregisterUser(courseName,user)
     def isMyEvent(self,staff,eventName):
         for e in self.getPostedCurrEvents(staff):
             if eventName == e.getName():
@@ -55,7 +62,7 @@ class EventManagementSystem():
 
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
-
+# ======== User Manager methods ========================================================================================
     def getStudents(self):
         return self.__userManager.getStudents()
     def getStaff(self):
@@ -80,18 +87,17 @@ class EventManagementSystem():
         return self.__userManager.getUser(zid)
     def getUserType(self,zid):
         return self.__userManager.getUserType(zid)
-
+# =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc):
         self.__venueManager.addVenue(name, loc)
-
     def removeVenue(self, name):
         self.__venueManager.removeVenue(name)
-
     def getVenues(self):
         self.__venueManager.getVenues()
-
     def getFreeTimes(self, name):
         self.__venueManager.getFreeTimes(name)
+    
+
 
     # def parseDateTime(self,dateTimeString):
     #     return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")
