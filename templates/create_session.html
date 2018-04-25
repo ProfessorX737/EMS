@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Session Creation</h1>
+<form method="post" action="{{ url_for('create_session',seminarName=seminarName) }}">
+    {{ form.name.label }}: {{ form.name }} <br>
+    {{ form.description.label }}: {{ form.description }}<br>
+    {{ form.convener.label }}: {{ form.convener }}   <br>
+    {{ form.startDateTime.label }}: {{ form.startDateTime(placeholder='dd-mm-yyyy HH:MM') }}    <br>
+    {{ form.endDateTime.label }}: {{ form.endDateTime(placeholder='dd-mm-yyyy HH:MM') }}<br>
+    {{ form.csrf_token }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}

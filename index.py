@@ -9,6 +9,7 @@ from Seminar import *
 from Course import *
 from EventManagementSystem import *
 from CreateEventForm import *
+from CreateSessionForm import *
 
 app = Flask(__name__)
 
@@ -87,14 +88,18 @@ def create_event():
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
-    print(event)
     isOwner = ems.isMyEvent(current_user,eventName)
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event)
 
-@app.route('/create_session',methods=['GET','POST'])
-def create_session():
-    return 'hello'
+@app.route('/create_session/<seminarName>',methods=['GET','POST'])
+def create_session(seminarName):
+    form = CreateSessionForm()
+    if form.validate_on_submit():
+        ems.addSession(seminarName,form.startDateTime.data,form.endDateTime.data,
+        form.name.data,form.description.data,form.convener.data)
+        return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
+    return render_template('create_session.html',seminarName=seminarName,form=form)
 
 @app.route("/logout")
 def logout():
