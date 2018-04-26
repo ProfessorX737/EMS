@@ -40,8 +40,10 @@ class User(UserMixin,Person):
         else:
             self.__pastEvents[event.getName()] = event
     def removeRegisteredEvent(self,eventName):
-        del self.__currEvents[eventName]
-        del self.__pastEvents[eventName]
+        if eventName in self.__currEvents:
+            del self.__currEvents[eventName]
+        elif eventName in self.__pastEvents:
+            del self.__pastEvents[eventName]
     def isRegistered(self,eventName):
         if eventName in self.__currEvents:
             return True
