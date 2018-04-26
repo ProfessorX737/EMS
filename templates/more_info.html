@@ -28,12 +28,12 @@
 {% else %}
     Closed
 {% endif %}
-{% if isOwner == false and current_user.isRegistered() == false %}
+{% if isOwner == false and current_user.isRegistered(event.getName()) == false %}
 <form method="post" action="{{ url_for('register_user',eventName=event.getName()) }}">
     <p><input type="submit" value="Register" ></p>
 </form>
 {% endif %}
-{% if current_user.isRegistered() == true %}
+{% if current_user.isRegistered(event.getName()) == true %}
 <form method="post" action="{{ url_for('deregister_user',eventName=event.getName()) }}">
     <p><input type="submit" value="Deregister" ></p>
 </form>

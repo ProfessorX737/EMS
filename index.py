@@ -97,7 +97,13 @@ def create_session(seminarName):
 
 @app.route('/register/<eventName>',methods=['GET','POST'])
 def register_user(eventName):
-    return "Register user"
+    event = ems.getEvent(eventName)
+    ems.addRegisteredEvent(current_user.get_id(),event)
+    if isinstance(event,Course):
+        ems.registerUserToCourse(eventName,current_user)
+    if isinstance(event,Seminar):
+        ems.registerUserToSeminar(eventName,current_user)
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
 @app.route('/deregister/<eventName>',methods=['GET','POST'])
 def deregister_user(eventName):
