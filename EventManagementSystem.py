@@ -93,6 +93,10 @@ class EventManagementSystem():
         return self.__userManager.getUser(zid)
     def getUserType(self,zid):
         return self.__userManager.getUserType(zid)
+    def addRegisteredEvent(self,userID,event):
+        self.__userManager.addRegisteredEvent(userID,event)
+    def removeRegisteredEvent(self,userID,eventName):
+        self.__userManager.removeRegisteredEvent(userID,eventName)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc):
         self.__venueManager.addVenue(name, loc)

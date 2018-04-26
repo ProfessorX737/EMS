@@ -44,3 +44,12 @@ class UserManager():
             return "Student"
         else:
             return "Staff"
+    def addRegisteredEvent(self,userID,event):
+        if userID in self.__students:
+            self.__students[userID].addRegisteredEvent(event)
+        if userID in self.__staff:
+            self.__staff[userID].addRegisteredEvent(event)
+    def removeRegisteredEvent(self,userID,eventName):
+        if userID in self.__students:
+            student = self.__students.get(userID)
+            student.removeRegisteredEvent(eventName)

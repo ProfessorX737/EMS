@@ -90,7 +90,7 @@ def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
     isOwner = ems.isMyEvent(current_user,eventName)
     # if staff check if this event is inside getPostedCurrEvents
-    return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event)
+    return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event,currentUser=current_user)
 
 @app.route('/create_session/<seminarName>',methods=['GET','POST'])
 def create_session(seminarName):
