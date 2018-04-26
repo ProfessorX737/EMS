@@ -4,6 +4,7 @@ from UserManager import *
 from VenueManager import *
 from Course import *
 from Seminar import *
+from Staff import Staff
 from Session import Session
 import datetime
 
@@ -38,8 +39,10 @@ class EventManagementSystem():
         self.__seminarManager.deregisterUser(seminarName,user)
     def deregisterUserFromCourse(self,courseName,user):
         self.__courseManager.deregisterUser(courseName,user)
-    def isMyEvent(self,staff,eventName):
-        for e in self.getPostedCurrEvents(staff):
+    def isMyEvent(self,user,eventName):
+        if not isinstance(user,Staff):
+            return False
+        for e in self.getPostedCurrEvents(user):
             if eventName == e.getName():
                 return True
         return False
