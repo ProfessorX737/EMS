@@ -26,7 +26,7 @@ class UserManager():
     def getCancelledEvents(self,staff):
         return staff.getCancelledEvents()
     def addUser(self,name,zID,email,password,role):
-        if (role == "trainee"):
+        if (role == 'trainee'):
             student = Student(name,zID,email,password)
             self.__students[student.get_id()] = student
         else:
