@@ -7,6 +7,7 @@ class User(UserMixin,Person):
         self.__password = password
         self.__currEvents = {}
         self.__pastEvents = {}
+        self.__notifications = []
         self.isAuthenticated = False
         self.isActive = False
         self.isAnonymous = False
@@ -42,11 +43,19 @@ class User(UserMixin,Person):
     def removeRegisteredEvent(self,eventName):
         if eventName in self.__currEvents:
             del self.__currEvents[eventName]
+            return True
         elif eventName in self.__pastEvents:
             del self.__pastEvents[eventName]
+            return True
+        return False
     def isRegistered(self,eventName):
         if eventName in self.__currEvents:
             return True
         if eventName in self.__pastEvents:
+            return True
+        return False
+    def cancelRegisteredEvent(self,eventName):
+        if self.removeRegisteredEvent(eventName):
+            self.__notifications.insert(1,eventName + " was cancelled")
             return True
         return False

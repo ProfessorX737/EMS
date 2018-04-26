@@ -24,7 +24,10 @@ class EventManager:
                 currentEvents.append(event)
         return currentEvents
     def cancelEvent(self,eventName):
-        self.__events.get(eventName).cancelEvent()
+        if eventName in self.__events:
+            self.__events.get(eventName).cancelEvent()
+            return True
+        return False
     def refreshEvents(self,user):
         currentEvents = user.getCurrentEvents()
         pastEvents = user.getPastEvents()
@@ -33,4 +36,7 @@ class EventManager:
                 pastEvents.append(event) 
                 currentEvents.remove(event)
     def addEvent(self, event):
-        self.__events[event.getName()] = event
+        if event.getName() not in self.__events:
+            self.__events[event.getName()] = event
+            return True
+        return False

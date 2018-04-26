@@ -53,3 +53,8 @@ class UserManager():
         if userID in self.__students:
             student = self.__students.get(userID)
             student.removeRegisteredEvent(eventName)
+    def cancelEvent(self,userID,eventName):
+        for staff in self.__staff:
+            staff.cancelRegisteredEvent(eventName)
+        for student in self.__students:
+            student.cancelRegisteredEvent(eventName)

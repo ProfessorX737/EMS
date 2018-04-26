@@ -22,7 +22,7 @@ class Event(Period):
     def isCancelled(self):
         return self.__isCancelled
     def isOpen(self):
-        if self.getEndDateTime() < datetime.datetime.now():
+        if self.getEndDateTime() < datetime.datetime.now() or self.__isCancelled:
             return False
         else:
             return True
