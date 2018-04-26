@@ -39,7 +39,8 @@ class EventManagementSystem():
         self.__seminarManager.deregisterUser(seminarName,userID)
     def deregisterUserFromCourse(self,courseName,userID):
         self.__courseManager.deregisterUser(courseName,userID)
-    def isMyEvent(self,user,eventName):
+    def isMyEvent(self,zid,eventName):
+        user = self.__userManager.getUser(zid)
         if not isinstance(user,Staff):
             return False
         for e in self.getPostedCurrEvents(user):

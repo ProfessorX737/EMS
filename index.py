@@ -82,7 +82,8 @@ def create_event():
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
-    isOwner = ems.isMyEvent(current_user,eventName)
+    isOwner = ems.isMyEvent(current_user.get_id(),eventName)
+    print(isOwner)
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event,currentUser=current_user)
 
