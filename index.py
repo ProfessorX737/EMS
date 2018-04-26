@@ -118,7 +118,7 @@ def deregister_user(eventName):
 
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
 def cancel_event(eventName):
-    ems.cancelEvent(current_user.get_id(),eventName)
+    ems.cancelEvent(current_user,eventName)
     return redirect(url_for('home'))
 
 @app.route("/logout")
