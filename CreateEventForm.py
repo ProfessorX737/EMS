@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, TextAreaField, validators, StringField, DateTimeField, SubmitField, SelectField
+from wtforms import TextField, TextAreaField, validators, StringField, DateTimeField, IntegerField, SubmitField, SelectField
 
 class CreateEventForm(Form):
     eventChoices = [('Course','Course'),('Seminar','Seminar')]
@@ -11,6 +11,6 @@ class CreateEventForm(Form):
     deregEnd = DateTimeField('Deregister Period End', format='%d-%m-%Y %H:%M', validators=[validators.DataRequired("Please enter the end of deregistration period.")])
     convener = StringField('Convener Name', validators=[validators.DataRequired("Please enter event convener's name.")])
     venue = StringField('Venue', validators=[validators.DataRequired("Please enter the event venue.")])
-    capacity = StringField('Capacity', validators=[validators.DataRequired("Please enter the event capacity.")])
+    capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter the event capacity.")])
     submit = SubmitField('Create Event', validators=(validators.Optional(),))
 
