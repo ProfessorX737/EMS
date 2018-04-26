@@ -107,7 +107,13 @@ def register_user(eventName):
 
 @app.route('/deregister/<eventName>',methods=['GET','POST'])
 def deregister_user(eventName):
-    return "deregister user"
+    event = ems.getEvent(eventName)
+    ems.removeRegisteredEvent(current_user.get_id(),eventName)
+    if isinstance(event,Course):
+        ems.deregisterUserFromCourse(eventName,current_user.get_id())
+    if isinstance(event,Seminar):
+        ems.deregisterUserFromSeminar(eventName,current_user.get_id())
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
 @app.route("/logout")
 def logout():

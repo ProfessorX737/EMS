@@ -35,10 +35,10 @@ class EventManagementSystem():
         self.__seminarManager.registerUser(seminarName,user)
     def registerUserToCourse(self,courseName,user):
         self.__courseManager.registerUser(courseName,user)
-    def deregisterUserFromSeminar(self,seminarName,user):
-        self.__seminarManager.deregisterUser(seminarName,user)
-    def deregisterUserFromCourse(self,courseName,user):
-        self.__courseManager.deregisterUser(courseName,user)
+    def deregisterUserFromSeminar(self,seminarName,userID):
+        self.__seminarManager.deregisterUser(seminarName,userID)
+    def deregisterUserFromCourse(self,courseName,userID):
+        self.__courseManager.deregisterUser(courseName,userID)
     def isMyEvent(self,user,eventName):
         if not isinstance(user,Staff):
             return False

@@ -5,8 +5,8 @@ class EventManager:
         self.__events = {}
     def getEvents(self):
         return self.__events.values()
-    def deregisterUser(self,eventName,userName):
-        self.__events.get(eventName).removeAttendee(userName)
+    def deregisterUser(self,eventName,userID):
+        self.__events.get(eventName).removeAttendee(userID)
     def registerUser(self,eventName,user):
         self.__events.get(eventName).addAttendee(user)
     def getEvent(self,eventName):

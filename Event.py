@@ -13,15 +13,11 @@ class Event(Period):
         self.__isCancelled = False
         self.__attendees = {}
 
-    def addAttendee(self,attendee):
-        if not isinstance(attendee,User):
-            return False
+    def addAttendee(self,user):
         if not self.isFull():
-            self.__attendees[attendee.getName()] = attendee
-            return True
-        return False
-    def removeAttendee(self,attendeeName):
-        del self.__attendees[attendeeName]
+            self.__attendees[user.get_id()] = user
+    def removeAttendee(self,userID):
+        del self.__attendees[userID]
 
     def isCancelled(self):
         return self.__isCancelled
@@ -31,7 +27,7 @@ class Event(Period):
         else:
             return True
     def isFull(self):
-        if len(self.__attendees) >= self.__capacity:
+        if len(self.__attendees.values()) >= self.__capacity:
             return True
         return False
     
@@ -44,9 +40,9 @@ class Event(Period):
     def getDeregEnd(self):
         return self.__deregEnd
     def getAttendees(self):
-        return self.__attendees
+        return self.__attendees.values()
     def getNumAttendees(self):
-        return len(self.__attendees)
+        return len(self.__attendees.values())
 
     def setCapacity(self,capacity):
         self.__capacity = capacity
