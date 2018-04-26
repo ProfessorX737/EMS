@@ -116,6 +116,11 @@ def deregister_user(eventName):
         ems.deregisterUserFromSeminar(eventName,current_user.get_id())
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
+@app.route('/cancel_event/<eventName>',methods=['GET','POST'])
+def cancel_event(eventName):
+
+    return "CANCELLED EVENT"
+
 @app.route("/logout")
 def logout():
     logout_user()

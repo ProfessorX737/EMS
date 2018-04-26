@@ -38,5 +38,9 @@
     <p><input type="submit" value="Deregister" ></p>
 </form>
 {% endif %}
-
+{% if isOwner == true %}
+<form method="post" action="{{ url_for('cancel_event',eventName=event.getName()) }}">
+    <p><input type="submit" value="Cancel Event" ></p>
+</form>
+{% endif %}
 {% endblock %}
