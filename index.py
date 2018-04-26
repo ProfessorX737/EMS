@@ -21,12 +21,6 @@ login_manager.login_view = "login"
 # eventManager = EventManager()
 ems = EventManagementSystem()
 
-# startDateTime, endDateTime, name="",descr=""):
-# (self,period,venue,convener,capacity,deregEnd):
-# ems.addVenue("UNSW")
-# e1 = Event(1,2,"coding 101","Learn how to code with xavier sensei","UNSW","Xavier",200,1.5)
-# ems.entManager.addEvent(e1)
-# startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd
 @login_manager.user_loader
 def loadUser(userName):
     return ems.getUser(userName)
@@ -100,6 +94,14 @@ def create_session(seminarName):
         form.name.data,form.description.data,form.convener.data)
         return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
     return render_template('create_session.html',seminarName=seminarName,form=form)
+
+@app.route('/register/<eventName>',methods=['GET','POST'])
+def register_user(eventName):
+    return "Register user"
+
+@app.route('/deregister/<eventName>',methods=['GET','POST'])
+def deregister_user(eventName):
+    return "deregister user"
 
 @app.route("/logout")
 def logout():

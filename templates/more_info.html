@@ -16,10 +16,27 @@
 {{event.getEndDateTime()}}
 <h2> Description </h2>
     {{event.getDescription()}}
-<h2> Convener </h2>
+<h2> Presenter </h2>
 {{event.getConvener()}}
 <h2> Venue </h2>
 {{event.getVenueName()}}
 <h2> Capacity </h2>
 {{event.getNumAttendees()}} / {{event.getCapacity()}}
+<h2> Status </h2>
+{% if event.isOpen() %}
+    Open
+{% else %}
+    Closed
+{% endif %}
+{% if isOwner == false and current_user.isRegistered() == false %}
+<form method="post" action="{{ url_for('register_user',eventName=event.getName()) }}">
+    <p><input type="submit" value="Register" ></p>
+</form>
+{% endif %}
+{% if current_user.isRegistered() == true %}
+<form method="post" action="{{ url_for('deregister_user',eventName=event.getName()) }}">
+    <p><input type="submit" value="Deregister" ></p>
+</form>
+{% endif %}
+
 {% endblock %}
