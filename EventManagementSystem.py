@@ -72,6 +72,13 @@ class EventManagementSystem():
 
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
+
+    def deleteEvent(self,event):
+        if isinstance(event,Seminar):
+            self.__seminarManager.deleteEvent(event)
+        else:
+            self.__courseManager.deleteEvent(event)
+
 # ======== User Manager methods ========================================================================================
     def getStudents(self):
         return self.__userManager.getStudents()

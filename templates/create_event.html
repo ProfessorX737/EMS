@@ -8,9 +8,9 @@
     {{ form.venue.label }}: {{ form.venue }}    <br>
     {{ form.convener.label }}: {{ form.convener }}   <br>
     {{ form.capacity.label }}: {{ form.capacity }}    <br>
-    {{ form.startDateTime.label }}: {{ form.startDateTime(placeholder='dd-mm-yyyy HH:MM') }}    <br>
-    {{ form.endDateTime.label }}: {{ form.endDateTime(placeholder='dd-mm-yyyy HH:MM') }}<br>
-    {{ form.deregEnd.label }}: {{ form.deregEnd(placeholder='dd-mm-yyyy HH:MM') }}<br>
+    {{ form.startDateTime.label }}: {{ form.startDateTime(placeholder='yyyy-mm-dd HH:MM') }}    <br>
+    {{ form.endDateTime.label }}: {{ form.endDateTime(placeholder='yyyy-mm-dd HH:MM') }}<br>
+    {{ form.deregEnd.label }}: {{ form.deregEnd(placeholder='yyyy-mm-dd HH:MM') }}<br>
     {{ form.csrf_token }}
     {{ form.submit }}
 </form>
