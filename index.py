@@ -143,6 +143,10 @@ def edit_event(eventName):
             form.capacity.data,form.deregEnd.data)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event)
+@app.route('/cancel_event/<eventName>',methods=['GET','POST'])
+def cancel_event(eventName):
+    ems.cancelEvent(current_user,eventName)
+    return redirect(url_for('home'))
 
 @app.route("/logout")
 def logout():

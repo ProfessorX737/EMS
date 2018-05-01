@@ -17,6 +17,8 @@ class User(UserMixin,Person):
         return self.__currEvents.values()
     def getPastEvents(self):
         return self.__pastEvents.values()
+    def getNotifications(self):
+        return self.__notifications
     # Flask login module required functions
     def get_id(self):
         return self.__zid
@@ -56,6 +58,6 @@ class User(UserMixin,Person):
         return False
     def cancelRegisteredEvent(self,eventName):
         if self.removeRegisteredEvent(eventName):
-            self.__notifications.insert(1,eventName + " was cancelled")
+            self.__notifications.insert(1,eventName + " event was cancelled")
             return True
         return False
