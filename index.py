@@ -110,6 +110,33 @@ def deregister_user(eventName):
         ems.deregisterUserFromSeminar(eventName,current_user.get_id())
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
+@app.route('/edit_event/<eventName>',methods=['GET','POST'])
+def edit_event(eventName):
+    event = ems.getEvent(eventName)
+    form = CreateEventForm()
+
+    form.name.default = eventName
+    form.description.default = event.getDescription()
+    form.startDateTime.default = event.getStartDateTime().strftime("%Y-%m-%d %H:%M")
+    form.endDateTime.default = event.getEndDateTime().strftime("%Y-%m-%d %H:%M") 
+    form.venue.default = event.getVenueName()
+    form.convener.default = event.getConvener()  
+    form.capacity.default = event.getCapacity()
+    form.deregEnd.default = event.getDeregEnd().strftime("%Y-%m-%d %H:%M")
+
+    if form.validate_on_submit():
+        print(form.capacity.data)
+        ems.deleteEvent(event)
+        if (isinstance(event,Course)):
+            ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,form.convener.data,
+            form.capacity.data,form.deregEnd.data)
+        else:
+            ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,form.convener.data,
+            form.capacity.data,form.deregEnd.data)
+        return redirect(url_for('home'))
+    return render_template('edit_event.html',form=form,event=event)
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
 def cancel_event(eventName):
     ems.cancelEvent(current_user,eventName)
