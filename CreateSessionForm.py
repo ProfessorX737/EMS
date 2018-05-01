@@ -7,5 +7,5 @@ class CreateSessionForm(Form):
     startDateTime = DateTimeField('Start Date Time', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired("Please enter the event start date and time.")])
     endDateTime = DateTimeField('End Date Time', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired("Please enter the event end date and time.")])
     convener = StringField('Convener Name', validators=[validators.DataRequired("Please enter event convener's name.")])
-    submit = SubmitField('Create Event', validators=(validators.Optional(),))
+    submit = SubmitField('Create Session', validators=(validators.Optional(),))
 

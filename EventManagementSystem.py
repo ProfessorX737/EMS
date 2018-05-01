@@ -109,8 +109,8 @@ class EventManagementSystem():
     def removeRegisteredEvent(self,userID,eventName):
         self.__userManager.removeRegisteredEvent(userID,eventName)
 # =========== Venue Manager methods =======================================================================================
-    def addVenue(self, name, loc):
-        self.__venueManager.addVenue(name, loc)
+    def addVenue(self, name, loc, capacity):
+        self.__venueManager.addVenue(name, loc, capacity)
     def removeVenue(self, name):
         self.__venueManager.removeVenue(name)
     def getVenues(self):

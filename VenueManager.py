@@ -4,11 +4,13 @@ class VenueManager():
     def __init__(self):
         self.__venues = {}
 
-    def addVenue(self, name, loc):
-        self.__venues[name] = loc
+    def addVenue(self, name, loc, capacity):
+        venue = Venue(name,loc,capacity)
+        print(venue)
+        self.__venues[name] = venue
 
     def removeVenue(self, name):
-        self.__venues.pop(name)
+        del self.__venues[name]
 
     def getVenues(self):
         return self.__venues

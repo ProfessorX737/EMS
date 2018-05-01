@@ -10,6 +10,7 @@ from Course import *
 from EventManagementSystem import *
 from CreateEventForm import *
 from CreateSessionForm import *
+from CreateVenueForm import *
 
 app = Flask(__name__)
 
@@ -143,10 +144,25 @@ def edit_event(eventName):
             form.capacity.data,form.deregEnd.data)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event)
+
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
 def cancel_event(eventName):
     ems.cancelEvent(current_user,eventName)
     return redirect(url_for('home'))
+
+@app.route('/create_venue',methods=['GET','POST'])
+def create_venue():
+    form = CreateVenueForm()
+    if form.validate_on_submit():
+        ems.addVenue(form.name.data,form.location.data,form.capacity.data)
+        return redirect(url_for('view_venues'))
+    return render_template('create_venue.html',form=form)
+
+@app.route('/venues',methods=['GET','POST'])
+def view_venues():
+    venues = ems.getVenues()
+    print(venues)
+    return render_template('venues.html',venues = venues)
 
 @app.route("/logout")
 def logout():
