@@ -62,7 +62,10 @@ def dashboard():
 
 @app.route('/create_event',methods=['GET','POST'])
 def create_event():
-    form = CreateEventForm()
+    venues = addVenues()    
+    # form = CreateEventForm()
+    form = NewStartUpForm(venues).getForm()
+
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -114,13 +117,13 @@ def deregister_user(eventName):
 @app.route('/edit_event/<eventName>',methods=['GET','POST'])
 def edit_event(eventName):
     event = ems.getEvent(eventName)
-    form = CreateEventForm()
+    form = NewStartUpForm(addVenues()).getForm()
 
     form.name.default = eventName
     form.description.default = event.getDescription()
     form.startDateTime.default = event.getStartDateTime().strftime("%Y-%m-%d %H:%M")
     form.endDateTime.default = event.getEndDateTime().strftime("%Y-%m-%d %H:%M") 
-    form.venue.default = event.getVenueName()
+    form.venue.default = (event.getVenueName(), event.getVenueName())
     form.convener.default = event.getConvener()  
     form.capacity.default = event.getCapacity()
     form.deregEnd.default = event.getDeregEnd().strftime("%Y-%m-%d %H:%M")
@@ -157,6 +160,14 @@ def view_venues():
     venues = ems.getVenues()
     print(venues)
     return render_template('venues.html',venues = venues)
+
+def addVenues():
+    venues = []
+    for v in ems.getVenueNames():
+        obj = (v,v)
+        venues.append(obj)
+    return venues
+
 
 @app.route("/logout")
 def logout():

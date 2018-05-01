@@ -4,11 +4,13 @@
 <ul>
 {% if venues %}
     {% for venue in venues %}
-        <li> {{venue}} </li>
+        <li> Name: {{venue.getName()}} </li>
+        <li> Location: {{venue.getLocation()}} </li>
+        <li> Capacity: {{venue.getMaxCapacity()}} </li>
     {%endfor%}
 {% else %}
-    <h1> No current venues yet, add one! </h1>
+<h1> No current venues yet, add one! </h1>
 {% endif %}
-<a href="{{ url_for('create_venue') }}">Add a venue</a>
 </ul>
+<a href="{{ url_for('create_venue') }}">Add a venue</a>
 {% endblock %}

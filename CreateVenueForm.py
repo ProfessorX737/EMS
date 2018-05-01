@@ -6,4 +6,4 @@ class CreateVenueForm(Form):
     location = StringField('Location', validators=[validators.DataRequired("Please enter venue location.")])
     capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter the location capacity.")])
     submit = SubmitField('Add Venue', validators=(validators.Optional(),))
-
+    

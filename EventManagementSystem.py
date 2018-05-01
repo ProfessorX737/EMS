@@ -114,9 +114,11 @@ class EventManagementSystem():
     def removeVenue(self, name):
         self.__venueManager.removeVenue(name)
     def getVenues(self):
-        self.__venueManager.getVenues()
+        return self.__venueManager.getVenues()
     def getFreeTimes(self, name):
-        self.__venueManager.getFreeTimes(name)
+        return self.__venueManager.getFreeTimes(name)
+    def getVenueNames(self):
+        return self.__venueManager.getVenueNames()
 # ============ mixed methods ===============================================================================================
     def cancelEvent(self,convener,eventName):
         event = self.getEvent(eventName)
