@@ -181,7 +181,7 @@ def view_venues():
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
-    current_user.deleteNotification(id)
+    current_user.deleteNotification(int(id))
     return redirect(url_for(path))
 
 @app.route("/logout")
