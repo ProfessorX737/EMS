@@ -158,6 +158,11 @@ def view_venues():
     print(venues)
     return render_template('venues.html',venues = venues)
 
+@app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
+def delete_notification(path,id):
+    current_user.deleteNotification(id)
+    return redirect(url_for(path))
+
 @app.route("/logout")
 def logout():
     logout_user()

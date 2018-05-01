@@ -7,15 +7,17 @@
   <body>
     <h1 class="test">Event Management System</h1>
     {% if current_user.is_authenticated %}
-      {% if current_user.getNotifications()|length > 0 %}
+      {% if current_user.getNotificationsMap().values()|length > 0 %}
         <div class="dropdown" style="float:left;">
           <button class="dropbtn">You have notifications</button>
           <div class="dropdown-content" style="left:0;">
-            {% for message in current_user.getNotifications() %}
-            <a>{{ message }}</a>
+            {% for key,value in current_user.getNotificationsMap().items() %}
+            <form method="post" action="{{ url_for('delete_notification',path=request.path.strip("/"),id=key) }}">
+              <p>{{value}}<input type="submit" value="X" ></p>
+            </form>
             {% endfor %}
           </div>
-        </div><br>
+        </div><br><br>
       {% endif %}
     {% endif %}
     {% block body %}{% endblock %}
