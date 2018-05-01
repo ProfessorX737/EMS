@@ -7,17 +7,18 @@ class User(UserMixin,Person):
         self.__password = password
         self.__currEvents = {}
         self.__pastEvents = {}
-        self.__notifications = []
+        self.__notifications = {}
         self.isAuthenticated = False
         self.isActive = False
         self.isAnonymous = False
+        self.__notifications[0] = "Welcome " + name
     def getPassword(self):
         return self.__password
     def getCurrEvents(self):
         return self.__currEvents.values()
     def getPastEvents(self):
         return self.__pastEvents.values()
-    def getNotifications(self):
+    def getNotificationsMap(self):
         return self.__notifications
     # Flask login module required functions
     def get_id(self):
@@ -50,6 +51,10 @@ class User(UserMixin,Person):
             del self.__pastEvents[eventName]
             return True
         return False
+    def deleteNotification(self,id):
+        print("chicken\n")
+        if id in self.__notifications:
+            del self.__notifications[id]
     def isRegistered(self,eventName):
         if eventName in self.__currEvents:
             return True
@@ -58,6 +63,11 @@ class User(UserMixin,Person):
         return False
     def cancelRegisteredEvent(self,eventName):
         if self.removeRegisteredEvent(eventName):
-            self.__notifications.insert(1,eventName + " event was cancelled")
+            self.__notifications[self.getUniqueNotificationID()] = eventName + " event was cancelled"
             return True
         return False
+    def getUniqueNotificationID(self):
+        id = 0
+        while id in self.__notifications:
+            id = id + 1
+        return id
