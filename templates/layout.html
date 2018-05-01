@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Event Management System</title>
-  <link rel="stylesheet" type=text/css href="style.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
   <body>
-    <h1>Event Management System</h1>
+    <h1 class="test">Event Management System</h1>
     {% if current_user.is_authenticated %}
       {% if current_user.getNotifications()|length > 0 %}
         <div class="dropdown" style="float:left;">
