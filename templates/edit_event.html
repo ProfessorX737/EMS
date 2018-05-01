@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Edit event</h1>
+<form method="post" action="{{ url_for('edit_event',eventName=event.getName()) }}">
+    {{ form.name.label }}: {{ form.name(value=form.name.default) }} <br>
+    {{ form.description.label }}: {{ form.description(value=form.description.default) }}<br>
+    {{ form.venue.label }}: {{ form.venue(value = form.venue.default) }}    <br>
+    {{ form.convener.label }}: {{ form.convener(value= form.convener.default) }}   <br>
+    {{ form.capacity.label }}: {{ form.capacity(value = form.capacity.default) }}    <br>
+    {{ form.startDateTime.label }}: {{ form.startDateTime(value = form.startDateTime.default) }}    <br>
+    {{ form.endDateTime.label }}: {{ form.endDateTime(value = form.endDateTime.default) }}<br>
+    {{ form.deregEnd.label }}: {{ form.deregEnd(value = form.deregEnd.default) }}<br>
+    {{ form.csrf_token }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}

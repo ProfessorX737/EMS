@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Venues</h1>
+<ul>
+{% if venues %}
+    {% for venue in venues %}
+        <li> {{venue}} </li>
+    {%endfor%}
+{% else %}
+    <h1> No current venues yet, add one! </h1>
+{% endif %}
+<a href="{{ url_for('create_venue') }}">Add a venue</a>
+</ul>
+{% endblock %}

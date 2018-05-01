@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Add a new venue</h1>
+<form method="post" action="{{ url_for('create_venue') }}">
+    {{ form.name.label }}: {{ form.name }} <br>
+    {{ form.location.label }}: {{ form.location }}<br>
+    {{ form.capacity.label }}: {{ form.capacity }}   <br>
+    {{ form.csrf_token }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}
