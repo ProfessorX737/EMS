@@ -13,7 +13,7 @@ from CreateSessionForm import *
 from CreateVenueForm import *
 
 app = Flask(__name__)
-
+app.config['TESTING'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -50,16 +50,17 @@ def index():
             return redirect(url_for('home'))
     
     return render_template('login.html')
-        
+@login_required        
 @app.route('/home',methods=['GET','POST'])
 def home():
     return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
 
-    
+@login_required           
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
     return render_template('dashboard.html',userType=userType)
 
+@login_required        
 @app.route('/create_event',methods=['GET','POST'])
 def create_event():   
     # form = CreateEventForm()
@@ -78,6 +79,7 @@ def create_event():
         return redirect(url_for('home'))
     return render_template('create_event.html', form = form)
 
+@login_required        
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
@@ -85,6 +87,7 @@ def moreInfo(eventType,eventName):
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,event=event)
 
+@login_required        
 @app.route('/create_session/<seminarName>',methods=['GET','POST'])
 def create_session(seminarName):
     form = CreateSessionForm()
@@ -94,6 +97,7 @@ def create_session(seminarName):
         return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
     return render_template('create_session.html',seminarName=seminarName,form=form)
 
+@login_required        
 @app.route('/register/<eventName>',methods=['GET','POST'])
 def register_user(eventName):
     event = ems.getEvent(eventName)
@@ -104,6 +108,7 @@ def register_user(eventName):
         ems.registerUserToSeminar(eventName,current_user)
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
+@login_required        
 @app.route('/deregister/<eventName>',methods=['GET','POST'])
 def deregister_user(eventName):
     event = ems.getEvent(eventName)
@@ -114,6 +119,7 @@ def deregister_user(eventName):
         ems.deregisterUserFromSeminar(eventName,current_user.get_id())
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
+@login_required        
 @app.route('/edit_event/<eventName>',methods=['GET','POST'])
 def edit_event(eventName):
     event = ems.getEvent(eventName)
@@ -144,11 +150,19 @@ def edit_event(eventName):
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event)
 
+@login_required        
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
 def cancel_event(eventName):
     ems.cancelEvent(current_user,eventName)
     return redirect(url_for('home'))
 
+@login_required
+@app.route('/delete_venue/<venueName>',methods=['GET','POST'])
+def delete_venue(venueName):
+    ems.removeVenue(venueName)
+    return redirect(url_for('view_venues'))
+
+@login_required        
 @app.route('/create_venue',methods=['GET','POST'])
 def create_venue():
     form = CreateVenueForm()
@@ -157,11 +171,12 @@ def create_venue():
         return redirect(url_for('view_venues'))
     return render_template('create_venue.html',form=form)
 
+@login_required        
 @app.route('/venues',methods=['GET','POST'])
 def view_venues():
     venues = ems.getVenues()
     print(venues)
-    return render_template('venues.html',venues = venues)
+    return render_template('venues.html',venues = venues,userType=userType)
 
 @app.route("/logout")
 def logout():

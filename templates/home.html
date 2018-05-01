@@ -13,8 +13,8 @@
         <li><a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}</a></li> <br/>
     {% endfor %}
 </ul>
+<a href="{{ url_for('view_venues') }}">View Venues</a>
 {% if userType == 'Staff' %}
 <a href="{{ url_for('create_event') }}">Create Event</a>
-<a href="{{ url_for('view_venues') }}">View Venues</a>
 {% endif %}
 {% endblock %}
