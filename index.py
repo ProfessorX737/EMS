@@ -35,13 +35,13 @@ with open('user.csv') as f:
         ems.addUser(attr[0],attr[1],attr[2],attr[3],attr[4])
         
 @app.route('/',methods=['GET','POST'])
-def index():
+def login():
     if (request.method == 'POST'):
         zid = request.form.get('zid','')
         password = request.form.get('password','')
         user = loadUser(zid)
         if user is None or user.getPassword() != password:
-            return redirect(url_for('index'))
+            return redirect(url_for('login'))
         else:
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
@@ -50,18 +50,19 @@ def index():
             return redirect(url_for('home'))
     
     return render_template('login.html')
-@login_required        
+
 @app.route('/home',methods=['GET','POST'])
+@login_required        
 def home():
     return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
 
-@login_required           
 @app.route('/dashboard',methods=['GET','POST'])
+@login_required        
 def dashboard():
     return render_template('dashboard.html',userType=userType)
 
-@login_required        
 @app.route('/create_event',methods=['GET','POST'])
+@login_required        
 def create_event():   
     # form = CreateEventForm()
     venueNames = ems.getVenueNames()
@@ -79,16 +80,16 @@ def create_event():
         return redirect(url_for('home'))
     return render_template('create_event.html', form = form)
 
-@login_required        
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
+@login_required        
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
     isOwner = ems.isMyEvent(current_user.get_id(),eventName)
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,event=event)
 
-@login_required        
 @app.route('/create_session/<seminarName>',methods=['GET','POST'])
+@login_required        
 def create_session(seminarName):
     form = CreateSessionForm()
     if form.validate_on_submit():
@@ -97,8 +98,8 @@ def create_session(seminarName):
         return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
     return render_template('create_session.html',seminarName=seminarName,form=form)
 
-@login_required        
 @app.route('/register/<eventName>',methods=['GET','POST'])
+@login_required        
 def register_user(eventName):
     event = ems.getEvent(eventName)
     ems.addRegisteredEvent(current_user.get_id(),event)
@@ -108,8 +109,8 @@ def register_user(eventName):
         ems.registerUserToSeminar(eventName,current_user)
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
-@login_required        
 @app.route('/deregister/<eventName>',methods=['GET','POST'])
+@login_required        
 def deregister_user(eventName):
     event = ems.getEvent(eventName)
     ems.removeRegisteredEvent(current_user.get_id(),eventName)
@@ -119,8 +120,8 @@ def deregister_user(eventName):
         ems.deregisterUserFromSeminar(eventName,current_user.get_id())
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
-@login_required        
 @app.route('/edit_event/<eventName>',methods=['GET','POST'])
+@login_required        
 def edit_event(eventName):
     event = ems.getEvent(eventName)
 
@@ -150,20 +151,20 @@ def edit_event(eventName):
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event)
 
-@login_required        
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
+@login_required        
 def cancel_event(eventName):
     ems.cancelEvent(current_user,eventName)
     return redirect(url_for('home'))
 
-@login_required
 @app.route('/delete_venue/<venueName>',methods=['GET','POST'])
+@login_required        
 def delete_venue(venueName):
     ems.removeVenue(venueName)
     return redirect(url_for('view_venues'))
 
-@login_required        
 @app.route('/create_venue',methods=['GET','POST'])
+@login_required        
 def create_venue():
     form = CreateVenueForm()
     if form.validate_on_submit():
@@ -171,19 +172,20 @@ def create_venue():
         return redirect(url_for('view_venues'))
     return render_template('create_venue.html',form=form)
 
-@login_required        
 @app.route('/venues',methods=['GET','POST'])
+@login_required        
 def view_venues():
     venues = ems.getVenues()
     print(venues)
     return render_template('venues.html',venues = venues,userType=userType)
 
 @app.route("/logout")
+@login_required        
 def logout():
     logout_user()
     flash('you were logged out')
     # set current user to unauthenticated
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 if __name__=='__main__':
     app.secret_key = os.urandom(12)
     app.run(debug=True)
