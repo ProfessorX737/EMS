@@ -61,10 +61,10 @@ def dashboard():
     return render_template('dashboard.html',userType=userType)
 
 @app.route('/create_event',methods=['GET','POST'])
-def create_event():
-    venues = addVenues()    
+def create_event():   
     # form = CreateEventForm()
-    form = NewStartUpForm(venues).getForm()
+    venueNames = ems.getVenueNames()
+    form = NewStartUpForm(venueNames).getForm()
 
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
@@ -117,7 +117,9 @@ def deregister_user(eventName):
 @app.route('/edit_event/<eventName>',methods=['GET','POST'])
 def edit_event(eventName):
     event = ems.getEvent(eventName)
-    form = NewStartUpForm(addVenues()).getForm()
+
+    venueNames = ems.getVenueNames()
+    form = NewStartUpForm(venueNames).getForm()
 
     form.name.default = eventName
     form.description.default = event.getDescription()
@@ -160,14 +162,6 @@ def view_venues():
     venues = ems.getVenues()
     print(venues)
     return render_template('venues.html',venues = venues)
-
-def addVenues():
-    venues = []
-    for v in ems.getVenueNames():
-        obj = (v,v)
-        venues.append(obj)
-    return venues
-
 
 @app.route("/logout")
 def logout():

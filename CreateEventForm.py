@@ -1,6 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextField, TextAreaField, validators, StringField, DateTimeField, IntegerField, SubmitField, SelectField
 
+# Enables us to pass parameters into WTForm 
 class NewStartUpForm( Form ):
     def __init__( self, venues, *arg, **kwarg ):
         self.venues = venues
@@ -21,8 +22,15 @@ class CreateEventForm(Form):
     capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter the event capacity.")])
     submit = SubmitField('Create Event', validators=(validators.Optional(),))
 
+    # SelectFields must be provided with pair objects
+    def createPairs(self, venues):
+        pairs = []
+        for venue in venues:
+            pairs.append((venue,venue))
+        return pairs
+
     def __init__(self,venues, *args, **kwargs):
         super(CreateEventForm, self).__init__(*args, **kwargs)
-        self.venue.choices = venues
+        self.venue.choices = self.createPairs(venues)
 
-
+   
