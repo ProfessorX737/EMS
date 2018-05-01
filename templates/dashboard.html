@@ -3,27 +3,33 @@
 <h1>Dashboard</h1>
 <h2> Registered Open Events </h2>
 <ul>
-{% for currEvent in currEvents %}
+{% for currEvent in current_user.getCurrEvents() %}
     <li><a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventName=currEvent.getName()) }}">{{currEvent.getName()}}</a></li> <br/>
 {% endfor %}
 </ul>
 <h2> Registered Past Events </h2>
 <ul>
-    {% for pastEvent in pastEvents %}
+    {% for pastEvent in current_user.getPastEvents() %}
         <li><a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventName=pastEvent.getName()) }}">{{pastEvent.getName()}}</a></li> <br/>
     {% endfor %}
 </ul>
 {%if userType == 'Staff'%}
   <h2> Posted Open Events </h2>
   <ul>
-  {% for postedCurrEvent in postedCurrEvents %}
+  {% for postedCurrEvent in current_user.getPostedCurrEvents() %}
       <li><a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventName=postedCurrEvent.getName()) }}">{{postedCurrEvent.getName()}}</a></li> <br/>
   {% endfor %}
   </ul>
   <h2> Posted Past Events </h2>
   <ul>
-      {% for postedPastEvent in postedPastEvents %}
+      {% for postedPastEvent in current_user.getPostedPastEvents() %}
           <li><a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventName=postedPastEvent.getName()) }}">{{postedPastEvent.getName()}}</a></li> <br/>
+      {% endfor %}
+  </ul>
+  <h2> Cancelled Events </h2>
+  <ul>
+      {% for cancelledEvent in current_user.getCancelledEvents() %}
+          <li><a href="{{ url_for('moreInfo',eventType=cancelledEvent.getClassName(),eventName=cancelledEvent.getName()) }}">{{cancelledEvent.getName()}}</a></li> <br/>
       {% endfor %}
   </ul>
 {% endif %}

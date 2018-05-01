@@ -57,12 +57,7 @@ def home():
     
 @app.route('/dashboard',methods=['GET','POST'])
 def dashboard():
-    postedCurrEvents = None
-    postedPastEvents = None
-    if userType == "Staff":
-        postedCurrEvents = ems.getPostedCurrEvents(current_user)
-        postedPastEvents = ems.getPostedPastEvents(current_user)
-    return render_template('dashboard.html',userType=userType,currEvents=current_user.getCurrEvents(),pastEvents=current_user.getPastEvents(),postedCurrEvents=postedCurrEvents,postedPastEvents=postedPastEvents)
+    return render_template('dashboard.html',userType=userType)
 
 @app.route('/create_event',methods=['GET','POST'])
 def create_event():
@@ -83,9 +78,8 @@ def create_event():
 def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
     isOwner = ems.isMyEvent(current_user.get_id(),eventName)
-    print(isOwner)
     # if staff check if this event is inside getPostedCurrEvents
-    return render_template('more_info.html',isOwner=isOwner,eventType=eventType,event=event,currentUser=current_user)
+    return render_template('more_info.html',isOwner=isOwner,event=event)
 
 @app.route('/create_session/<seminarName>',methods=['GET','POST'])
 def create_session(seminarName):
