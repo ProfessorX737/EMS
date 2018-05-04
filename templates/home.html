@@ -1,20 +1,21 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>Home</h1>
+
+<div class="row" style="display: flex">
+<div class="column" style="flex:50%">
 <h2>Seminars</h2>
-<ul>
-{% for seminar in seminars %}
-    <li><a href="{{ url_for('moreInfo',eventType='Seminar',eventName=seminar.getName()) }}">{{seminar.getName()}}</a></li> <br/>
-{% endfor %}
-</ul>
-<h2> Courses </h2>
-<ul>
-    {% for course in courses %}
-        <li><a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}</a></li> <br/>
+    {% for seminar in seminars %}
+        <a href="{{ url_for('moreInfo',eventType='Seminar',eventName=seminar.getName()) }}">{{seminar.getName()}}</a><br/>
     {% endfor %}
-</ul>
-<a href="{{ url_for('view_venues') }}">View Venues</a>
-{% if userType == 'Staff' %}
-<a href="{{ url_for('create_event') }}">Create Event</a>
-{% endif %}
+</div>
+<div class="column" style="flex:50%">
+<h2> Courses </h2>
+
+    {% for course in courses %}
+        <a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}</a><br/>
+    {% endfor %}
+
+</div>
+</div>
 {% endblock %}

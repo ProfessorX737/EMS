@@ -1,14 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-{% if isOwner %}
-    {% if event.getClassName() == 'Seminar' %}
-        <a href="{{ url_for('create_session',seminarName=event.getName()) }}" > Create sessions </a>
-        <h2> Current Sessions </h2>
-        {% for session in event.getSessions()%}
-            <li> {{session.getName()}} </li>
-        {% endfor %}
-    {% endif %}
-{% endif %}
+
 <h1>{{event.getName()}}</h1>
 <h2> Start: </h2>
 {{event.getStartDateTime()}}
@@ -46,6 +38,13 @@
     <form method="post" action="{{ url_for('cancel_event',eventName=event.getName()) }}">
         <p><input type="submit" value="Cancel Event" ></p>
     </form>
+    {% if event.getClassName() == 'Seminar' %}
+        <a href="{{ url_for('create_session',seminarName=event.getName()) }}" > Create sessions </a>
+        <h2> Current Sessions </h2>
+        {% for session in event.getSessions()%}
+            <li> {{session.getName()}} </li>
+        {% endfor %}
+    {% endif %}
     {% endif %}
 {% endif %}
 {% endblock %}

@@ -53,6 +53,7 @@ class User(UserMixin,Person):
         return False
     def deleteNotification(self,id):
         print("chicken\n")
+        id = int(id)
         if id in self.__notifications:
             del self.__notifications[id]
     def isRegistered(self,eventName):

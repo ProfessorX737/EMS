@@ -1,18 +1,54 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Course Creation</h1>
+<h1>Event Creation</h1>
 <form method="post" action="/create_event">
-    {{ form.eventType.label }}: {{ form.eventType }} <br>
-    {{ form.name.label }}: {{ form.name }} <br>
-    {{ form.description.label }}: {{ form.description }}<br>
-    {{ form.venue.label }}: {{ form.venue }}    <br>
-    {{ form.convener.label }}: {{ form.convener }}   <br>
-    {{ form.capacity.label }}: {{ form.capacity }}    <br>
-    {{ form.startDateTime.label }}: {{ form.startDateTime(placeholder='yyyy-mm-dd HH:MM') }}    <br>
-    {{ form.endDateTime.label }}: {{ form.endDateTime(placeholder='yyyy-mm-dd HH:MM') }}<br>
-    {{ form.deregEnd.label }}: {{ form.deregEnd(placeholder='yyyy-mm-dd HH:MM') }}<br>
-    {{ form.csrf_token }}
-    {{ form.submit }}
+    <div class="login-div" style="width: 20%; margin: auto; margin-bottom:10px">
+        <table class="login-table">
+            <tr>
+                <td>{{ form.eventType.label }}:</td>
+                <td>{{ form.eventType }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.name.label }}:</td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.description.label }}:</td>
+                <td>{{ form.description }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.venue.label }}:</td>
+                <td>{{ form.venue }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.convener.label }}:</td>
+                <td>{{ form.convener }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.capacity.label }}:</td>
+                <td>{{ form.capacity}}</td>
+            </tr>
+            <tr>
+                <td style="white-space: nowrap">{{ form.startDateTime.label }}:</td>
+                <td>{{ form.startDateTime(placeholder='yyyy-mm-dd HH:MM') }} </td>
+            </tr>
+            <tr>
+                <td>{{ form.endDateTime.label }}:</td>
+                <td>{{ form.endDateTime(placeholder='yyyy-mm-dd HH:MM') }} </td>
+            </tr>
+            <tr>
+                <td style="white-space: nowrap">{{ form.deregEnd.label }}:</td>
+                <td>{{ form.deregEnd(placeholder='yyyy-mm-dd HH:MM') }} </td>
+            </tr>   
+            <tr>
+                <td>{{ form.csrf_token }}</td>
+                <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>
+            </tr>   
+        </table>
+        
+    </div>
+    
+       
 </form>
 
 {% endblock %}

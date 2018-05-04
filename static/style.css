@@ -46,3 +46,12 @@
 .test {
     background-color: orange;
 }
+
+.login-div{
+    display: flex;
+    justify-content: center;
+}
+
+table{
+    align-self:center;
+}

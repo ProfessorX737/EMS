@@ -3,8 +3,21 @@
   <h2>Login</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
     <form method="post" action="/">
-        <p>zid: <input name="zid"></p>
-        <p>password: <input name="password"></p>
-        <p><input type="submit" value="Login" ></p>
+        <div class="login-div" style="width: 20%; margin: auto; margin-bottom:10px">
+        <table class="login-table">
+            <tr>
+                <td>zid:</td>
+                <td><input name="zid"></td>
+            </tr>
+            <tr>
+                <td>password:</td>
+                <td><input name="password"></td>
+            </tr>
+        </table>
+        </div>
+        <input type="submit" value="Login" >
     </form>
+
+
+
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>Venues</h1>
-<ul>
+
 {% if venues %}
     {% for venue in venues %}
-        <li> Name: {{venue.getName()}} </li>
-        <li> Location: {{venue.getLocation()}} </li>
-        <li> Capacity: {{venue.getMaxCapacity()}} </li>
+         Name: {{venue.getName()}} </br>
+         Location: {{venue.getLocation()}} </br>
+         Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}
             <form method="post" action="{{ url_for('delete_venue',venueName=venue.getName()) }}">
                 <p><input type="submit" value="Remove Venue" ></p>
@@ -16,7 +16,7 @@
 {% else %}
 <h1> No current venues yet, add one! </h1>
 {% endif %}
-</ul>
+
 {% if userType == 'Staff' %}
 <a href="{{ url_for('create_venue') }}">Add a venue</a>
 {% endif %}

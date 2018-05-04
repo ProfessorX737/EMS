@@ -125,7 +125,6 @@ class EventManagementSystem():
         self.__userManager.cancelEvent(convener,eventName)
         self.__courseManager.cancelEvent(eventName)
         self.__seminarManager.cancelEvent(eventName)
-    
 
 
     # def parseDateTime(self,dateTimeString):

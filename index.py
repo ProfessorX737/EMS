@@ -65,7 +65,7 @@ def create_event():
     # form = CreateEventForm()
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
-
+    print("creating event")
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -76,7 +76,7 @@ def create_event():
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
         return redirect(url_for('home'))
-    return render_template('create_event.html', form = form)
+    return render_template('create_event.html', form = form, userType=userType)
 
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 @login_required        
@@ -179,7 +179,8 @@ def view_venues():
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
-    current_user.deleteNotification(id)
+    user = ems.getUser(current_user.get_id())
+    user.deleteNotification(int(id))
     return redirect(url_for(path))
 
 @app.route("/logout")
