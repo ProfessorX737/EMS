@@ -159,10 +159,13 @@ def delete_venue(venueName):
 @login_required        
 def create_venue():
     form = CreateVenueForm()
+    message = ''
     if form.validate_on_submit():
-        ems.addVenue(form.name.data,form.location.data,form.capacity.data)
-        return redirect(url_for('view_venues'))
-    return render_template('create_venue.html',form=form,userType=userType)
+        if (ems.addVenue(form.name.data,form.location.data,form.capacity.data) is False):
+            message = 'venue with this name already exists'
+        else:
+            return redirect(url_for('view_venues'))
+    return render_template('create_venue.html',form=form,userType=userType,message=message)
 
 @app.route('/venues',methods=['GET','POST'])
 @login_required        

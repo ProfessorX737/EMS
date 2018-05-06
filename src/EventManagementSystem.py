@@ -23,6 +23,7 @@ class EventManagementSystem():
         for e in self.__seminarManager.getEvents():
             events.append(e)
         return events
+        
     def getCurrentSeminars(self):
         return self.__seminarManager.getCurrentEvents()
     def getPastSeminars(self):
@@ -71,9 +72,9 @@ class EventManagementSystem():
             return True
         else:
             return False
+
     def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
         session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
-        self.__userManager.notifyRegistreesNewSession(seminarName,name)
         self.__seminarManager.addSession(seminarName,session)
 
     def getSession(self,seminarName,sessionName):
@@ -116,7 +117,7 @@ class EventManagementSystem():
         self.__userManager.removeRegisteredEvent(userID,eventName)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
-        self.__venueManager.addVenue(name, loc, capacity)
+        return self.__venueManager.addVenue(name, loc, capacity)
     def removeVenue(self, name):
         self.__venueManager.removeVenue(name)
     def getVenues(self):
@@ -132,6 +133,4 @@ class EventManagementSystem():
         self.__courseManager.cancelEvent(eventName)
         self.__seminarManager.cancelEvent(eventName)
 
-
-    # def parseDateTime(self,dateTimeString):
-    #     return datetime.datetime.strptime(dateTimeString,"%d-%m-%Y %H:%M")
+                
