@@ -5,7 +5,7 @@ class SeminarManager(EventManager):
     def __init__(self):
         super().__init__()
     def addSeminar(self,seminar):
-        self.addEvent(seminar)
+        return self.addEvent(seminar)
 
     def addSession(self,seminarName,session):
         seminar = self.getEvent(seminarName)

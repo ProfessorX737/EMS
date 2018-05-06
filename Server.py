@@ -12,7 +12,6 @@ login_manager.login_view = "login"
 
 ems = EventManagementSystem()
 
-
 @login_manager.user_loader
 def loadUser(userName):
     return ems.getUser(userName)

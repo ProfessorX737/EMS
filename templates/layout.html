@@ -12,26 +12,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
-.eventbox {
-  display: inline-block;
-  background-color: white;
-  border: 3px solid black;
-  padding: 25px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-}
 
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.eventbox::first-line {
-  font-style: bold;
-  font-size: 20px;
-}
 </style>
 <body>
 
@@ -47,9 +28,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="{{url_for('home')}}">Home</a></li>
-        {% if current_user.is_authenticated %}
         
+        {% if current_user.is_authenticated %}
+          <li><a href="{{url_for('home')}}">Home</a></li>
           <li><a href="{{url_for('dashboard')}}">Dashboards</a></li>
           {% if userType == 'Staff' %}
             <li><a href="{{url_for('create_event')}}">Create Event</a></li>
@@ -80,27 +61,9 @@
   
 <div class="container-fluid text-center">    
   <div class="row content">
-    <!-- <div class="col-sm-2 sidenav">
-      <p><a href="#">Link</a></p>
-      <p><a href="#">Link</a></p>
-      <p><a href="#">Link</a></p>
-    </div> -->
     {% block body %}
     {% endblock %}
-    <!-- <div class="col-sm-2 sidenav">
-      <div class="well">
-        <p>ADS</p>
-      </div>
-      <div class="well">
-        <p>ADS</p>
-      </div>
-    </div> -->
   </div>
 </div>
-
-<!-- <footer class="container-fluid text-center">
-  <p>Footer Text</p>
-</footer> -->
-
 </body>
 </html>
