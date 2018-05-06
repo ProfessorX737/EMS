@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextField, TextAreaField, validators, StringField, DateTimeField, IntegerField, SubmitField, SelectField
-from validators.dateTime_isLessThan import *
-from validators.dateTime_isGreaterThan import *
+from src.validators.dateTime_isLessThan import *
+from src.validators.dateTime_isGreaterThan import *
 # Enables us to pass parameters into WTForm 
 class NewStartUpForm( Form ):
     def __init__( self, venues, *arg, **kwarg ):

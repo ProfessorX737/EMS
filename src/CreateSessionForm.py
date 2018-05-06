@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextField, TextAreaField, validators, StringField, DateTimeField, SubmitField, SelectField
-from validators.dateTime_isLessThan import *
-from validators.dateTime_isGreaterThan import *
+from src.validators.dateTime_isLessThan import *
+from src.validators.dateTime_isGreaterThan import *
 
 class CreateSessionForm(Form):
     name = StringField('Name', validators=[validators.DataRequired("Please enter event name.")])
