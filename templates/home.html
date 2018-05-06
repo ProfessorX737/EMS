@@ -5,24 +5,27 @@
 <div class="row" style="display: flex">
     <div class="column" style="flex:50%">
     <h2>Seminars</h2>
-        {% for seminar in seminars %}
+        <div class="flex">
+            {% for seminar in seminars %}
             <div class="eventbox">
                 <a href="{{ url_for('moreInfo',eventType='Course',eventName=seminar.getName()) }}">{{seminar.getName()}}<br></a>
                 Venue: {{seminar.getVenueName()}}<br>
                 Start: {{seminar.getStartDateTime()}}
-            </div><br>
-        {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
     <div class="column" style="flex:50%">
     <h2> Courses </h2>
-        {% for course in courses %}
+        <div class="flex">
+            {% for course in courses %}
             <div class="eventbox">
                 <a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}<br></a>
                 Venue: {{course.getVenueName()}}<br>
                 Start: {{course.getStartDateTime()}}
-            </div><br>
-            
-        {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}
