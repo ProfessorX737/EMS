@@ -17,6 +17,8 @@ class GreaterThan(object):
     def __call__(self, form, field):
         try:
             other = form[self.fieldname]
+            if other.data is None:
+                raise ValidationError()
         except KeyError:
             raise ValidationError(field.gettext("Invalid field name '%s'.") % self.fieldname)
         if field.data <= other.data:
