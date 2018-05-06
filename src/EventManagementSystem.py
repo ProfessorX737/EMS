@@ -58,14 +58,19 @@ class EventManagementSystem():
 
     def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         course = Course(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        self.__courseManager.addCourse(course)
-        print("Course name is ", course.getName())
-        staff.addPostedCurrEvent(course)
+        if (self.__courseManager.addCourse(course)):
+            staff.addPostedCurrEvent(course)
+            return True
+        else:
+            return False
 
     def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         seminar = Seminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        self.__seminarManager.addSeminar(seminar)
-        staff.addPostedCurrEvent(seminar)
+        if (self.__seminarManager.addSeminar(seminar)):
+            staff.addPostedCurrEvent(seminar)
+            return True
+        else:
+            return False
     def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
         session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
         self.__seminarManager.addSession(seminarName,session)

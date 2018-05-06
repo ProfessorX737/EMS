@@ -12,13 +12,17 @@ from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from Server import app, ems, loadUser
 
-with open('user.csv') as f:
-    lines = f.readlines()
-    for line in lines:
-        attr = line.split(',')
-        # remove new line character from last elt
-        attr[-1] = attr[-1].strip()
-        ems.addUser(attr[0],attr[1],attr[2],attr[3],attr[4])
+try: 
+    with open('user.csv') as f:
+        lines = f.readlines()
+        for line in lines:
+            attr = line.split(',')
+            # remove new line character from last elt
+            attr[-1] = attr[-1].strip()
+            ems.addUser(attr[0],attr[1],attr[2],attr[3],attr[4])
+except OSError as e:
+    print(e)
+    exit()
         
 @app.route('/',methods=['GET','POST'])
 def login():
@@ -50,20 +54,26 @@ def dashboard():
 @app.route('/create_event',methods=['GET','POST'])
 @login_required        
 def create_event():   
-    # form = CreateEventForm()
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
+    message = ''
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
-            ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
+            if (ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)
+            form.capacity.data,form.deregEnd.data)):
+                return redirect(url_for('home'))
+            else:
+                message = 'Course name already taken'
         else:
-            ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
+            if(ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)
-        return redirect(url_for('home'))
-    return render_template('create_event.html', form = form, userType=userType)
+            form.capacity.data,form.deregEnd.data)):
+                return redirect(url_for('home'))
+            else:
+                message = 'Seminar name already taken'
+
+    return render_template('create_event.html', form = form, userType=userType, message=message)
 
 @app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
 @login_required        

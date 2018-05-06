@@ -17,19 +17,24 @@
 <h2> Status </h2>
 {% if event.isOpen() %}
     Open
+{% elif event.isCancelled() %}
+    Cancelled
 {% else %}
     Closed
 {% endif %}
 {% if not event.isCancelled() %}
-    {% if isOwner == false and current_user.isRegistered(event.getName()) == false %}
-    <form method="post" action="{{ url_for('register_user',eventName=event.getName()) }}">
-        <p><input type="submit" value="Register" ></p>
-    </form>
-    {% endif %}
-    {% if current_user.isRegistered(event.getName()) == true %}
-    <form method="post" action="{{ url_for('deregister_user',eventName=event.getName()) }}">
-        <p><input type="submit" value="Deregister" ></p>
-    </form>
+    {% if event.isFull() %}
+    {% else %}
+        {% if isOwner == false and current_user.isRegistered(event.getName()) == false %}
+        <form method="post" action="{{ url_for('register_user',eventName=event.getName()) }}">
+            <p><input type="submit" value="Register" ></p>
+        </form>
+        {% endif %}
+        {% if current_user.isRegistered(event.getName()) == true %}
+        <form method="post" action="{{ url_for('deregister_user',eventName=event.getName()) }}">
+            <p><input type="submit" value="Deregister" ></p>
+        </form>
+        {% endif %}
     {% endif %}
     {% if isOwner == true %}
     <form method="post" action="{{ url_for('edit_event',eventName=event.getName()) }}">
@@ -46,5 +51,6 @@
         {% endfor %}
     {% endif %}
     {% endif %}
+
 {% endif %}
 {% endblock %}
