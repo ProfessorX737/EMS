@@ -20,7 +20,7 @@ class CreateEventForm(Form):
     deregEnd = DateTimeField('Deregister Period End', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired("Please enter the end of deregistration period."), LessThan('startDateTime', 'dereg < start')])
     convener = StringField('Convener Name', validators=[validators.DataRequired("Please enter event convener's name.")])
     venue = SelectField('Venue')
-    capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter the event capacity.")])
+    capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter valid event capacity.")])
     submit = SubmitField('Create Event', validators=(validators.Optional(),))
 
     # SelectFields must be provided with pair objects
@@ -34,4 +34,12 @@ class CreateEventForm(Form):
         super(CreateEventForm, self).__init__(*args, **kwargs)
         self.venue.choices = self.createPairs(venues)
 
-   
+    def fillDefault(self,event):
+        self.name.default = event.getName()
+        self.description.default = event.getDescription()
+        self.startDateTime.default = event.getStartDateTime().strftime("%Y-%m-%d %H:%M")
+        self.endDateTime.default = event.getEndDateTime().strftime("%Y-%m-%d %H:%M") 
+        self.venue.default = (event.getVenueName(), event.getVenueName())
+        self.convener.default = event.getConvener()  
+        self.capacity.default = event.getCapacity()
+        self.deregEnd.default = event.getDeregEnd().strftime("%Y-%m-%d %H:%M")
