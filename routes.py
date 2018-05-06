@@ -1,15 +1,15 @@
 from flask import Flask, render_template, url_for, flash, request, redirect, session
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from UserManager import *
-from EventManager import *
-from Event import *
-from Period import *
-from Seminar import *
-from Course import *
-from CreateEventForm import *
-from CreateSessionForm import *
-from CreateVenueForm import *
+from src.UserManager import *
+from src.EventManager import *
+from src.Event import *
+from src.Period import *
+from src.Seminar import *
+from src.Course import *
+from src.CreateEventForm import *
+from src.CreateSessionForm import *
+from src.CreateVenueForm import *
 from Server import app, ems, loadUser
 
 with open('user.csv') as f:
@@ -53,7 +53,6 @@ def create_event():
     # form = CreateEventForm()
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
-    print("creating event")
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -113,18 +112,9 @@ def edit_event(eventName):
 
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
-
-    form.name.default = eventName
-    form.description.default = event.getDescription()
-    form.startDateTime.default = event.getStartDateTime().strftime("%Y-%m-%d %H:%M")
-    form.endDateTime.default = event.getEndDateTime().strftime("%Y-%m-%d %H:%M") 
-    form.venue.default = (event.getVenueName(), event.getVenueName())
-    form.convener.default = event.getConvener()  
-    form.capacity.default = event.getCapacity()
-    form.deregEnd.default = event.getDeregEnd().strftime("%Y-%m-%d %H:%M")
+    form.fillDefault(event)
 
     if form.validate_on_submit():
-        print(form.capacity.data)
         ems.deleteEvent(event)
         if (isinstance(event,Course)):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -162,7 +152,6 @@ def create_venue():
 @login_required        
 def view_venues():
     venues = ems.getVenues()
-    print(venues)
     return render_template('venues.html',venues = venues,userType=userType)
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])

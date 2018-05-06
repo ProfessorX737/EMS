@@ -1,16 +1,16 @@
 from flask import Flask, render_template, url_for, flash, request, redirect, session
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from UserManager import *
-from EventManager import *
-from Event import *
-from Period import *
-from Seminar import *
-from Course import *
-from EventManagementSystem import *
-from CreateEventForm import *
-from CreateSessionForm import *
-from CreateVenueForm import *
+from src.UserManager import *
+from src.EventManager import *
+from src.Event import *
+from src.Period import *
+from src.Seminar import *
+from src.Course import *
+from src.EventManagementSystem import *
+from src.CreateEventForm import *
+from src.CreateSessionForm import *
+from src.CreateVenueForm import *
 
 app = Flask(__name__)
 app.config['TESTING'] = False
