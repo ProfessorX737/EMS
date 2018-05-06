@@ -4,7 +4,8 @@
 
 {% if venues %}
     {% for venue in venues %}
-         Name: {{venue.getName()}} </br>
+        <div class="eventbox">
+         {{venue.getName()}} </br>
          Location: {{venue.getLocation()}} </br>
          Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}
@@ -12,6 +13,7 @@
                 <p><input type="submit" value="Remove Venue" ></p>
             </form>
         {% endif %}
+        </div>
     {%endfor%}
 {% else %}
 <h1> No current venues yet, add one! </h1>

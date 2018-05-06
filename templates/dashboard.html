@@ -2,25 +2,60 @@
 {% block body %}
 <h1>Dashboard</h1>
 <h2> Registered Open Events </h2>
-{% for currEvent in current_user.getCurrEvents() %}
-    <a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventName=currEvent.getName()) }}">{{currEvent.getName()}}</a><br/>
-{% endfor %}
+<div class="flex">
+    {% for currEvent in current_user.getCurrEvents() %}
+    <div class="eventbox">
+        <a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventName=currEvent.getName()) }}">{{currEvent.getName()}}</a><br/>
+        Type: {{currEvent.getClassName()}}<br>
+        Venue: {{currEvent.getVenueName()}}<br>
+        Start: {{currEvent.getStartDateTime()}}
+    </div>
+    {% endfor %}
+</div>
 <h2> Registered Past Events </h2>
+<div class="flex">
     {% for pastEvent in current_user.getPastEvents() %}
-        <a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventName=pastEvent.getName()) }}">{{pastEvent.getName()}}</a> <br/>
+    <div class="eventbox">
+        <a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventName=pastEvent.getName()) }}">{{pastEvent.getName()}}</a><br/>
+        Type: {{pastEvent.getClassName()}}<br>
+        Venue: {{pastEvent.getVenueName()}}<br>
+        Start: {{pastEvent.getStartDateTime()}}
+    </div>
     {% endfor %}
+</div>
 {%if userType == 'Staff'%}
-  <h2> Posted Open Events </h2>
-  {% for postedCurrEvent in current_user.getPostedCurrEvents() %}
-      <a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventName=postedCurrEvent.getName()) }}">{{postedCurrEvent.getName()}}</a><br/>
-  {% endfor %}
-  <h2> Posted Past Events </h2>
+<h2> Posted Open Events </h2>
+<div class="flex">
+    {% for postedCurrEvent in current_user.getPostedCurrEvents() %}
+    <div class="eventbox">
+        <a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventName=postedCurrEvent.getName()) }}">{{postedCurrEvent.getName()}}</a><br/>
+        Type: {{postedCurrEvent.getClassName()}}<br>
+        Venue: {{postedCurrEvent.getVenueName()}}<br>
+        Start: {{postedCurrEvent.getStartDateTime()}}
+    </div>
+    {% endfor %}
+</div>
+<h2> Posted Past Events </h2>
+<div class="flex">
     {% for postedPastEvent in current_user.getPostedPastEvents() %}
+    <div class="eventbox">
         <a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventName=postedPastEvent.getName()) }}">{{postedPastEvent.getName()}}</a><br/>
+        Type: {{postedPastEvent.getClassName()}}<br>
+        Venue: {{postedPastEvent.getVenueName()}}<br>
+        Start: {{postedPastEvent.getStartDateTime()}}
+    </div>
     {% endfor %}
-  <h2> Cancelled Events </h2>
+</div>
+<h2> Cancelled Events </h2>
+<div class="flex">
     {% for cancelledEvent in current_user.getCancelledEvents() %}
+    <div class="eventbox">
         <a href="{{ url_for('moreInfo',eventType=cancelledEvent.getClassName(),eventName=cancelledEvent.getName()) }}">{{cancelledEvent.getName()}}</a><br/>
+        Type: {{cancelledEvent.getClassName()}}<br>
+        Venue: {{cancelledEvent.getVenueName()}}<br>
+        Start: {{cancelledEvent.getStartDateTime()}}
+    </div>
     {% endfor %}
+</div>
 {% endif %}
 {% endblock %}
