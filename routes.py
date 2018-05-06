@@ -27,7 +27,7 @@ def login():
         password = request.form.get('password','')
         user = loadUser(zid)
         if user is None or user.getPassword() != password:
-            return redirect(url_for('login'))
+            return render_template('login.html',message="Invalid username or password")
         else:
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
