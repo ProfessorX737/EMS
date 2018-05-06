@@ -68,6 +68,7 @@ class EventManagementSystem():
         staff.addPostedCurrEvent(seminar)
     def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
         session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
+        self.__userManager.notifyRegistreesNewSession(seminarName,name)
         self.__seminarManager.addSession(seminarName,session)
 
     def getSession(self,seminarName,sessionName):

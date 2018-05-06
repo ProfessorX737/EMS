@@ -58,4 +58,8 @@ class UserManager():
         for s in self.__students.values():
             s.cancelRegisteredEvent(eventName)
         convener.cancelPostedEvent(eventName)
+    def notifyRegistreesNewSession(self,seminarName, sessionName):
+        for student in self.__students.values():
+            if student.isRegistered(seminarName):
+                student.addNotification("A new session " + "'{0}'".format(sessionName) + " was added to " + "'{0}'".format(seminarName) + " seminar")
 

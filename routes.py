@@ -26,8 +26,10 @@ def login():
         zid = request.form.get('zid','')
         password = request.form.get('password','')
         user = loadUser(zid)
-        if user is None or user.getPassword() != password:
-            return render_template('login.html',message="Invalid username or password")
+        if user is None:
+            return render_template('login.html',message= "'{0}'".format(zid) + " is not a valid username")
+        if user.getPassword() != password:
+            return render_template('login.html',message="Incorrect password")
         else:
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student

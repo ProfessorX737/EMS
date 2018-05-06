@@ -62,7 +62,7 @@ class User(UserMixin,Person):
         return False
     def cancelRegisteredEvent(self,eventName):
         if self.removeRegisteredEvent(eventName):
-            self.__notifications[self.getUniqueNotificationID()] = eventName + " event was cancelled"
+            self.addNotification(eventName + " event was cancelled")
             return True
         return False
     def getUniqueNotificationID(self):
@@ -70,3 +70,5 @@ class User(UserMixin,Person):
         while id in self.__notifications:
             id = id + 1
         return id
+    def addNotification(self,notification):
+        self.__notifications[self.getUniqueNotificationID()] = notification
