@@ -47,8 +47,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="{{url_for('home')}}">Home</a></li>
+        <li><a href="{{url_for('home')}}">Home</a></li>
         {% if current_user.is_authenticated %}
+        
           <li><a href="{{url_for('dashboard')}}">Dashboards</a></li>
           {% if userType == 'Staff' %}
             <li><a href="{{url_for('create_event')}}">Create Event</a></li>
@@ -58,7 +59,20 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
+            {% if current_user.getNotificationsMap().values()|length > 0 %}
+              <div class="dropdown" style="float:left;">
+                <button class="dropbtn">Notifications</button>
+                <div class="dropdown-content" style="left:0;">
+                  {% for key,value in current_user.getNotificationsMap().items() %}
+                    <form method="post" action="{{ url_for('delete_notification',path=request.path.strip("/"),id=key) }}">
+                      <p>{{value}}<input type="submit" value="X" ></p>
+                    </form>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
             <li><a href="{{url_for('logout')}}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+
           {% endif %}
       </ul>
     </div>

@@ -4,6 +4,6 @@ from wtforms import TextField, TextAreaField, validators, StringField, DateTimeF
 class CreateVenueForm(Form):
     name = StringField('Name', validators=[validators.DataRequired("Please enter venue location.")])
     location = StringField('Location', validators=[validators.DataRequired("Please enter venue location.")])
-    capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter the location capacity.")])
+    capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter valid location capacity.")])
     submit = SubmitField('Add Venue', validators=(validators.Optional(),))
     
