@@ -3,13 +3,37 @@
 <h1>Edit event</h1>
 <form method="post" action="{{ url_for('edit_event',eventName=event.getName()) }}">
     {{ form.name.label }}: {{ form.name(value=form.name.default) }} <br>
+    {% if form.name.errors %}
+    <ul class="errors">{% for error in form.name.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.description.label }}: {{ form.description(value=form.description.default) }}<br>
+    {% if form.description.errors %}
+    <ul class="errors">{% for error in form.name.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.venue.label }}: {{ form.venue(value = form.venue.default) }}    <br>
+    {% if form.venue.errors %}
+    <ul class="errors">{% for error in form.name.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.convener.label }}: {{ form.convener(value= form.convener.default) }}   <br>
+    {% if form.convener.errors %}
+    <ul class="errors">{% for error in form.convener.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.capacity.label }}: {{ form.capacity(value = form.capacity.default) }}    <br>
+    {% if form.capacity.errors %}
+    <ul class="errors">{% for error in form.capacity.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.startDateTime.label }}: {{ form.startDateTime(value = form.startDateTime.default) }}    <br>
+    {% if form.startDateTime.errors %}
+    <ul class="errors">{% for error in form.startDateTime.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.endDateTime.label }}: {{ form.endDateTime(value = form.endDateTime.default) }}<br>
+    {% if form.endDateTime.errors %}
+    <ul class="errors">{% for error in form.endDateTime.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.deregEnd.label }}: {{ form.deregEnd(value = form.deregEnd.default) }}<br>
+    {% if form.deregEnd.errors %}
+    <ul class="errors">{% for error in form.deregEnd.errors %}{{ error }}{% endfor %}</ul>
+    {% endif %}
     {{ form.csrf_token }}
     {{ form.submit }}
 </form>

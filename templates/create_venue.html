@@ -2,11 +2,35 @@
 {% block body %}
 <h1>Add a new venue</h1>
 <form method="post" action="{{ url_for('create_venue') }}">
-    {{ form.name.label }}: {{ form.name }} <br>
-    {{ form.location.label }}: {{ form.location }}<br>
-    {{ form.capacity.label }}: {{ form.capacity }}   <br>
-    {{ form.csrf_token }}
-    {{ form.submit }}
+<div class="login-div" style="width: 20%; margin: auto; margin-bottom:10px">
+            <table class="login-table">
+                <tr>
+                    <td>{{ form.name.label }}:</td>
+                    <td>{{ form.name }}</td>
+                    {% if form.name.errors %}
+                    <td class="errors">{% for error in form.name.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.location.label }}:</td>
+                    <td>{{ form.location }}</td>
+                    {% if form.location.errors %}
+                    <td class="errors">{% for error in form.location.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td style="white-space: nowrap">{{ form.capacity.label }}:</td>
+                    <td>{{ form.capacity }}</td>
+                    {% if form.capacity.errors %}
+                    <td class="errors">{% for error in form.capacity.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.csrf_token }}</td>
+                    <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>
+                </tr>   
+            </table>
+        </div>
 </form>
 
 {% endblock %}

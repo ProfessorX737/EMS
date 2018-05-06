@@ -11,34 +11,58 @@
             <tr>
                 <td>{{ form.name.label }}:</td>
                 <td>{{ form.name }}</td>
+                {% if form.name.errors %}
+                <td class="errors">{% for error in form.name.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>{{ form.description.label }}:</td>
                 <td>{{ form.description }}</td>
+                {% if form.description.errors %}
+                <td class="errors">{% for error in form.description.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>{{ form.venue.label }}:</td>
                 <td>{{ form.venue }}</td>
+                {% if form.venue.errors %}
+                <td class="errors">{% for error in form.venue.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>{{ form.convener.label }}:</td>
                 <td>{{ form.convener }}</td>
+                {% if form.convener.errors %}
+                <td class="errors">{% for error in form.convener.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>{{ form.capacity.label }}:</td>
                 <td>{{ form.capacity}}</td>
+                {% if form.capacity.errors %}
+                <td class="errors">{% for error in form.capacity.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td style="white-space: nowrap">{{ form.startDateTime.label }}:</td>
                 <td>{{ form.startDateTime(placeholder='yyyy-mm-dd HH:MM') }} </td>
+                {% if form.startDateTime.errors %}
+                    <td style="white-space: nowrap"  class="errors">{% for error in form.startDateTime.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td>{{ form.endDateTime.label }}:</td>
                 <td>{{ form.endDateTime(placeholder='yyyy-mm-dd HH:MM') }} </td>
+                {% if form.endDateTime.errors %}
+                    <td style="white-space: nowrap" class="errors">{% for error in form.endDateTime.errors %}{{ error }}{% endfor %}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td style="white-space: nowrap">{{ form.deregEnd.label }}:</td>
                 <td>{{ form.deregEnd(placeholder='yyyy-mm-dd HH:MM') }} </td>
+                {% if form.deregEnd.errors %}
+                    <td style="white-space: nowrap" class="errors">{% for error in form.deregEnd.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
             </tr>   
             <tr>
                 <td>{{ form.csrf_token }}</td>
