@@ -1,4 +1,4 @@
-from User import *
+from src.User import *
 class Staff(User):
     def __init__(self,name,zid,email,password):
         super().__init__(name,zid,email,password)

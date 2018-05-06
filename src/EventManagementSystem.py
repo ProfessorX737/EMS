@@ -1,11 +1,11 @@
-from CourseManager import *
-from SeminarManager import *
-from UserManager import *
-from VenueManager import *
-from Course import *
-from Seminar import *
-from Staff import Staff
-from Session import Session
+from src.CourseManager import *
+from src.SeminarManager import *
+from src.UserManager import *
+from src.VenueManager import *
+from src.Course import *
+from src.Seminar import *
+from src.Staff import Staff
+from src.Session import Session
 import datetime
 
 class EventManagementSystem():

@@ -1,5 +1,5 @@
-from Student import *
-from Staff import *
+from src.Student import *
+from src.Staff import *
 from datetime import datetime
 class UserManager():
     def __init__(self):
@@ -39,7 +39,6 @@ class UserManager():
             return self.__staff.get(zid)
     def getUserType(self,zid):
         u = self.getUser(zid)
-        print(u.get_id())
         if isinstance(u,Student):
             return "Student"
         else:

@@ -1,4 +1,4 @@
-from Period import *
+from src.Period import *
 
 class Session(Period):
     def __init__(self,seminarName,startDateTime,endDateTime,name,descr,presenter):

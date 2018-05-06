@@ -1,6 +1,6 @@
-from EventManager import *
-from Seminar import *
-from Session import Session
+from src.EventManager import *
+from src.Seminar import *
+from src.Session import Session
 class SeminarManager(EventManager):
     def __init__(self):
         super().__init__()
@@ -9,7 +9,6 @@ class SeminarManager(EventManager):
 
     def addSession(self,seminarName,session):
         seminar = self.getEvent(seminarName)
-        print("adding seminar ", seminar.getName())
         seminar.addSession(session)
 
     def getSession(self,seminarName,sessionName):

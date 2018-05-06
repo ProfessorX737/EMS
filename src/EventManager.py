@@ -1,5 +1,5 @@
 import datetime
-from Seminar import *
+from src.Seminar import *
 class EventManager:
     def __init__(self):
         self.__events = {}

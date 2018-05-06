@@ -1,5 +1,5 @@
-from EventManager import *
-from Course import *
+from src.EventManager import *
+from src.Course import *
 class CourseManager(EventManager):
     def __init__(self):
         super().__init__()

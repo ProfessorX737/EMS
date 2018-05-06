@@ -1,4 +1,4 @@
-from Event import Event
+from src.Event import Event
 
 class Course(Event):
     def __init__(self,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):

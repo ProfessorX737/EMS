@@ -1,6 +1,6 @@
 import datetime
-from Period import *
-from User import *
+from src.Period import *
+from src.User import *
 import abc
 
 class Event(Period):

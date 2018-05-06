@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, flash, request, redirect, session
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from EventManagementSystem import *
+from src.EventManagementSystem import *
 
 app = Flask(__name__)
 app.secret_key = 'itsasecret'

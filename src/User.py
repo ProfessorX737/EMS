@@ -1,4 +1,4 @@
-from Person import *
+from src.Person import *
 from flask_login import UserMixin
 class User(UserMixin,Person):
     def __init__(self,name,zid,email,password):

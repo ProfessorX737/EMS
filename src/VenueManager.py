@@ -1,4 +1,4 @@
-from Venue import *
+from src.Venue import *
 
 class VenueManager():
     def __init__(self):
