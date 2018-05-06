@@ -7,9 +7,9 @@ from src.Event import *
 from src.Period import *
 from src.Seminar import *
 from src.Course import *
-from src.CreateEventForm import *
-from src.CreateSessionForm import *
-from src.CreateVenueForm import *
+from src.forms.CreateEventForm import *
+from src.forms.CreateSessionForm import *
+from src.forms.CreateVenueForm import *
 from Server import app, ems, loadUser
 
 with open('user.csv') as f:
