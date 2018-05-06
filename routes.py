@@ -125,9 +125,7 @@ def edit_event(eventName):
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
     form.fillDefault(event)
-
     if form.validate_on_submit():
-        ems.deleteEvent(event)
         if (isinstance(event,Course)):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
@@ -136,6 +134,8 @@ def edit_event(eventName):
             ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
+        editedEvent = ems.getEvent(form.name.data)
+        ems.changeRegisteredEvent(event,editedEvent)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event)
 

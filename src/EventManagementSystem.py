@@ -71,6 +71,7 @@ class EventManagementSystem():
             return True
         else:
             return False
+
     def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
         session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
         self.__userManager.notifyRegistreesNewSession(seminarName,name)
@@ -79,11 +80,9 @@ class EventManagementSystem():
     def getSession(self,seminarName,sessionName):
         self.__seminarManager.getSession(seminarName,sessionName)
 
-    def deleteEvent(self,event):
-        if isinstance(event,Seminar):
-            self.__seminarManager.deleteEvent(event)
-        else:
-            self.__courseManager.deleteEvent(event)
+    def deleteEvent(self,eventName):
+        self.__seminarManager.deleteEvent(eventName)
+        self.__courseManager.deleteEvent(eventName)
 
 # ======== User Manager methods ========================================================================================
     def getStudents(self):
@@ -114,6 +113,10 @@ class EventManagementSystem():
         self.__userManager.addRegisteredEvent(userID,event)
     def removeRegisteredEvent(self,userID,eventName):
         self.__userManager.removeRegisteredEvent(userID,eventName)
+    def changeRegisteredEvent(self,oldEvent,editedEvent):
+        editedEvent.setAttendees(oldEvent.getAttendees())
+        self.__userManager.changeRegisteredEvent(oldEvent.getName(),editedEvent)
+        self.deleteEvent(oldEvent.getName())
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
         self.__venueManager.addVenue(name, loc, capacity)

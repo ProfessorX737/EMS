@@ -13,9 +13,12 @@ class Event(Period):
         self.__isCancelled = False
         self.__attendees = {}
 
-    def addAttendee(self,user):
+    def addAttendee(self, user):
         if not self.isFull():
             self.__attendees[user.get_id()] = user
+    def setAttendees(self, attendeeList):
+        for attendee in attendeeList:
+            self.__attendees[attendee.get_id()] = attendee
     def removeAttendee(self,userID):
         del self.__attendees[userID]
 
