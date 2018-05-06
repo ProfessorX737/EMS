@@ -179,12 +179,7 @@ def view_venues():
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
-<<<<<<< HEAD
-    user = ems.getUser(current_user.get_id())
-    user.deleteNotification(int(id))
-=======
     current_user.deleteNotification(int(id))
->>>>>>> 942d4a7a9e8af5db47bb301cfb1d6a09b68ebf83
     return redirect(url_for(path))
 
 @app.route("/logout")
