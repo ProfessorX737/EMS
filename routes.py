@@ -27,7 +27,7 @@ def login():
         password = request.form.get('password','')
         user = loadUser(zid)
         if user is None or user.getPassword() != password:
-            return render_template('login.html', message="Invalid Username or Password")
+            return redirect(url_for('login'))
         else:
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
@@ -71,7 +71,7 @@ def moreInfo(eventType,eventName):
     event = ems.getEvent(eventName)
     isOwner = ems.isMyEvent(current_user.get_id(),eventName)
     # if staff check if this event is inside getPostedCurrEvents
-    return render_template('more_info.html',isOwner=isOwner,event=event)
+    return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType)
 
 @app.route('/create_session/<seminarName>',methods=['GET','POST'])
 @login_required        
@@ -81,7 +81,7 @@ def create_session(seminarName):
         ems.addSession(seminarName,form.startDateTime.data,form.endDateTime.data,
         form.name.data,form.description.data,form.convener.data)
         return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
-    return render_template('create_session.html',seminarName=seminarName,form=form)
+    return render_template('create_session.html',seminarName=seminarName,form=form,userType=userType)
 
 @app.route('/register/<eventName>',methods=['GET','POST'])
 @login_required        
@@ -146,7 +146,7 @@ def create_venue():
     if form.validate_on_submit():
         ems.addVenue(form.name.data,form.location.data,form.capacity.data)
         return redirect(url_for('view_venues'))
-    return render_template('create_venue.html',form=form)
+    return render_template('create_venue.html',form=form,userType=userType)
 
 @app.route('/venues',methods=['GET','POST'])
 @login_required        

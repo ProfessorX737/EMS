@@ -65,7 +65,6 @@ def create_event():
     # form = CreateEventForm()
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
-    print("creating event")
     if form.validate_on_submit():
         if (form.eventType.data == 'Course'):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -128,7 +127,6 @@ def edit_event(eventName):
     form.fillDefault(event)
 
     if form.validate_on_submit():
-        print(form.capacity.data)
         ems.deleteEvent(event)
         if (isinstance(event,Course)):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -166,7 +164,6 @@ def create_venue():
 @login_required        
 def view_venues():
     venues = ems.getVenues()
-    print(venues)
     return render_template('venues.html',venues = venues,userType=userType)
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
