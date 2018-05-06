@@ -125,8 +125,12 @@ def edit_event(eventName):
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
     form.fillDefault(event)
+    message=''
 
     if form.validate_on_submit():
+        if (event.getNumAttendees() > form.capacity.data):
+            message='new capacity must be >= current number of attendees'
+            return render_template('edit_event.html',form=form,event=event,message=message)
         ems.deleteEvent(event)
         if (isinstance(event,Course)):
             ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
@@ -137,7 +141,7 @@ def edit_event(eventName):
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
         return redirect(url_for('home'))
-    return render_template('edit_event.html',form=form,event=event)
+    return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/cancel_event/<eventName>',methods=['GET','POST'])
 @login_required        
