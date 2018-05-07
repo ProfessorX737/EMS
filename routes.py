@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for, flash, request, redirect, session
+import copy
 import os
+from flask import Flask, render_template, url_for, flash, request, redirect, session
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from src.UserManager import *
 from src.EventManager import *
@@ -99,11 +100,12 @@ def create_session(seminarName):
 @login_required        
 def register_user(eventName):
     event = ems.getEvent(eventName)
+    print("current user id " + current_user.get_id())
     ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
-        ems.registerUserToCourse(eventName,current_user)
+        ems.registerUserToCourse(eventName,copy.copy(current_user))
     if isinstance(event,Seminar):
-        ems.registerUserToSeminar(eventName,current_user)
+        ems.registerUserToSeminar(eventName,copy.copy(current_user))
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
 
 @app.route('/deregister/<eventName>',methods=['GET','POST'])
@@ -121,12 +123,14 @@ def deregister_user(eventName):
 @login_required        
 def edit_event(eventName):
     event = ems.getEvent(eventName)
-
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
     form.fillDefault(event)
     message=''
+    attendees = event.getAttendees()
+    oldEventName = event.getName()
     if form.validate_on_submit():
+        ems.deleteEvent(oldEventName)
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_event.html',form=form,event=event,message=message)
@@ -139,7 +143,7 @@ def edit_event(eventName):
             form.name.data,form.description.data,form.venue.data,form.convener.data,
             form.capacity.data,form.deregEnd.data)
         editedEvent = ems.getEvent(form.name.data)
-        ems.changeRegisteredEvent(event,editedEvent)
+        ems.changeRegisteredEvent(oldEventName,attendees,editedEvent)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 

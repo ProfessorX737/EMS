@@ -113,10 +113,9 @@ class EventManagementSystem():
         self.__userManager.addRegisteredEvent(userID,event)
     def removeRegisteredEvent(self,userID,eventName):
         self.__userManager.removeRegisteredEvent(userID,eventName)
-    def changeRegisteredEvent(self,oldEvent,editedEvent):
-        editedEvent.setAttendees(oldEvent.getAttendees())
-        self.__userManager.changeRegisteredEvent(oldEvent.getName(),editedEvent)
-        self.deleteEvent(oldEvent.getName())
+    def changeRegisteredEvent(self,oldEventName,attendees,editedEvent):
+        editedEvent.setAttendees(attendees)
+        self.__userManager.changeRegisteredEvent(oldEventName,editedEvent)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
         self.__venueManager.addVenue(name, loc, capacity)
