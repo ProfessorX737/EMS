@@ -1,9 +1,48 @@
-16/04/18 -
 
-20/04/18 - 
 
-23/04/18 - 
 
-26/04/18 -
+15/04/18: Stand up meeting:
+          Elena: Work on sequence diagram for our classes to get a basic idea of how our user stories will be achieved. (Quite a bit of work)
+                 Help out with event-related code. 
+                 Work on Login user story.
+          Xavier: Event-related code.
+          Ho: User-related code.
 
-30/04/18 - 
+17/04/18: Completed user login.
+          Final changes to UML were made.
+          Created basic event manager.
+
+19/04/18: Fixed bugs and modified event related code.
+
+20/04/18: Created course and seminar manager
+
+21/04/18: Implemented venue manager class.
+
+22/04/18: Stand up meeting:
+          Elena: Work with Xavier on implementing the event manager related functions.
+          Xavier: Registration, deregistration and event cancellation user stories.
+          Ho: Event creation user story, Home page user story and more info user story.
+
+23/04/18: Added Home page and more info page.
+
+24/04/18: Some basic testing and fixed bugs on the home page and more info page.
+
+25/04/18: Decided to use maps instead of lists for easier accessing. Quite a bit of refactoring.
+
+26/04/18: Stand Up Meeting: 
+          Elena: Event editing using wtforms module.
+          Xavier: Continue working on cancellation, registration and deregistration.
+          Ho: Re-do event creation using wtform module, work on userstory to add and delete venues.
+          To pick up: Someone add a styles.css file into a static folder for later use.
+
+3/05/18: Reflection:
+         Elena was sick during this week so work was distributed amongst the other two members.
+         Stand Up Meeting:
+         This week will mainly focus on physical testing and adding styling.
+         Elena and Xavier: Testing and refactoring
+         Ho: Bootstrap + css + fixing odd bugs. 
+
+
+
+
+
