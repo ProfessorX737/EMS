@@ -40,5 +40,6 @@ class EventManager:
             self.__events[event.getName()] = event
             return True
         return False
-    def deleteEvent(self,event):
-        del self.__events[event.getName()]
+    def deleteEvent(self,eventName):
+        if eventName in self.__events:
+            del self.__events[eventName]

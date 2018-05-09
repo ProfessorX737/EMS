@@ -52,6 +52,9 @@ class UserManager():
         if userID in self.__students:
             student = self.__students.get(userID)
             student.removeRegisteredEvent(eventName)
+        elif userID in self.__staff:
+            staff = self.__staff.get(userID)
+            staff.removeRegisteredEvent(eventName)
     def cancelEvent(self,convener,eventName):
         for s in self.__staff.values():
             s.cancelRegisteredEvent(eventName)
@@ -62,4 +65,13 @@ class UserManager():
         for student in self.__students.values():
             if student.isRegistered(seminarName):
                 student.addNotification("A new session " + "'{0}'".format(sessionName) + " was added to " + "'{0}'".format(seminarName) + " seminar")
-
+    def changeRegisteredEvent(self,oldEventName,editedEvent):
+        for student in self.__students.values():
+            if student.isRegistered(oldEventName):
+                student.removeRegisteredEvent(oldEventName)
+                student.addRegisteredEvent(editedEvent)
+        for staff in self.__staff.values():
+            if staff.isRegistered(oldEventName):
+                staff.removeRegisteredEvent(oldEventName)
+                staff.addRegisteredEvent(editedEvent)
+        
