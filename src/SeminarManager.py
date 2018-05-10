@@ -7,15 +7,15 @@ class SeminarManager(EventManager):
     def addSeminar(self,seminar):
         return self.addEvent(seminar)
 
-    def addSession(self,seminarName,session):
-        seminar = self.getEvent(seminarName)
+    def addSession(self,seminarId,session):
+        seminar = self.getEvent(seminarId)
         seminar.addSession(session)
 
-    def getSession(self,seminarName,sessionName):
-        seminar = self.__events[seminarName]
-        session = seminar.getSession(sessionName)
+    def getSession(self,seminarId,sessionId):
+        seminar = self.__events[seminarId]
+        session = seminar.getSession(sessionId)
         return session
     
-    def getSessions(self,seminarName):
-        seminar = self.getEvent(seminarName)
+    def getSessions(self,seminarId):
+        seminar = self.getEvent(seminarId)
         return seminar.getSessions()
