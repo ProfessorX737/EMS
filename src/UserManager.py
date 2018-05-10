@@ -74,4 +74,3 @@ class UserManager():
             if staff.isRegistered(oldEventName):
                 staff.removeRegisteredEvent(oldEventName)
                 staff.addRegisteredEvent(editedEvent)
-        
