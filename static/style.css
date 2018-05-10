@@ -55,8 +55,9 @@ table{
     align-self:center;
 }
 
-/* Remove the navbar's default margin-bottom and rounded borders */ 
+/* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 0;
     border-radius: 0;
 }
@@ -84,7 +85,7 @@ footer {
     height: auto;
     padding: 15px;
     }
-    .row.content {height:auto;} 
+    .row.content {height:auto;}
 }
 
 .eventbox {
@@ -96,13 +97,13 @@ footer {
     margin-right: 10px;
     margin-top: 5px;
   }
-  
+
   .flex {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .eventbox::first-line {
     font-style: bold;
     font-size: 20px;
@@ -110,8 +111,8 @@ footer {
 
 /* # ========================CSS for Forms==================================================*/
   .form {
-    width: 20%; 
-    margin: auto; 
+    width: 20%;
+    margin: auto;
     margin-bottom:10px;
     display: flex;
     justify-content: center;
