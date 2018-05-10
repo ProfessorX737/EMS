@@ -10,7 +10,6 @@ class EventManager:
     def registerUser(self,eventId,user):
         self.__events.get(eventId).addAttendee(user)
     def getEvent(self,eventId):
-        if 0 in self.__events:
         return self.__events.get(eventId)
     def getPastEvents(self):
         pastEvents = []
