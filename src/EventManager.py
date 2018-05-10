@@ -24,7 +24,7 @@ class EventManager:
                 currentEvents.append(event)
         return currentEvents
     def cancelEvent(self,eventId):
-        if eventName in self.__events:
+        if eventId in self.__events:
             self.__events.get(eventId).cancelEvent()
             return True
         return False

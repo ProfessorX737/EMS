@@ -57,6 +57,8 @@ class Event(Period):
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
         self.__venue = venue
+    def setConvener(self, convenerName):
+        self.__convener = convenerName
     def cancelEvent(self):
         self.__isCancelled = True
 
