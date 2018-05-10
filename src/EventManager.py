@@ -11,7 +11,6 @@ class EventManager:
         self.__events.get(eventId).addAttendee(user)
     def getEvent(self,eventId):
         if 0 in self.__events:
-            print("its in here!!!\neventId is equal to " + str(eventId) + "\n")
         return self.__events.get(eventId)
     def getPastEvents(self):
         pastEvents = []

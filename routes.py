@@ -103,7 +103,6 @@ def create_session(seminarId):
 def register_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(int(eventId))
-    print("current user id " + current_user.get_id())
     ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
         ems.registerUserToCourse(eventId,copy.copy(current_user))
@@ -132,10 +131,7 @@ def edit_event(eventId):
     form = NewStartUpForm(venueNames).getForm()
     form.fillDefault(event)
     message=''
-    attendees = event.getAttendees()
-    oldEventId = event.getId()
     if form.validate_on_submit():
-        # ems.deleteEvent(oldEventId)
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_event.html',form=form,event=event,message=message)

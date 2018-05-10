@@ -19,7 +19,6 @@ class EventManagementSystem():
     def getEvents(self):
         events = []
         for e in self.__courseManager.getEvents():
-            print("id = " + str(e.getId())+"\n")
             events.append(e)
         for e in self.__seminarManager.getEvents():
             events.append(e)
@@ -49,7 +48,6 @@ class EventManagementSystem():
                 return True
         return False
     def getEvent(self,eventId):
-        print("length of course list " + str(len(self.__courseManager.getEvents())) + "\n")
         event = self.__courseManager.getEvent(eventId)
         if event is None:
             event = self.__seminarManager.getEvent(eventId)
