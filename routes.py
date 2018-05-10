@@ -81,6 +81,7 @@ def create_event():
 @app.route("/more/<eventType>/<eventId>",methods=['GET','POST'])
 @login_required        
 def moreInfo(eventType,eventId):
+    eventId = int(eventId)
     event = ems.getEvent(eventId)
     isOwner = ems.isMyEvent(current_user.get_id(),eventId)
     # if staff check if this event is inside getPostedCurrEvents
@@ -89,6 +90,7 @@ def moreInfo(eventType,eventId):
 @app.route('/create_session/<seminarId>',methods=['GET','POST'])
 @login_required        
 def create_session(seminarId):
+    seminarId = int(seminarId)
     form = CreateSessionForm()
     if form.validate_on_submit():
         ems.addSession(seminarId,form.startDateTime.data,form.endDateTime.data,
@@ -99,7 +101,8 @@ def create_session(seminarId):
 @app.route('/register/<eventId>',methods=['GET','POST'])
 @login_required        
 def register_user(eventId):
-    event = ems.getEvent(eventId)
+    eventId = int(eventId)
+    event = ems.getEvent(int(eventId))
     print("current user id " + current_user.get_id())
     ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
@@ -111,6 +114,7 @@ def register_user(eventId):
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
 @login_required        
 def deregister_user(eventId):
+    eventId = int(eventId)
     event = ems.getEvent(eventId)
     ems.removeRegisteredEvent(current_user.get_id(),eventId)
     if isinstance(event,Course):
@@ -122,6 +126,7 @@ def deregister_user(eventId):
 @app.route('/edit_event/<eventId>',methods=['GET','POST'])
 @login_required        
 def edit_event(eventId):
+    eventId = int(eventId)
     event = ems.getEvent(eventId)
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
@@ -158,12 +163,14 @@ def edit_event(eventId):
 @app.route('/cancel_event/<eventId>',methods=['GET','POST'])
 @login_required        
 def cancel_event(eventId):
+    eventId = int(eventId)
     ems.cancelEvent(current_user,eventId)
     return redirect(url_for('home'))
 
 @app.route('/delete_venue/<venueId>',methods=['GET','POST'])
 @login_required        
 def delete_venue(venueId):
+    venueId = int(venueId)
     ems.removeVenue(venueId)
     return redirect(url_for('view_venues'))
 
@@ -184,6 +191,7 @@ def view_venues():
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
+    id = int(id)
     current_user.deleteNotification(int(id))
     return redirect(url_for(path))
 

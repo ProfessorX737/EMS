@@ -16,7 +16,7 @@ class VenueManager():
         return self.__venues.values()
     def getVenueNames(self):
         venueNames = []
-        for v self.__venues.values():
+        for v in self.__venues.values():
             venueNames.append(v.getName())
         return venueNames
     def getFreeTimes(self, venueId):

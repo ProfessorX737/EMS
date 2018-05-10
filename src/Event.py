@@ -36,7 +36,7 @@ class Event(Period):
             return True
         return False
     
-    def getId():
+    def getId(self):
         return self.__id
     def getConvener(self):
         return self.__convener

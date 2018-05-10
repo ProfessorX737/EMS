@@ -10,6 +10,8 @@ class EventManager:
     def registerUser(self,eventId,user):
         self.__events.get(eventId).addAttendee(user)
     def getEvent(self,eventId):
+        if 0 in self.__events:
+            print("its in here!!!\neventId is equal to " + str(eventId) + "\n")
         return self.__events.get(eventId)
     def getPastEvents(self):
         pastEvents = []
@@ -43,7 +45,7 @@ class EventManager:
     def deleteEvent(self,eventId):
         if eventId in self.__events:
             del self.__events[eventId]
-    def containsEventId(id):
+    def containsEventId(self,id):
         if id in self.__events:
             return True
         return False

@@ -19,6 +19,7 @@ class EventManagementSystem():
     def getEvents(self):
         events = []
         for e in self.__courseManager.getEvents():
+            print("id = " + str(e.getId())+"\n")
             events.append(e)
         for e in self.__seminarManager.getEvents():
             events.append(e)
@@ -48,6 +49,7 @@ class EventManagementSystem():
                 return True
         return False
     def getEvent(self,eventId):
+        print("length of course list " + str(len(self.__courseManager.getEvents())) + "\n")
         event = self.__courseManager.getEvent(eventId)
         if event is None:
             event = self.__seminarManager.getEvent(eventId)
@@ -57,25 +59,23 @@ class EventManagementSystem():
 
     def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        if (self.__courseManager.addCourse(course)):
+        if self.__courseManager.addCourse(course):
             staff.addPostedCurrEvent(course)
-            return course.getId()
-        else:
-            return -1
+            return True
+        return False
 
     def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        if (self.__seminarManager.addSeminar(seminar)):
+        if self.__seminarManager.addSeminar(seminar):
             staff.addPostedCurrEvent(seminar)
-            return seminar.getId()
-        else:
-            return -1
+            return True
+        return False
 
     def addSession(self,seminarId, startDateTime, endDateTime, name, descr, presenter):
         seminar = self.getEvent(seminarId)
         sessionId = self.__seminarManager.addSession(seminarId,startDateTime,endDateTime,name,descr,presenter)
         self.__userManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
-        return sessionId
+        return True
 
     def getSession(self,eventId,sessionId):
         self.__seminarManager.getSession(eventId,sessionId)
@@ -134,7 +134,7 @@ class EventManagementSystem():
         self.__courseManager.cancelEvent(eventId)
         self.__seminarManager.cancelEvent(eventId)
 # ============== private methods =========================
-    def getUniqueEventId():
+    def getUniqueEventId(self):
         id = 0
         while self.__courseManager.containsEventId(id) or self.__seminarManager.containsEventId(id):
             id = id + 1

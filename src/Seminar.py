@@ -10,8 +10,6 @@ class Seminar(Event):
         self.__sessions.append(session)
         return id
     
-    def addSession(self,)
-    
     def getSessions(self):
         return self.__sessions
     
