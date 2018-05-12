@@ -12,7 +12,8 @@ from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from Server import app, ems, loadUser
-import urllib.parse
+from urllib.parse import quote_plus, unquote_plus
+app.jinja_env.filters['quote_plus'] = quote_plus
 
 try: 
     with open('user.csv') as f:
@@ -180,7 +181,8 @@ def view_venues():
 def delete_notification(path,id):
     id = int(id)
     current_user.deleteNotification(id)
-    return redirect(url_for(path))
+    path = unquote_plus(path).strip("/")
+    return redirect(path)
 
 @app.route("/logout")
 @login_required        
