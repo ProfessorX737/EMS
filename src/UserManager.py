@@ -64,7 +64,17 @@ class UserManager():
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
         for student in self.__students.values():
             if student.isRegistered(seminarId):
-                student.addNotification("A new session " + "'{0}'".format(sessionName) + " was added to " + "'{0}'".format(seminarName) + " seminar")
+                student.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
+        for staff in self.__staff.values():
+            if staff.isRegistered(seminarId):
+                staff.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
+    def notifyRegistreesEventEdit(self, eventId):
+        for student in self.__students.values():
+            if student.isRegistered(eventId):
+                student.addNotification("The details of '{0}' event were changed".format(student.getRegisteredEventName(eventId)))
+        for staff in self.__staff.values():
+            if staff.isRegistered(eventId):
+                student.addNotification("The details of '{0}' event were changed".format(staff.getRegisteredEventName(eventId)))
     def changeRegisteredEvent(self,oldEventId,editedEvent):
         for student in self.__students.values():
             if student.isRegistered(oldeventId):

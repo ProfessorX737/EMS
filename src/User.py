@@ -79,3 +79,9 @@ class User(UserMixin,Person):
         elif id in self.__pastEvents:
             return self.__pastEvents[id].getName()
         return None
+    def getRegisteredEvent(self,eventId):
+        if eventId in self.__currEvents:
+            return self.__currEvents.get(eventId)
+        if eventId in self.__pastEvents:
+            return self.__pastEvents.get(eventId)
+        return None

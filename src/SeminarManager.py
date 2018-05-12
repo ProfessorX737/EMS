@@ -28,7 +28,7 @@ class SeminarManager(EventManager):
         return id
     
     def __sessionIdExists(self, id):
-        for session in self.__events.values():
-            if id == session.getId():
+        for seminar in super().getEvents():
+            if seminar.containsSessionId(id):
                 return True 
         return False
