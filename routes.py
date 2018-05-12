@@ -12,6 +12,7 @@ from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from Server import app, ems, loadUser
+import urllib.parse
 
 try: 
     with open('user.csv') as f:
@@ -102,7 +103,7 @@ def create_session(seminarId):
 @login_required        
 def register_user(eventId):
     eventId = int(eventId)
-    event = ems.getEvent(int(eventId))
+    event = ems.getEvent(eventId)
     ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
         ems.registerUserToCourse(eventId,copy.copy(current_user))
@@ -143,16 +144,6 @@ def edit_event(eventId):
         event.setConvener(form.convener.data)
         event.setCapacity(form.capacity.data)
         event.setDeregEnd(form.deregEnd.data)
-        # if (isinstance(event,Course)):
-        #     ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
-        #     form.name.data,form.description.data,form.venue.data,form.convener.data,
-        #     form.capacity.data,form.deregEnd.data)
-        # else:
-        #     ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
-        #     form.name.data,form.description.data,form.venue.data,form.convener.data,
-        #     form.capacity.data,form.deregEnd.data)
-        # editedEvent = ems.getEvent(form.name.data)
-        # ems.changeRegisteredEvent(oldEventName,attendees,editedEvent)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 
@@ -188,7 +179,7 @@ def view_venues():
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
     id = int(id)
-    current_user.deleteNotification(int(id))
+    current_user.deleteNotification(id)
     return redirect(url_for(path))
 
 @app.route("/logout")
