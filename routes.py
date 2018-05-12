@@ -12,6 +12,8 @@ from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from Server import app, ems, loadUser
+from urllib.parse import quote_plus, unquote_plus
+app.jinja_env.filters['quote_plus'] = quote_plus
 
 try: 
     with open('user.csv') as f:
@@ -78,85 +80,86 @@ def create_event():
 
     return render_template('create_event.html', form = form, userType=userType, message=message)
 
-@app.route("/more/<eventType>/<eventName>",methods=['GET','POST'])
+@app.route("/more/<eventType>/<eventId>",methods=['GET','POST'])
 @login_required        
-def moreInfo(eventType,eventName):
-    event = ems.getEvent(eventName)
-    isOwner = ems.isMyEvent(current_user.get_id(),eventName)
+def moreInfo(eventType,eventId):
+    eventId = int(eventId)
+    event = ems.getEvent(eventId)
+    isOwner = ems.isMyEvent(current_user.get_id(),eventId)
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType)
 
-@app.route('/create_session/<seminarName>',methods=['GET','POST'])
+@app.route('/create_session/<seminarId>',methods=['GET','POST'])
 @login_required        
-def create_session(seminarName):
+def create_session(seminarId):
+    seminarId = int(seminarId)
     form = CreateSessionForm()
     if form.validate_on_submit():
-        ems.addSession(seminarName,form.startDateTime.data,form.endDateTime.data,
+        ems.addSession(seminarId,form.startDateTime.data,form.endDateTime.data,
         form.name.data,form.description.data,form.convener.data)
-        return redirect(url_for('moreInfo',eventType='Seminar',eventName=seminarName))
-    return render_template('create_session.html',seminarName=seminarName,form=form,userType=userType)
+        return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
+    return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType)
 
-@app.route('/register/<eventName>',methods=['GET','POST'])
+@app.route('/register/<eventId>',methods=['GET','POST'])
 @login_required        
-def register_user(eventName):
-    event = ems.getEvent(eventName)
-    print("current user id " + current_user.get_id())
+def register_user(eventId):
+    eventId = int(eventId)
+    event = ems.getEvent(eventId)
     ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
-        ems.registerUserToCourse(eventName,copy.copy(current_user))
+        ems.registerUserToCourse(eventId,copy.copy(current_user))
     if isinstance(event,Seminar):
-        ems.registerUserToSeminar(eventName,copy.copy(current_user))
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
+        ems.registerUserToSeminar(eventId,copy.copy(current_user))
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
-@app.route('/deregister/<eventName>',methods=['GET','POST'])
+@app.route('/deregister/<eventId>',methods=['GET','POST'])
 @login_required        
-def deregister_user(eventName):
-    event = ems.getEvent(eventName)
-    ems.removeRegisteredEvent(current_user.get_id(),eventName)
+def deregister_user(eventId):
+    eventId = int(eventId)
+    event = ems.getEvent(eventId)
+    ems.removeRegisteredEvent(current_user.get_id(),eventId)
     if isinstance(event,Course):
-        ems.deregisterUserFromCourse(eventName,current_user.get_id())
+        ems.deregisterUserFromCourse(eventId,current_user.get_id())
     if isinstance(event,Seminar):
-        ems.deregisterUserFromSeminar(eventName,current_user.get_id())
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventName=eventName))
+        ems.deregisterUserFromSeminar(eventId,current_user.get_id())
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
-@app.route('/edit_event/<eventName>',methods=['GET','POST'])
+@app.route('/edit_event/<eventId>',methods=['GET','POST'])
 @login_required        
-def edit_event(eventName):
-    event = ems.getEvent(eventName)
+def edit_event(eventId):
+    eventId = int(eventId)
+    event = ems.getEvent(eventId)
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
     form.fillDefault(event)
     message=''
-    attendees = event.getAttendees()
-    oldEventName = event.getName()
     if form.validate_on_submit():
-        ems.deleteEvent(oldEventName)
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_event.html',form=form,event=event,message=message)
-        if (isinstance(event,Course)):
-            ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
-            form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)
-        else:
-            ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
-            form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)
-        editedEvent = ems.getEvent(form.name.data)
-        ems.changeRegisteredEvent(oldEventName,attendees,editedEvent)
+        event.setStartDateTime(form.startDateTime.data)
+        event.setEndDateTime(form.endDateTime.data)
+        event.setName(form.name.data)
+        event.setDescription(form.description.data)
+        event.setVenue(form.venue.data)
+        event.setConvener(form.convener.data)
+        event.setCapacity(form.capacity.data)
+        event.setDeregEnd(form.deregEnd.data)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 
-@app.route('/cancel_event/<eventName>',methods=['GET','POST'])
+@app.route('/cancel_event/<eventId>',methods=['GET','POST'])
 @login_required        
-def cancel_event(eventName):
-    ems.cancelEvent(current_user,eventName)
+def cancel_event(eventId):
+    eventId = int(eventId)
+    ems.cancelEvent(current_user,eventId)
     return redirect(url_for('home'))
 
-@app.route('/delete_venue/<venueName>',methods=['GET','POST'])
+@app.route('/delete_venue/<venueId>',methods=['GET','POST'])
 @login_required        
-def delete_venue(venueName):
-    ems.removeVenue(venueName)
+def delete_venue(venueId):
+    venueId = int(venueId)
+    ems.removeVenue(venueId)
     return redirect(url_for('view_venues'))
 
 @app.route('/create_venue',methods=['GET','POST'])
@@ -179,8 +182,10 @@ def view_venues():
 
 @app.route('/delete_notification/<path>/<id>',methods=['GET','POST'])
 def delete_notification(path,id):
-    current_user.deleteNotification(int(id))
-    return redirect(url_for(path))
+    id = int(id)
+    current_user.deleteNotification(id)
+    path = unquote_plus(path).strip("/")
+    return redirect(path)
 
 @app.route("/logout")
 @login_required        

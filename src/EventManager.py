@@ -5,12 +5,12 @@ class EventManager:
         self.__events = {}
     def getEvents(self):
         return self.__events.values()
-    def deregisterUser(self,eventName,userID):
-        self.__events.get(eventName).removeAttendee(userID)
-    def registerUser(self,eventName,user):
-        self.__events.get(eventName).addAttendee(user)
-    def getEvent(self,eventName):
-        return self.__events.get(eventName)
+    def deregisterUser(self,eventId,userID):
+        self.__events.get(eventId).removeAttendee(userID)
+    def registerUser(self,eventId,user):
+        self.__events.get(eventId).addAttendee(user)
+    def getEvent(self,eventId):
+        return self.__events.get(eventId)
     def getPastEvents(self):
         pastEvents = []
         for event in self.__events.values():
@@ -23,9 +23,9 @@ class EventManager:
             if event.isOpen():
                 currentEvents.append(event)
         return currentEvents
-    def cancelEvent(self,eventName):
-        if eventName in self.__events:
-            self.__events.get(eventName).cancelEvent()
+    def cancelEvent(self,eventId):
+        if eventId in self.__events:
+            self.__events.get(eventId).cancelEvent()
             return True
         return False
     def refreshEvents(self,user):
@@ -36,10 +36,15 @@ class EventManager:
                 pastEvents.append(event) 
                 currentEvents.remove(event)
     def addEvent(self, event):
-        if event.getName() not in self.__events:
-            self.__events[event.getName()] = event
+        if event.getId() not in self.__events:
+            self.__events[event.getId()] = event
             return True
         return False
-    def deleteEvent(self,eventName):
-        if eventName in self.__events:
-            del self.__events[eventName]
+    def deleteEvent(self,eventId):
+        if eventId in self.__events:
+            del self.__events[eventId]
+    def containsEventId(self,id):
+        if id in self.__events:
+            return True
+        return False
+            

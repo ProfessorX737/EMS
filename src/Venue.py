@@ -1,9 +1,12 @@
 
 class Venue:
-    def __init__(self,name,location,maxCapacity):
+    def __init__(self,id,name,location,maxCapacity):
         self._name = name
+        self._id = id
         self._location = location
         self._maxCapacity = maxCapacity
+    def getId(self):
+        return self._id
     def getName(self):
         return self._name
     def getLocation(self):

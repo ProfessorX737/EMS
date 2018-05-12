@@ -8,7 +8,7 @@
         <div class="flex">
             {% for seminar in seminars %}
             <div class="eventbox">
-                <a href="{{ url_for('moreInfo',eventType='Course',eventName=seminar.getName()) }}">{{seminar.getName()}}<br></a>
+                <a href="{{ url_for('moreInfo',eventType='Course',eventId=seminar.getId()) }}">{{seminar.getName()}}<br></a>
                 Venue: {{seminar.getVenueName()}}<br>
                 Start: {{seminar.getStartDateTime()}}
             </div>
@@ -20,7 +20,7 @@
         <div class="flex">
             {% for course in courses %}
             <div class="eventbox">
-                <a href="{{ url_for('moreInfo',eventType='Course',eventName=course.getName()) }}">{{course.getName()}}<br></a>
+                <a href="{{ url_for('moreInfo',eventType='Course',eventId=course.getId()) }}">{{course.getName()}}<br></a>
                 Venue: {{course.getVenueName()}}<br>
                 Start: {{course.getStartDateTime()}}
             </div>

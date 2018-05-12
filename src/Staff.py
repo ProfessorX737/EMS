@@ -13,19 +13,19 @@ class Staff(User):
         return self.__cancelledEvents
     def setPostedCurrEvents(self,postedCurrEvents):
         for e in postedCurrEvents:
-            self.__postedCurrEvents[e.getName()] = e
+            self.__postedCurrEvents[e.getId()] = e
     def setPostedPastEvents(self,postedPastEvents):
         for e in postedPastEvents:
-            self.__postedPastEvents[e.getName()] = e
+            self.__postedPastEvents[e.getId()] = e
     def setCancelledEvents(self,cancelledEvents):
         for e in cancelledEvents:
-            self.__cancelledEvents[e.getName()] = e
+            self.__cancelledEvents[e.getId()] = e
     def addPostedCurrEvent(self,event):
-        self.__postedCurrEvents[event.getName()] = event
-    def cancelPostedEvent(self,eventName):
-        if eventName in self.__postedCurrEvents:
-            self.__cancelledEvents.append(self.__postedCurrEvents[eventName])
-            del self.__postedCurrEvents[eventName] 
-        elif eventName in self.__postedPastEvents:
-            self.__cancelledEvents.append(self.__postedPastEvents[eventName])
-            del self.__postedPastEvents[eventName] 
+        self.__postedCurrEvents[event.getId()] = event
+    def cancelPostedEvent(self,eventId):
+        if eventId in self.__postedCurrEvents:
+            self.__cancelledEvents.append(self.__postedCurrEvents[eventId])
+            del self.__postedCurrEvents[eventId] 
+        elif eventId in self.__postedPastEvents:
+            self.__cancelledEvents.append(self.__postedPastEvents[eventId])
+            del self.__postedPastEvents[eventId] 
