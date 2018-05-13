@@ -46,9 +46,16 @@
     {% if event.getClassName() == 'Seminar' %}
         <a href="{{ url_for('create_session',seminarId=event.getId()) }}" > Create sessions </a>
         <h2> Current Sessions </h2>
-        {% for session in event.getSessions()%}
-            <li> {{session.getName()}} </li>
-        {% endfor %}
+        <div class="flex">
+            {% for session in event.getSessions() %}
+            <div class="eventbox">
+                {{session.getName()}}<br>
+                Presenter: {{session.getPresenter()}}<br>
+                Start: {{session.getStartDateTime()}}<br>
+                End: {{session.getEndDateTime()}}<br>
+            </div>
+            {% endfor %}
+        </div>
     {% endif %}
     {% endif %}
 
