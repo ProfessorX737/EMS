@@ -6,11 +6,13 @@ class Seminar(Event):
         self.__sessions = []
 
     def addSession(self,session):
-        self.__sessions.append(session)
-        print("ADDED SESSION", session.getName())
-    
+        for i in self.__sessions:
+            if i.getStartDateTime != session.getStartDateTime:
+                self.__sessions.append(session)
+                print("ADDED SESSION", session.getName())
+
     def getSessions(self):
         return self.__sessions
-    
+
     def getClassName(self):
         return "Seminar"
