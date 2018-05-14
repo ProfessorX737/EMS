@@ -9,9 +9,9 @@ class Seminar(Event):
         t = (i.getStartDateTime() < session.getStartDateTime()
             and session.getStartDateTime() < i.getStartDateTime
             for i in self.__sessions)
-        if any(t):
-                self.__sessions.append(session)
-                print("ADDED SESSION", session.getName())
+        if any(t) == False:
+            self.__sessions.append(session)
+            print("ADDED SESSION", session.getName())
         print("INVALID PERIOD")
 
     def getSessions(self):
