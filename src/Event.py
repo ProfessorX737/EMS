@@ -4,14 +4,16 @@ from src.User import *
 import abc
 
 class Event(Period):
-    def __init__(self,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
+    def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
         super().__init__(startDateTime,endDateTime,name,descr)
+        self.__id = id
         self.__venue = venue
         self.__convener = convener
         self.__capacity = capacity
         self.__deregEnd = deregEnd
         self.__isCancelled = False
         self.__attendees = {}
+
 
     def addAttendee(self, user):
         if not self.isFull():
@@ -34,6 +36,8 @@ class Event(Period):
             return True
         return False
     
+    def getId(self):
+        return self.__id
     def getConvener(self):
         return self.__convener
     def getVenueName(self):
@@ -53,6 +57,8 @@ class Event(Period):
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
         self.__venue = venue
+    def setConvener(self, convenerName):
+        self.__convener = convenerName
     def cancelEvent(self):
         self.__isCancelled = True
 

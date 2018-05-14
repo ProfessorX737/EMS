@@ -10,7 +10,7 @@
         Location: {{venue.getLocation()}} </br>
         Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}
-            <form method="post" action="{{ url_for('delete_venue',venueName=venue.getName()) }}">
+            <form method="post" action="{{ url_for('delete_venue',venueId=venue.getId()) }}">
                 <p><input type="submit" value="Remove Venue"></p>
             </form>
         {% endif %}

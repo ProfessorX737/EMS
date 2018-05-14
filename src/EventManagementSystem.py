@@ -32,57 +32,67 @@ class EventManagementSystem():
         return self.__courseManager.getCurrentEvents()
     def getPastCourses(self):
         return self.__courseManager.getPastEvents()
-    def registerUserToSeminar(self,seminarName,user):
-        self.__seminarManager.registerUser(seminarName,user)
-    def registerUserToCourse(self,courseName,user):
-        self.__courseManager.registerUser(courseName,user)
-    def deregisterUserFromSeminar(self,seminarName,userID):
-        self.__seminarManager.deregisterUser(seminarName,userID)
-    def deregisterUserFromCourse(self,courseName,userID):
-        self.__courseManager.deregisterUser(courseName,userID)
-    def isMyEvent(self,zid,eventName):
+    def registerUserToSeminar(self,eventId,user):
+        self.__seminarManager.registerUser(eventId,user)
+    def registerUserToCourse(self,eventId,user):
+        self.__courseManager.registerUser(eventId,user)
+    def deregisterUserFromSeminar(self,eventId,userID):
+        self.__seminarManager.deregisterUser(eventId,userID)
+    def deregisterUserFromCourse(self,eventId,userID):
+        self.__courseManager.deregisterUser(eventId,userID)
+    def isMyEvent(self,zid,eventId):
         user = self.__userManager.getUser(zid)
         if not isinstance(user,Staff):
             return False
         for e in self.getPostedCurrEvents(user):
-            if eventName == e.getName():
+            if eventId == e.getId():
                 return True
         return False
-
-    def getEvent(self,eventName):
-        event = self.__courseManager.getEvent(eventName)
+    def getEvent(self,eventId):
+        event = self.__courseManager.getEvent(eventId)
         if event is None:
-            event = self.__seminarManager.getEvent(eventName)
+            event = self.__seminarManager.getEvent(eventId)
         return event
-    def getSessions(self,seminarName):
-        return self.__seminarManager.getSessions(seminarName)
+    def getSessions(self,eventId):
+        return self.__seminarManager.getSessions(eventId)
 
     def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        course = Course(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        if (self.__courseManager.addCourse(course)):
+        course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        if self.__courseManager.addCourse(course):
             staff.addPostedCurrEvent(course)
             return True
-        else:
-            return False
+        return False
 
     def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        seminar = Seminar(startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
-        if (self.__seminarManager.addSeminar(seminar)):
+        seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+        if self.__seminarManager.addSeminar(seminar):
             staff.addPostedCurrEvent(seminar)
             return True
-        else:
-            return False
+        return False
 
-    def addSession(self,seminarName, startDateTime, endDateTime, name, descr, presenter):
-        session = Session(seminarName, startDateTime, endDateTime, name, descr, presenter)
-        self.__seminarManager.addSession(seminarName,session)
+    def addSession(self,seminarId, startDateTime, endDateTime, name, descr, presenter):
+        seminar = self.getEvent(seminarId)
+        sessionId = self.__seminarManager.addSession(seminarId,startDateTime,endDateTime,name,descr,presenter)
+        self.__userManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
+        return True
 
-    def getSession(self,seminarName,sessionName):
-        self.__seminarManager.getSession(seminarName,sessionName)
+    def getSession(self,eventId,sessionId):
+        self.__seminarManager.getSession(eventId,sessionId)
 
-    def deleteEvent(self,eventName):
-        self.__seminarManager.deleteEvent(eventName)
-        self.__courseManager.deleteEvent(eventName)
+    def deleteEvent(self,eventId):
+        self.__seminarManager.deleteEvent(eventId)
+        self.__courseManager.deleteEvent(eventId)
+    
+    def editEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd):
+        event.setStartDateTime(startDateTime)
+        event.setEndDateTime(endDateTime)
+        event.setName(name)
+        event.setDescription(descr)
+        event.setVenue(venueName)
+        event.setConvener(convener)
+        event.setCapacity(capacity)
+        event.setDeregEnd(deregEnd)
+        self.__userManager.notifyRegistreesEventEdit(event.getId()) 
 
 # ======== User Manager methods ========================================================================================
     def getStudents(self):
@@ -111,27 +121,30 @@ class EventManagementSystem():
         return self.__userManager.getUserType(zid)
     def addRegisteredEvent(self,userID,event):
         self.__userManager.addRegisteredEvent(userID,event)
-    def removeRegisteredEvent(self,userID,eventName):
-        self.__userManager.removeRegisteredEvent(userID,eventName)
-    def changeRegisteredEvent(self,oldEventName,attendees,editedEvent):
-        editedEvent.setAttendees(attendees)
-        self.__userManager.changeRegisteredEvent(oldEventName,editedEvent)
+    def removeRegisteredEvent(self,userID,eventId):
+        self.__userManager.removeRegisteredEvent(userID,eventId)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
-        return self.__venueManager.addVenue(name, loc, capacity)
-    def removeVenue(self, name):
-        self.__venueManager.removeVenue(name)
+        self.__venueManager.addVenue(name, loc, capacity)
+    def removeVenue(self, venueId):
+        self.__venueManager.removeVenue(venueId)
     def getVenues(self):
         return self.__venueManager.getVenues()
-    def getFreeTimes(self, name):
-        return self.__venueManager.getFreeTimes(name)
+    def getFreeTimes(self, venueId):
+        return self.__venueManager.getFreeTimes(venueId)
     def getVenueNames(self):
         return self.__venueManager.getVenueNames()
 # ============ mixed methods ===============================================================================================
-    def cancelEvent(self,convener,eventName):
-        event = self.getEvent(eventName)
-        self.__userManager.cancelEvent(convener,eventName)
-        self.__courseManager.cancelEvent(eventName)
-        self.__seminarManager.cancelEvent(eventName)
+    def cancelEvent(self,convener,eventId):
+        event = self.getEvent(eventId)
+        self.__userManager.cancelEvent(convener,eventId)
+        self.__courseManager.cancelEvent(eventId)
+        self.__seminarManager.cancelEvent(eventId)
+# ============== private methods =========================
+    def getUniqueEventId(self):
+        id = 0
+        while self.__courseManager.containsEventId(id) or self.__seminarManager.containsEventId(id):
+            id = id + 1
+        return id
 
                 

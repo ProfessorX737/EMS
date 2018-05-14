@@ -25,30 +25,37 @@
 {% if not event.isCancelled() %}
     {% if event.isFull() %}
     {% else %}
-        {% if isOwner == false and current_user.isRegistered(event.getName()) == false %}
-        <form method="post" action="{{ url_for('register_user',eventName=event.getName()) }}">
+        {% if isOwner == false and current_user.isRegistered(event.getId()) == false %}
+        <form method="post" action="{{ url_for('register_user',eventId=event.getId()) }}">
             <p><input type="submit" value="Register" ></p>
         </form>
         {% endif %}
-        {% if current_user.isRegistered(event.getName()) == true %}
-        <form method="post" action="{{ url_for('deregister_user',eventName=event.getName()) }}">
+        {% if current_user.isRegistered(event.getId()) == true %}
+        <form method="post" action="{{ url_for('deregister_user',eventId=event.getId()) }}">
             <p><input type="submit" value="Deregister" ></p>
         </form>
         {% endif %}
     {% endif %}
     {% if isOwner == true %}
-    <form method="post" action="{{ url_for('edit_event',eventName=event.getName()) }}">
+    <form method="post" action="{{ url_for('edit_event',eventId=event.getId()) }}">
         <p><input type="submit" value="Edit Event" ></p>
     </form>
-    <form method="post" action="{{ url_for('cancel_event',eventName=event.getName()) }}">
+    <form method="post" action="{{ url_for('cancel_event',eventId=event.getId()) }}">
         <p><input type="submit" value="Cancel Event" ></p>
     </form>
     {% if event.getClassName() == 'Seminar' %}
-        <a href="{{ url_for('create_session',seminarName=event.getName()) }}" > Create sessions </a>
+        <a href="{{ url_for('create_session',seminarId=event.getId()) }}" > Create sessions </a>
         <h2> Current Sessions </h2>
-        {% for session in event.getSessions()%}
-            <li> {{session.getName()}} </li>
-        {% endfor %}
+        <div class="flex">
+            {% for session in event.getSessions() %}
+            <div class="eventbox">
+                {{session.getName()}}<br>
+                Presenter: {{session.getPresenter()}}<br>
+                Start: {{session.getStartDateTime()}}<br>
+                End: {{session.getEndDateTime()}}<br>
+            </div>
+            {% endfor %}
+        </div>
     {% endif %}
     {% endif %}
 
