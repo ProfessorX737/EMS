@@ -6,10 +6,13 @@ class Seminar(Event):
         self.__sessions = []
 
     def addSession(self,session):
-        for i in self.__sessions:
-            if i.getStartDateTime != session.getStartDateTime:
+        t = (i.getStartDateTime() < session.getStartDateTime()
+            and session.getStartDateTime() < i.getStartDateTime
+            for i in self.__sessions)
+        if any(t):
                 self.__sessions.append(session)
                 print("ADDED SESSION", session.getName())
+        print("INVALID PERIOD")
 
     def getSessions(self):
         return self.__sessions
