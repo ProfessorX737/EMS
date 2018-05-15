@@ -1,4 +1,5 @@
 from src.Event import Event
+from src.Session import Session
 
 class Seminar(Event):
     def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
@@ -7,11 +8,10 @@ class Seminar(Event):
 
     def addSession(self,id,startDateTime,endDateTime,name,descr,presenter):
         session = Session(id,startDateTime,endDateTime,name,descr,presenter)
-        self.__sessions.append(session)
-        return id
+        self.__sessions[id] = session
     
     def getSessions(self):
-        return self.__sessions
+        return self.__sessions.values()
     
     def getClassName(self):
         return "Seminar"

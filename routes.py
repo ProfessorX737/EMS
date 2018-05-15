@@ -138,6 +138,7 @@ def edit_event(eventId):
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_event.html',form=form,event=event,message=message)
+<<<<<<< HEAD
         event.setStartDateTime(form.startDateTime.data)
         event.setEndDateTime(form.endDateTime.data)
         event.setName(form.name.data)
@@ -148,6 +149,10 @@ def edit_event(eventId):
         event.setDeregEnd(form.deregEnd.data)
         event.setFee(form.fee.data)
         event.setEarlyBirdEnd(form.earlybirdEnd.data)
+=======
+        ems.editEvent(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
+        form.description.data,form.venue.data,form.convener.data,form.capacity.data,form.deregEnd.data)
+>>>>>>> 7dee702be88734276b69e42f633cd34d60e0d66d
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 

@@ -70,7 +70,10 @@ class EventManagementSystem():
             return True
         return False
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7dee702be88734276b69e42f633cd34d60e0d66d
     def addSession(self,seminarId, startDateTime, endDateTime, name, descr, presenter):
         seminar = self.getEvent(seminarId)
         sessionId = self.__seminarManager.addSession(seminarId,startDateTime,endDateTime,name,descr,presenter)
@@ -83,6 +86,17 @@ class EventManagementSystem():
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
         self.__courseManager.deleteEvent(eventId)
+    
+    def editEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd):
+        event.setStartDateTime(startDateTime)
+        event.setEndDateTime(endDateTime)
+        event.setName(name)
+        event.setDescription(descr)
+        event.setVenue(venueName)
+        event.setConvener(convener)
+        event.setCapacity(capacity)
+        event.setDeregEnd(deregEnd)
+        self.__userManager.notifyRegistreesEventEdit(event.getId()) 
 
     def getCost(self,eventId,userId):
         if self.getUserType(userId) is None:
@@ -120,9 +134,6 @@ class EventManagementSystem():
         self.__userManager.addRegisteredEvent(userID,event)
     def removeRegisteredEvent(self,userID,eventId):
         self.__userManager.removeRegisteredEvent(userID,eventId)
-    # def changeRegisteredEvent(self,oldEventName,attendees,editedEvent):
-    #     editedEvent.setAttendees(attendees)
-    #     self.__userManager.changeRegisteredEvent(oldEventName,editedEvent)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
         self.__venueManager.addVenue(name, loc, capacity)
