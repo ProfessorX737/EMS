@@ -6,6 +6,10 @@
 {{event.getStartDateTime()}}
 <h2> End: </h2>
 {{event.getEndDateTime()}}
+<h2> End of Deregistration: </h2>
+{{event.getDeregEnd()}}
+<h2> End of Early Bird prices: </h2>
+{{event.getEarlyBirdEnd()}}
 <h2> Description </h2>
     {{event.getDescription()}}
 <h2> Presenter </h2>
@@ -17,11 +21,14 @@
 <h2> Status </h2>
 {% if event.isOpen() %}
     Open
+    <h2> Registration Fee </h2>
+   ${{fee}}
 {% elif event.isCancelled() %}
     Cancelled
 {% else %}
     Closed
 {% endif %}
+
 {% if not event.isCancelled() %}
     {% if event.isFull() %}
     {% else %}

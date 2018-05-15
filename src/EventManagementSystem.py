@@ -55,15 +55,15 @@ class EventManagementSystem():
     def getSessions(self,eventId):
         return self.__seminarManager.getSessions(eventId)
 
-    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd):
+        course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         if self.__courseManager.addCourse(course):
             staff.addPostedCurrEvent(course)
             return True
         return False
 
-    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
-        seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
+    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd):
+        seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         if self.__seminarManager.addSeminar(seminar):
             staff.addPostedCurrEvent(seminar)
             return True
@@ -81,6 +81,13 @@ class EventManagementSystem():
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
         self.__courseManager.deleteEvent(eventId)
+
+    def getCost(self,eventId,userId):
+        if self.getUserType(userId) is None:
+            event = self.getEvent(self,eventId)
+            return event.getCost()
+        else:
+            return 0
 
 # ======== User Manager methods ========================================================================================
     def getStudents(self):

@@ -66,14 +66,14 @@ def create_event():
         if (form.eventType.data == 'Course'):
             if (ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)):
+            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)):
                 return redirect(url_for('home'))
             else:
                 message = 'Course name already taken'
         else:
             if(ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
             form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data)):
+            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)):
                 return redirect(url_for('home'))
             else:
                 message = 'Seminar name already taken'
@@ -86,8 +86,9 @@ def moreInfo(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
     isOwner = ems.isMyEvent(current_user.get_id(),eventId)
+    fee = ems.getCost(eventId,current_user.get_id())
     # if staff check if this event is inside getPostedCurrEvents
-    return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType)
+    return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,fee=fee)
 
 @app.route('/create_session/<seminarId>',methods=['GET','POST'])
 @login_required        
@@ -145,6 +146,8 @@ def edit_event(eventId):
         event.setConvener(form.convener.data)
         event.setCapacity(form.capacity.data)
         event.setDeregEnd(form.deregEnd.data)
+        event.setFee(form.fee.data)
+        event.setEarlyBirdEnd(form.earlybirdEnd.data)
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 
