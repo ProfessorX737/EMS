@@ -4,14 +4,18 @@ from src.User import *
 import abc
 
 class Event(Period):
-    def __init__(self,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
+    def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
         super().__init__(startDateTime,endDateTime,name,descr)
+        self.__id = id
         self.__venue = venue
         self.__convener = convener
         self.__capacity = capacity
         self.__deregEnd = deregEnd
         self.__isCancelled = False
         self.__attendees = {}
+        self.__fee = fee
+        self.__earlybirdEnd = earlybirdEnd
+
 
     def addAttendee(self, user):
         if not self.isFull():
@@ -34,6 +38,8 @@ class Event(Period):
             return True
         return False
     
+    def getId(self):
+        return self.__id
     def getConvener(self):
         return self.__convener
     def getVenueName(self):
@@ -46,16 +52,30 @@ class Event(Period):
         return self.__attendees.values()
     def getNumAttendees(self):
         return len(self.__attendees.values())
-
+    def getEarlyBirdEnd(self):
+        return self.__earlybirdEnd
+    def getCost(self):
+        if datetime.datetime.now() > self.__earlybirdEnd:
+            return self.__fee
+        else:
+            return 0.5*self.__fee
+    def getFee(self):
+        return self.__fee
     def setCapacity(self,capacity):
         self.__capacity = capacity
     def setDeregEnd(self,deregEnd):
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
         self.__venue = venue
+    def setConvener(self, convenerName):
+        self.__convener = convenerName
+    def setEarlyBirdEnd(self, earlybirdEnd):
+        self.__earlybirdEnd = earlybirdEnd
+    def setFee(self,fee):
+        self.__fee = fee
     def cancelEvent(self):
         self.__isCancelled = True
-
+    
     @abc.abstractmethod
     def getClassName(self):
         pass

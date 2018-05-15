@@ -33,35 +33,36 @@ class User(UserMixin,Person):
         self.__password = password
     def setCurrEvents(self,currEvents):
         for e in currEvents:
-            self.__currEvents[e.getName()] = e
+            self.__currEvents[e.getId()] = e
     def setPastEvents(self,pastEvents):
         for e in pastEvents:
-            self.__pastEvents[e.getName()] = e
+            self.__pastEvents[e.getId()] = e
         self.__pastEvents = pastEvents
     def addRegisteredEvent(self,event):
         if event.isOpen():
-            self.__currEvents[event.getName()] = event
+            self.__currEvents[event.getId()] = event
         else:
-            self.__pastEvents[event.getName()] = event
-    def removeRegisteredEvent(self,eventName):
-        if eventName in self.__currEvents:
-            del self.__currEvents[eventName]
+            self.__pastEvents[event.getId()] = event
+    def removeRegisteredEvent(self,eventId):
+        if eventId in self.__currEvents:
+            del self.__currEvents[eventId]
             return True
-        elif eventName in self.__pastEvents:
-            del self.__pastEvents[eventName]
+        elif eventId in self.__pastEvents:
+            del self.__pastEvents[eventId]
             return True
         return False
     def deleteNotification(self,id):
         if id in self.__notifications:
             del self.__notifications[id]
-    def isRegistered(self,eventName):
-        if eventName in self.__currEvents:
+    def isRegistered(self,eventId):
+        if eventId in self.__currEvents:
             return True
-        if eventName in self.__pastEvents:
+        if eventId in self.__pastEvents:
             return True
         return False
-    def cancelRegisteredEvent(self,eventName):
-        if self.removeRegisteredEvent(eventName):
+    def cancelRegisteredEvent(self,eventId):
+        eventName = self.getRegisteredEventName(eventId)
+        if self.removeRegisteredEvent(eventId):
             self.addNotification(eventName + " event was cancelled")
             return True
         return False
@@ -72,3 +73,9 @@ class User(UserMixin,Person):
         return id
     def addNotification(self,notification):
         self.__notifications[self.getUniqueNotificationID()] = notification
+    def getRegisteredEventName(self,id):
+        if id in self.__currEvents:
+            return self.__currEvents[id].getName()
+        elif id in self.__pastEvents:
+            return self.__pastEvents[id].getName()
+        return None
