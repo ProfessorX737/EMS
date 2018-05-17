@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Login</h2>
+  <h2>Register Guest User</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
     <form method="post" action="/">
         <div class="login-div" style="width: 20%; margin: auto; margin-bottom:10px">
         <table class="login-table">
             <tr>
-                <td>zid:</td>
-                <td><input name="zid"></td>
+                <td>username:</td>
+                <td><input name="username"></td>
             </tr>
             <tr>
                 <td>password:</td>
@@ -15,7 +15,7 @@
             </tr>
         </table>
         </div>
-        <input type="submit" value="Login" >
+        <input type="submit" value="Register" >
     </form>
     {{message}}
 
