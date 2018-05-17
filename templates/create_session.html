@@ -19,6 +19,13 @@
                     {% endif %}
                 </tr>
                 <tr>
+                    <td style="white-space: nowrap">{{ form.capacity.label }}:</td>
+                    <td>{{ form.capacity }}</td>
+                    {% if form.capacity.errors %}
+                    <td class="errors">{% for error in form.capacity.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
                     <td style="white-space: nowrap">{{ form.convener.label }}:</td>
                     <td>{{ form.convener }}</td>
                     {% if form.convener.errors %}

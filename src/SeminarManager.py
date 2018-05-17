@@ -8,14 +8,15 @@ class SeminarManager(EventManager):
         return self.addEvent(seminar)
 
     # return session id
-    def addSession(self,seminarId,startDateTime,endDateTime,name,descr,presenter):
+    def addSession(self,seminarId,sessionId,startDateTime,endDateTime,name,descr,capacity,presenter):
         seminar = self.getEvent(seminarId)
-        return seminar.addSession(self.__getUniqueSessionId(),startDateTime,endDateTime,name,descr,presenter)
-
-    def getSession(self,seminarId,sessionId):
-        seminar = self.__events[seminarId]
-        session = seminar.getSession(sessionId)
-        return session
+        return seminar.addSession(sessionId,startDateTime,endDateTime,name,descr,capacity,presenter)
+    
+    def getSession(self,sessionId):
+        for seminar in super().getEvents():
+            if seminar.containsSessionId(sessionId):
+                return seminar.getSession(sessionId)
+        return None
     
     def getSessions(self,seminarId):
         seminar = self.getEvent(seminarId)
@@ -32,3 +33,31 @@ class SeminarManager(EventManager):
             if seminar.containsSessionId(id):
                 return True 
         return False
+
+    def containsEventId(self,id):
+        if super().containsEventId(id) or self.__sessionIdExists(id):
+            return True
+        return False
+
+    def cancelEvent(self,eventId):
+        if super().cancelEvent(eventId) == True:
+            print("Cancelling seminar ==========")
+            return True
+        for seminar in super().getEvents():
+            print("Cancelling session ==========")
+            seminar.deleteSession(eventId)
+            return True
+        return False
+    
+    def registerUserToSession(self,sessionId,user):
+        session = self.getSession(sessionId)
+        if session is None:
+            return False
+        session.addAttendee(user)
+        return True
+    
+    def deregisterUserFromSession(self,sessionId,userID):
+        session = self.getSession(sessionId)
+        if session is None:
+            return False
+        session.removeAttendee(userID)

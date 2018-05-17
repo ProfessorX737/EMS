@@ -4,23 +4,27 @@
 <h2> Registered Open Events </h2>
 <div class="flex">
     {% for currEvent in current_user.getCurrEvents() %}
+    {% if currEvent.getClassName() != "Session" %}
     <div class="eventbox">
         <a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventId=currEvent.getId())}}">{{currEvent.getName()}}</a><br/>
         Type: {{currEvent.getClassName()}}<br>
         Venue: {{currEvent.getVenueName()}}<br>
         Start: {{currEvent.getStartDateTime()}}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 <h2> Registered Past Events </h2>
 <div class="flex">
     {% for pastEvent in current_user.getPastEvents() %}
+    {% if pastEvent.getClassName() != "Session" %}
     <div class="eventbox">
         <a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventId=pastEvent.getId()) }}">{{pastEvent.getName()}}</a><br/>
         Type: {{pastEvent.getClassName()}}<br>
         Venue: {{pastEvent.getVenueName()}}<br>
         Start: {{pastEvent.getStartDateTime()}}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 {%if userType == 'Staff'%}

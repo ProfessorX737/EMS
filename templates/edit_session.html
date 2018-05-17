@@ -1,15 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Edit Event</h1>
-<form method="post" action="{{ url_for('edit_event',eventType=event.getClassName(),eventId=event.getId()) }}">
+<h1>Edit Session</h1>
+<form method="post" action="{{ url_for('edit_session',eventType=event.getClassName(),eventId=event.getId()) }}">
     <div class="form">
         <table class="login-table">
             <tr>
                 <td class="error"> {% if message %} {{message}} {% endif %}</td>
-            </tr>
-            <tr>
-                <td>{{ form.eventType.label }}:</td>
-                <td>{{ form.eventType }}</td>
             </tr>
             <tr>
                 <td>{{ form.name.label }}:</td>
@@ -47,26 +43,12 @@
                 {% endif %}
             </tr>
             <tr>
-                <td>{{ form.venue.label }}:</td>
-                <td>{{ form.venue(value = form.venue.default) }} </td>
-                {% if form.venue.errors %}
-                <td class="errors">{% for error in form.venue.errors %} {{error}} {% endfor %}</td>
-                {% endif %}
-            </tr>
-            <tr>
                 <td>{{ form.convener.label }}:</td>
                 <td>{{ form.convener(value= form.convener.default) }} </td>
                 {% if form.convener.errors %}
                 <td class="errors">{% for error in form.convener.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
-            <tr>
-                <td style="white-space: nowrap">{{ form.deregEnd.label }}:</td>
-                <td>{{ form.deregEnd(value = form.deregEnd.default) }} </td>
-                {% if form.deregEnd.errors %}
-                    <td style="white-space: nowrap" class="errors">{% for error in form.deregEnd.errors %} {{error}} {% endfor %}</td>
-                {% endif %}
-            </tr>   
             <tr>
                 <td>{{ form.csrf_token }}</td>
                 <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>

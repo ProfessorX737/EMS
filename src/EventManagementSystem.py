@@ -36,10 +36,14 @@ class EventManagementSystem():
         self.__seminarManager.registerUser(eventId,user)
     def registerUserToCourse(self,eventId,user):
         self.__courseManager.registerUser(eventId,user)
+    def registerUserToSession(self,eventId,user):
+        self.__seminarManager.registerUserToSession(eventId,user)
     def deregisterUserFromSeminar(self,eventId,userID):
         self.__seminarManager.deregisterUser(eventId,userID)
     def deregisterUserFromCourse(self,eventId,userID):
         self.__courseManager.deregisterUser(eventId,userID)
+    def deregisterUserFromSession(self,eventId,userID):
+        self.__seminarManager.deregisterUserFromSession(eventId,userID)
     def isMyEvent(self,zid,eventId):
         user = self.__userManager.getUser(zid)
         if not isinstance(user,Staff):
@@ -52,9 +56,14 @@ class EventManagementSystem():
         event = self.__courseManager.getEvent(eventId)
         if event is None:
             event = self.__seminarManager.getEvent(eventId)
+        if event is None:
+            event = self.getSession(eventId)
         return event
     def getSessions(self,eventId):
         return self.__seminarManager.getSessions(eventId)
+
+    def getSession(self,sessionId):
+        return self.__seminarManager.getSession(sessionId)
 
     def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd):
         course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd)
@@ -70,14 +79,11 @@ class EventManagementSystem():
             return True
         return False
 
-    def addSession(self,seminarId, startDateTime, endDateTime, name, descr, presenter):
+    def addSession(self,seminarId, startDateTime, endDateTime, name, descr, capacity, presenter):
         seminar = self.getEvent(seminarId)
-        sessionId = self.__seminarManager.addSession(seminarId,startDateTime,endDateTime,name,descr,presenter)
+        sessionId = self.__seminarManager.addSession(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,capacity,presenter)
         self.__userManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
         return True
-
-    def getSession(self,eventId,sessionId):
-        self.__seminarManager.getSession(eventId,sessionId)
 
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
@@ -93,6 +99,14 @@ class EventManagementSystem():
         event.setCapacity(capacity)
         event.setDeregEnd(deregEnd)
         self.__userManager.notifyRegistreesEventEdit(event.getId()) 
+    
+    def editSession(self,session,startDateTime,endDateTime,name,descr,presenter,capacity):
+        session.setStartDateTime(startDateTime)
+        session.setEndDateTime(endDateTime)
+        session.setName(name)
+        session.setDescription(descr)
+        session.setPresenter(presenter)
+        session.setCapacity(capacity)
 
 # ======== User Manager methods ========================================================================================
     def getStudents(self):

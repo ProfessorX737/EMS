@@ -36,27 +36,45 @@
         </form>
         {% endif %}
     {% endif %}
+    {{regErrorMsg}}
     {% if isOwner == true %}
-    <form method="post" action="{{ url_for('edit_event',eventId=event.getId()) }}">
-        <p><input type="submit" value="Edit Event" ></p>
-    </form>
-    <form method="post" action="{{ url_for('cancel_event',eventId=event.getId()) }}">
-        <p><input type="submit" value="Cancel Event" ></p>
-    </form>
+        {% if event.getClassName() != "Session" %}
+            <form method="post" action="{{ url_for('edit_event',eventType=event.getClassName(),eventId=event.getId()) }}">
+                <p><input type="submit" value="Edit Event" ></p>
+            </form>
+        {% else %}
+            <form method="post" action="{{ url_for('edit_session',eventType=event.getClassName(),eventId=event.getId()) }}">
+                <p><input type="submit" value="Edit Event" ></p>
+            </form>
+        {% endif %}
+            <form method="post" action="{{ url_for('cancel_event',eventType=event.getClassName(),eventId=event.getId()) }}">
+                <p><input type="submit" value="Cancel Event" ></p>
+            </form>
+    {% endif %}
     {% if event.getClassName() == 'Seminar' %}
+        {% if isOwner == true %}
         <a href="{{ url_for('create_session',seminarId=event.getId()) }}" > Create sessions </a>
+        {% endif %}
         <h2> Current Sessions </h2>
         <div class="flex">
             {% for session in event.getSessions() %}
             <div class="eventbox">
-                {{session.getName()}}<br>
+                <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
                 Presenter: {{session.getPresenter()}}<br>
                 Start: {{session.getStartDateTime()}}<br>
-                End: {{session.getEndDateTime()}}<br>
+                {% if isOwner == false and current_user.isRegistered(session.getId()) == false %}
+                <form method="post" action="{{ url_for('register_user',eventId=session.getId()) }}">
+                    <input type="submit" value="Register">
+                </form>
+                {% endif %}
+                {% if current_user.isRegistered(session.getId()) == true %}
+                <form method="post" action="{{ url_for('deregister_user',eventId=session.getId()) }}">
+                    <input type="submit" value="Deregister">
+                </form>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
-    {% endif %}
     {% endif %}
 
 {% endif %}

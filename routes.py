@@ -96,7 +96,7 @@ def create_session(seminarId):
     form = CreateSessionForm()
     if form.validate_on_submit():
         ems.addSession(seminarId,form.startDateTime.data,form.endDateTime.data,
-        form.name.data,form.description.data,form.convener.data)
+        form.name.data,form.description.data,form.capacity.data,form.convener.data)
         return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType)
 
@@ -105,11 +105,23 @@ def create_session(seminarId):
 def register_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Course):
         ems.registerUserToCourse(eventId,copy.copy(current_user))
+        ems.addRegisteredEvent(current_user.get_id(),event)
     if isinstance(event,Seminar):
+        if not event.isRegisteredToASession(current_user.get_id()):
+            isOwner = ems.isMyEvent(current_user.get_id(),eventId)
+            return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg="To register you must be registered to at least one session")
         ems.registerUserToSeminar(eventId,copy.copy(current_user))
+        ems.addRegisteredEvent(current_user.get_id(),event)
+    if isinstance(event,Session):
+        ems.registerUserToSession(eventId,copy.copy(current_user))
+        ems.registerUserToSeminar(event.getSeminarId(), copy.copy(current_user))
+        seminar = ems.getEvent(event.getSeminarId())
+        ems.addRegisteredEvent(current_user.get_id(),seminar) 
+        ems.addRegisteredEvent(current_user.get_id(),event)
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
+
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
@@ -122,11 +134,21 @@ def deregister_user(eventId):
         ems.deregisterUserFromCourse(eventId,current_user.get_id())
     if isinstance(event,Seminar):
         ems.deregisterUserFromSeminar(eventId,current_user.get_id())
+        for session in event.getSessions():
+            ems.deregisterUserFromSession(session.getId(),current_user.get_id())      
+            ems.removeRegisteredEvent(current_user.get_id(),session.getId())
+    if isinstance(event,Session):
+        ems.deregisterUserFromSession(eventId,current_user.get_id())
+        seminar = ems.getEvent(event.getSeminarId())
+        if not seminar.isRegisteredToASession(current_user.get_id()):
+            ems.deregisterUserFromSeminar(event.getSeminarId(),current_user.get_id())
+            ems.removeRegisteredEvent(current_user.get_id(),event.getSeminarId())
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
-@app.route('/edit_event/<eventId>',methods=['GET','POST'])
+@app.route('/edit_event/<eventType>/<eventId>',methods=['GET','POST'])
 @login_required        
-def edit_event(eventId):
+def edit_event(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
     venueNames = ems.getVenueNames()
@@ -142,9 +164,26 @@ def edit_event(eventId):
         return redirect(url_for('home'))
     return render_template('edit_event.html',form=form,event=event,message=message)
 
-@app.route('/cancel_event/<eventId>',methods=['GET','POST'])
+@app.route('/edit_session/<eventType>/<eventId>',methods=['GET','POST'])
 @login_required        
-def cancel_event(eventId):
+def edit_session(eventType,eventId):
+    eventId = int(eventId)
+    event = ems.getEvent(eventId)
+    form = CreateSessionForm()
+    form.fillDefault(event)
+    message=''
+    if form.validate_on_submit():
+        if (event.getNumAttendees() > form.capacity.data):
+            message='new capacity must be >= current number of attendees'
+            return render_template('edit_session.html',form=form,event=event,message=message)
+        ems.editSession(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
+        form.description.data,form.convener.data,form.capacity.data)
+        return redirect(url_for('home'))
+    return render_template('edit_session.html',form=form,event=event,message=message)
+
+@app.route('/cancel_event/<eventType>/<eventId>',methods=['GET','POST'])
+@login_required        
+def cancel_event(eventType,eventId):
     eventId = int(eventId)
     ems.cancelEvent(current_user,eventId)
     return redirect(url_for('home'))
