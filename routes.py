@@ -57,7 +57,7 @@ def home():
 def dashboard():
     return render_template('dashboard.html',userType=userType)
 
-app.route('/register_guest',methods=['GET','POST'])
+@app.route('/register_guest',methods=['GET','POST'])
 def register_guest():
     form = CreateGuestForm()
     if form.validate_on_submit():
