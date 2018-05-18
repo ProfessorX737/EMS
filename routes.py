@@ -63,7 +63,7 @@ def register_guest():
     if form.validate_on_submit():
         guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
         return redirect(url_for('login',message='You have successfully registered.'))
-    return render_template('register.html', form = form, userType=userType)
+    return render_template('register.html', form = form)
 
 
 @app.route('/create_event',methods=['GET','POST'])
