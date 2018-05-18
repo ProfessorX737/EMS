@@ -1,10 +1,12 @@
 from src.Student import *
 from src.Staff import *
+from src.Guest import *
 from datetime import datetime
 class UserManager():
     def __init__(self):
         self.__students = {}
         self.__staff = {}
+        self.__guest = {}
     def getStudents(self):
         return self.__students.values()
     def getStaff(self):
@@ -29,9 +31,17 @@ class UserManager():
         if (role == 'trainee'):
             student = Student(name,zID,email,password)
             self.__students[student.get_id()] = student
-        else:
+            return True
+        elif (role == 'trainer'):
             staff = Staff(name,zID,email,password)
             self.__staff[staff.get_id()] = staff
+            return True
+        elif (role == 'guest'):
+            guest = Guest(name,zID,email,password)
+            self.__guest[guest.get_id()] = guest
+            return True
+        else:
+            return False
     def getUser(self,zid):
         if zid in self.__students:
             return self.__students.get(zid)
