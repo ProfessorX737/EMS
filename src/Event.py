@@ -16,7 +16,6 @@ class Event(Period):
         self.__fee = fee
         self.__earlybirdEnd = earlybirdEnd
 
-
     def addAttendee(self, user):
         if not self.isFull():
             self.__attendees[user.get_id()] = user
@@ -43,7 +42,7 @@ class Event(Period):
     def getConvener(self):
         return self.__convener
     def getVenueName(self):
-        return self.__venue
+        return self.__venue.getName()
     def getCapacity(self):
         return self.__capacity
     def getDeregEnd(self):

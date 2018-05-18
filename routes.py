@@ -61,8 +61,13 @@ def dashboard():
 def register_guest():
     form = CreateGuestForm()
     if form.validate_on_submit():
-        guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
-        return redirect(url_for('login',message='You have successfully registered.'))
+        if (ems.getUserById(form.username.data) is not None):
+            return render_template('register.html', form = form, message = 'That username already exists')
+        elif (ems.getUserByEmail(form.email.data) is not None):
+            return render_template('register.html', form = form, message = 'That email already exists')
+        else:
+            guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
+            return render_template('login.html',message="You have successfully registered.")
     return render_template('register.html', form = form)
 
 

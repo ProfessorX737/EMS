@@ -12,8 +12,12 @@ class VenueManager():
     def removeVenue(self, venueId):
         del self.__venues[venueId]
     def getVenues(self):
-        print(self.__venues.values())
         return self.__venues.values()
+    def getVenue(self,venueName):
+        for v in self.__venues.values():
+            if v.getName() == venueName:
+                return v
+        return None
     def getVenueNames(self):
         venueNames = []
         for v in self.__venues.values():
