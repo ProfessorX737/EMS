@@ -1,5 +1,5 @@
 from src.Venue import *
-
+from src.exceptions.ExistingVenueException import *
 class VenueManager():
     def __init__(self):
         self.__venues = {}
@@ -9,6 +9,8 @@ class VenueManager():
             venue = Venue(id,name,loc,capacity)
             self.__venues[id] = venue
             return True
+        else:
+            raise ExistingVenueException('Venue','Venue with this name already exists')
     def removeVenue(self, venueId):
         del self.__venues[venueId]
     def getVenues(self):

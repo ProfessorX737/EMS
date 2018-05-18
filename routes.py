@@ -12,6 +12,10 @@ from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from src.forms.CreateGuestForm import *
+from src.exceptions.LoginException import *
+from src.exceptions.VenueCapacityException import *
+from src.exceptions.ExistingEventException import *
+from src.exceptions.ExistingVenueException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -33,18 +37,16 @@ def login():
     if (request.method == 'POST'):
         zid = request.form.get('zid','')
         password = request.form.get('password','')
-        user = loadUser(zid)
-        if user is None:
-            return render_template('login.html',message= "'{0}'".format(zid) + " is not a valid username")
-        if user.getPassword() != password:
-            return render_template('login.html',message="Incorrect password")
-        else:
+        try:
+            user = ems.getUserById(zid)
+            ems.checkPassword(user,password)
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
             global userType
             userType = ems.getUserType(current_user.get_id())
             return redirect(url_for('home'))
-
+        except LoginException as errmsg:
+            return render_template('login.html',message= errmsg.args[1])
     return render_template('login.html')
 
 @app.route('/home',methods=['GET','POST'])
@@ -78,21 +80,21 @@ def create_event():
     form = NewStartUpForm(venueNames).getForm()
     message = ''
     if form.validate_on_submit():
-        if (form.eventType.data == 'Course'):
-            if (ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
-            form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)):
+        try:
+            if (form.eventType.data == 'Course'):
+                ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
+                form.name.data,form.description.data,form.venue.data,form.convener.data,
+                form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
                 return redirect(url_for('home'))
             else:
-                message = 'Course name already taken'
-        else:
-            if(ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
-            form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)):
+                ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
+                form.name.data,form.description.data,form.venue.data,form.convener.data,
+                form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
                 return redirect(url_for('home'))
-            else:
-                message = 'Seminar name already taken'
-
+        except VenueCapacityException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1])
+        except ExistingEventException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1])
     return render_template('create_event.html', form = form, userType=userType, message=message)
 
 @app.route("/more/<eventType>/<eventId>",methods=['GET','POST'])
@@ -150,20 +152,13 @@ def edit_event(eventId):
     form.fillDefault(event)
     message=''
     if form.validate_on_submit():
-        if (event.getNumAttendees() > form.capacity.data):
-            message='new capacity must be >= current number of attendees'
-            return render_template('edit_event.html',form=form,event=event,message=message)
-        event.setStartDateTime(form.startDateTime.data)
-        event.setEndDateTime(form.endDateTime.data)
-        event.setName(form.name.data)
-        event.setDescription(form.description.data)
-        event.setVenue(form.venue.data)
-        event.setConvener(form.convener.data)
-        event.setCapacity(form.capacity.data)
-        event.setDeregEnd(form.deregEnd.data)
-        event.setFee(form.fee.data)
-        event.setEarlyBirdEnd(form.earlybirdEnd.data)
-        return redirect(url_for('home'))
+        try:
+            ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,form.convener.data,
+            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            return redirect(url_for('home'))
+        except VenueCapacityException as errmsg:
+            return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
     return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/cancel_event/<eventId>',methods=['GET','POST'])
@@ -186,10 +181,11 @@ def create_venue():
     form = CreateVenueForm()
     message = ''
     if form.validate_on_submit():
-        if (ems.addVenue(form.name.data,form.location.data,form.capacity.data) is False):
-            message = 'venue with this name already exists'
-        else:
+        try:
+            ems.addVenue(form.name.data,form.location.data,form.capacity.data) 
             return redirect(url_for('view_venues'))
+        except ExistingVenueException as errmsg:
+            message = errmsg.args[1]
     return render_template('create_venue.html',form=form,userType=userType,message=message)
 
 @app.route('/venues',methods=['GET','POST'])

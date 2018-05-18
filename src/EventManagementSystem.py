@@ -8,6 +8,10 @@ from src.Course import *
 from src.Seminar import *
 from src.Staff import Staff
 from src.Session import Session
+from src.exceptions.LoginException import *
+from src.exceptions.VenueCapacityException import *
+from src.exceptions.ExistingEventException import *
+from src.exceptions.ExistingVenueException import *
 import datetime
 
 class EventManagementSystem():
@@ -45,7 +49,7 @@ class EventManagementSystem():
     def deregisterUserFromCourse(self,eventId,userID):
         self.__courseManager.deregisterUser(eventId,userID)
     def isMyEvent(self,zid,eventId):
-        user = self.__staffManager.getUser(zid)
+        user = self.__staffManager.getUserById(zid)
         if not isinstance(user,Staff):
             return False
         for e in self.getPostedCurrEvents(user):
@@ -60,21 +64,27 @@ class EventManagementSystem():
     def getSessions(self,eventId):
         return self.__seminarManager.getSessions(eventId)
 
-    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd):
-        venue = self.__venueManager.getVenue(venue)
+    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venueName, convener, capacity, deregEnd, fee, earlybirdEnd):
+        venue = self.__venueManager.getVenue(venueName)
+        if (venue.getMaxCapacity() < capacity):
+            raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         if self.__courseManager.addCourse(course):
             staff.addPostedCurrEvent(course)
             return True
-        return False
+        else:
+            raise ExistingEventException('Course', 'Course with this name already exists')
 
-    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd):
-        venue = self.__venueManager.getVenue(venue)
+    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venueName, convener, capacity, deregEnd, fee, earlybirdEnd):
+        venue = self.__venueManager.getVenue(venueName)
+        if (venue.getMaxCapacity() < capacity):
+            raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         if self.__seminarManager.addSeminar(seminar):
             staff.addPostedCurrEvent(seminar)
             return True
-        return False
+        else:
+            raise ExistingEventException('Seminar', 'Seminar with this name already exists')
 
     def addSession(self,seminarId, startDateTime, endDateTime, name, descr, presenter):
         seminar = self.getEvent(seminarId)
@@ -144,6 +154,8 @@ class EventManagementSystem():
             return self.__staffManager.getUserById(zid)
         elif self.__guestManager.getUserById(zid) is not None:
             return self.__guestManager.getUserById(zid)
+        else:
+            raise LoginException('User', 'Username does not exist')
     def getUserByEmail(self,email):
         if self.__studentManager.getUserByEmail(email) is not None:
             return self.__studentManager.getUserByEmail(email)
@@ -168,7 +180,10 @@ class EventManagementSystem():
         self.__guestManager.removeRegisteredEvent(userID,eventId)
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
-        self.__venueManager.addVenue(name, loc, capacity)
+        try:
+            self.__venueManager.addVenue(name, loc, capacity)
+        except ExistingVenueException as errmsg:
+            raise errmsg
     def removeVenue(self, venueId):
         self.__venueManager.removeVenue(venueId)
     def getVenues(self):
@@ -186,6 +201,11 @@ class EventManagementSystem():
         self.__courseManager.cancelEvent(eventId)
         self.__seminarManager.cancelEvent(eventId)
         convener.cancelPostedEvent(eventId)
+    def checkPassword(self, user, password):
+        if user.getPassword() != password:
+            raise LoginException('Password','Invalid password')
+        else:
+            return True
 # ============== private methods =========================
     def getUniqueEventId(self):
         id = 0
@@ -193,4 +213,18 @@ class EventManagementSystem():
             id = id + 1
         return id
 
-                
+    def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd,fee,earlybirdEnd):
+        venue = self.__venueManager.getVenue(venueName)
+        try:
+            event.setStartDateTime(startDateTime)
+            event.setEndDateTime(endDateTime)
+            event.setName(name)
+            event.setDescription(descr)
+            event.setVenue(venue)
+            event.setConvener(convener)
+            event.setCapacity(capacity)
+            event.setDeregEnd(deregEnd)
+            event.setFee(fee)
+            event.setEarlyBirdEnd(earlybirdEnd)       
+        except VenueCapacityException as errmsg:
+            raise errmsg

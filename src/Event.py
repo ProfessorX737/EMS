@@ -1,6 +1,7 @@
 import datetime
 from src.Period import *
 from src.User import *
+from src.exceptions.VenueCapacityException import *
 import abc
 
 class Event(Period):
@@ -61,7 +62,10 @@ class Event(Period):
     def getFee(self):
         return self.__fee
     def setCapacity(self,capacity):
-        self.__capacity = capacity
+        if capacity > self.__venue.getMaxCapacity():
+            raise VenueCapacityException('Capacity','New event capacity > Venue capacity')
+        else:
+            self.__capacity = capacity
     def setDeregEnd(self,deregEnd):
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
