@@ -50,3 +50,8 @@ class EventManager:
         if id in self.__events:
             return True
         return False
+    def getCost(self,eventId):
+        if eventId in self.__events:
+            event = self.__events[eventId]
+            return event.getFee()
+        return None

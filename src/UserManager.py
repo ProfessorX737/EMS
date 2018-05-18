@@ -41,8 +41,11 @@ class UserManager():
         u = self.getUser(zid)
         if isinstance(u,Student):
             return "Student"
-        else:
+        elif isinstance(u,Staff):
             return "Staff"
+        else:
+            return None
+
     def addRegisteredEvent(self,userID,event):
         if userID in self.__students:
             self.__students[userID].addRegisteredEvent(event)

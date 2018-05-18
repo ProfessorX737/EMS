@@ -68,6 +68,20 @@
                 {% endif %}
             </tr>   
             <tr>
+                <td style="white-space: nowrap">{{ form.earlybirdEnd.label }}:</td>
+                <td>{{ form.earlybirdEnd(placeholder='yyyy-mm-dd HH:MM') }} </td>
+                {% if form.earlybirdEnd.errors %}
+                    <td style="white-space: nowrap" class="errors">{% for error in form.earlybirdEnd.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>{{ form.fee.label }}:</td>
+                <td>{{ form.fee}}</td>
+                {% if form.capacity.errors %}
+                <td class="errors">{% for error in form.fee.errors %} {{error}} {% endfor %}</td>
+                {% endif %}
+            </tr>               
+            <tr>
                 <td>{{ form.csrf_token }}</td>
                 <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>
             </tr>   

@@ -2,8 +2,8 @@ from src.Event import Event
 from src.Session import Session
 
 class Seminar(Event):
-    def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd):
-        super().__init__(id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd)
+    def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
+        super().__init__(id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd)
         self.__sessions = {}
 
     def addSession(self,session):
