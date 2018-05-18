@@ -56,17 +56,14 @@ class UserManager():
         elif isinstance(u,Staff):
             return "Staff"
         else:
-<<<<<<< HEAD
-            return None
-
-=======
             return "Guest"
->>>>>>> guest
     def addRegisteredEvent(self,userID,event):
         if userID in self.__students:
             self.__students[userID].addRegisteredEvent(event)
         if userID in self.__staff:
             self.__staff[userID].addRegisteredEvent(event)
+        if userID in self.__guest:
+            self.__guest[userID].addRegisteredEvent(event)
     def removeRegisteredEvent(self,userID,eventId):
         if userID in self.__students:
             student = self.__students.get(userID)
@@ -74,10 +71,15 @@ class UserManager():
         elif userID in self.__staff:
             staff = self.__staff.get(userID)
             staff.removeRegisteredEvent(eventId)
+        elif userID in self.__guest:
+            guest =  self.__guest.get(userID)
+            guest.removeRegisteredEvent(eventId)
     def cancelEvent(self,convener,eventId):
         for s in self.__staff.values():
             s.cancelRegisteredEvent(eventId)
         for s in self.__students.values():
+            s.cancelRegisteredEvent(eventId)
+        for s in self.__guest.values():
             s.cancelRegisteredEvent(eventId)
         convener.cancelPostedEvent(eventId)
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
@@ -87,13 +89,19 @@ class UserManager():
         for staff in self.__staff.values():
             if staff.isRegistered(seminarId):
                 staff.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
+        for guest in self.__guest.values():
+            if guest.isRegistered(seminarId):
+                guest.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
     def notifyRegistreesEventEdit(self, eventId):
         for student in self.__students.values():
             if student.isRegistered(eventId):
                 student.addNotification("The details of '{0}' event were changed".format(student.getRegisteredEventName(eventId)))
         for staff in self.__staff.values():
             if staff.isRegistered(eventId):
-                student.addNotification("The details of '{0}' event were changed".format(staff.getRegisteredEventName(eventId)))
+                staff.addNotification("The details of '{0}' event were changed".format(staff.getRegisteredEventName(eventId)))
+        for guest in self.__guest.values():
+            if guest.isRegistered(eventId):
+                guest.addNotification("The details of '{0}' event were changed".format(guest.getRegisteredEventName(eventId)))                
     def changeRegisteredEvent(self,oldEventId,editedEvent):
         for student in self.__students.values():
             if student.isRegistered(oldeventId):
@@ -103,3 +111,7 @@ class UserManager():
             if staff.isRegistered(oldEventId):
                 staff.removeRegisteredEvent(oldEventId)
                 staff.addRegisteredEvent(editedEvent)
+        for guest in self.__guest.values():
+            if guest.isRegistered(oldEventId):
+                guest.removeRegisteredEvent(oldEventId)
+                guest.addRegisteredEvent(editedEvent)

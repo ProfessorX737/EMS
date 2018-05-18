@@ -95,8 +95,8 @@ class EventManagementSystem():
         self.__userManager.notifyRegistreesEventEdit(event.getId()) 
 
     def getCost(self,eventId,userId):
-        if self.getUserType(userId) is None:
-            event = self.getEvent(self,eventId)
+        if self.getUserType(userId) == "Guest":
+            event = self.getEvent(eventId)
             return event.getCost()
         else:
             return 0
