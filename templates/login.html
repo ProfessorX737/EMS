@@ -17,40 +17,6 @@
         </div>
         <input type="submit" value="Login" >
     </form>
-    <div class="form">
-                <table class="login-table">
-                    <tr>
-                        <td class="error"> {% if message %} {{message}} {% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.name.label }}:</td>
-                        <td>{{ form.name }}</td>
-                        {% if form.name.errors %}
-                        <td class="errors">{% for error in form.name.errors %} {{error}} {% endfor %}</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td>{{ form.location.label }}:</td>
-                        <td>{{ form.location }}</td>
-                        {% if form.location.errors %}
-                        <td class="errors">{% for error in form.location.errors %} {{error}} {% endfor %}</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td style="white-space: nowrap">{{ form.capacity.label }}:</td>
-                        <td>{{ form.capacity }}</td>
-                        {% if form.capacity.errors %}
-                        <td class="errors">{% for error in form.capacity.errors %} {{error}} {% endfor %}</td>
-                        {% endif %}
-                    </tr>
-                    <tr>
-                        <td>{{ form.csrf_token }}</td>
-                        <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>
-                    </tr>
-                </table>
-            </div>
-    </form>
-
     {{message}}
     <a href="{{ url_for('register_guest') }}">Register Guest User</a>
 

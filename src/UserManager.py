@@ -47,12 +47,16 @@ class UserManager():
             return self.__students.get(zid)
         if zid in self.__staff:
             return self.__staff.get(zid)
+        if zid in self.__guest:
+            return self.__guest.get(zid)
     def getUserType(self,zid):
         u = self.getUser(zid)
         if isinstance(u,Student):
             return "Student"
-        else:
+        elif isinstance(u,Staff):
             return "Staff"
+        else:
+            return "Guest"
     def addRegisteredEvent(self,userID,event):
         if userID in self.__students:
             self.__students[userID].addRegisteredEvent(event)
