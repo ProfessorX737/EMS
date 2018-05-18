@@ -1,24 +1,46 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Register Guest User</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-    <form method="post" action="/">
-        <div class="login-div" style="width: 20%; margin: auto; margin-bottom:10px">
-        <table class="login-table">
-            <tr>
-                <td>username:</td>
-                <td><input name="username"></td>
-            </tr>
-            <tr>
-                <td>password:</td>
-                <td><input name="password" type="password"></td>
-            </tr>
-        </table>
+<h1>Add a new venue</h1>
+<form method="post" action="{{ url_for('register_guest') }}">
+<div class="form">
+            <table class="login-table">
+                <tr>
+                    <td class="error"> {% if message %} {{message}} {% endif %}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.name.label }}:</td>
+                    <td>{{ form.name }}</td>
+                    {% if form.name.errors %}
+                    <td class="errors">{% for error in form.name.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.username.label }}:</td>
+                    <td>{{ form.username }}</td>
+                    {% if form.username.errors %}
+                    <td class="errors">{% for error in form.username.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.email.label }}:</td>
+                    <td>{{ form.email }}</td>
+                    {% if form.email.errors %}
+                    <td class="errors">{% for error in form.email.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.password.label }}:</td>
+                    <td>{{ form.password }}</td>
+                    {% if form.password.errors %}
+                    <td class="errors">{% for error in form.password.errors %} {{error}} {% endfor %}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ form.csrf_token }}</td>
+                    <td> <div style="margin-top: 10px">{{ form.submit }} </div> </td>
+                </tr>
+            </table>
         </div>
-        <input type="submit" value="Register" >
-    </form>
-    {{message}}
-
-
+</form>
 
 {% endblock %}

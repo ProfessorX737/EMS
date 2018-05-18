@@ -11,11 +11,12 @@ from src.Course import *
 from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
+from src.forms.CreateGuestForm import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
 
-try: 
+try:
     with open('user.csv') as f:
         lines = f.readlines()
         for line in lines:
@@ -26,7 +27,7 @@ try:
 except OSError as e:
     print(e)
     exit()
-        
+
 @app.route('/',methods=['GET','POST'])
 def login():
     if (request.method == 'POST'):
@@ -40,25 +41,34 @@ def login():
         else:
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
-            global userType 
+            global userType
             userType = ems.getUserType(current_user.get_id())
             return redirect(url_for('home'))
-    
+
     return render_template('login.html')
 
 @app.route('/home',methods=['GET','POST'])
-@login_required        
+@login_required
 def home():
     return render_template('home.html',userType = userType,seminars = ems.getCurrentSeminars(), courses = ems.getCurrentCourses())
 
 @app.route('/dashboard',methods=['GET','POST'])
-@login_required        
+@login_required
 def dashboard():
     return render_template('dashboard.html',userType=userType)
 
+@app.route('/register_guest',methods=['GET','POST'])
+def register_guest():
+    form = CreateGuestForm()
+    if form.validate_on_submit():
+        guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
+        return redirect(url_for('login',message='You have successfully registered.'))
+    return render_template('register.html', form = form)
+
+
 @app.route('/create_event',methods=['GET','POST'])
-@login_required        
-def create_event():   
+@login_required
+def create_event():
     venueNames = ems.getVenueNames()
     form = NewStartUpForm(venueNames).getForm()
     message = ''
@@ -81,7 +91,7 @@ def create_event():
     return render_template('create_event.html', form = form, userType=userType, message=message)
 
 @app.route("/more/<eventType>/<eventId>",methods=['GET','POST'])
-@login_required        
+@login_required
 def moreInfo(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -91,7 +101,7 @@ def moreInfo(eventType,eventId):
     return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,fee=fee)
 
 @app.route('/create_session/<seminarId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
     form = CreateSessionForm()
@@ -102,7 +112,7 @@ def create_session(seminarId):
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType)
 
 @app.route('/register/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def register_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -114,7 +124,7 @@ def register_user(eventId):
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def deregister_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -126,7 +136,7 @@ def deregister_user(eventId):
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/edit_event/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def edit_event(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -152,21 +162,21 @@ def edit_event(eventId):
     return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/cancel_event/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def cancel_event(eventId):
     eventId = int(eventId)
     ems.cancelEvent(current_user,eventId)
     return redirect(url_for('home'))
 
 @app.route('/delete_venue/<venueId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def delete_venue(venueId):
     venueId = int(venueId)
     ems.removeVenue(venueId)
     return redirect(url_for('view_venues'))
 
 @app.route('/create_venue',methods=['GET','POST'])
-@login_required        
+@login_required
 def create_venue():
     form = CreateVenueForm()
     message = ''
@@ -178,7 +188,7 @@ def create_venue():
     return render_template('create_venue.html',form=form,userType=userType,message=message)
 
 @app.route('/venues',methods=['GET','POST'])
-@login_required        
+@login_required
 def view_venues():
     venues = ems.getVenues()
     return render_template('venues.html',venues = venues,userType=userType)
@@ -191,7 +201,7 @@ def delete_notification(path,id):
     return redirect(path)
 
 @app.route("/logout")
-@login_required        
+@login_required
 def logout():
     logout_user()
     flash('you were logged out')
