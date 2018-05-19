@@ -63,15 +63,14 @@ def dashboard():
 def register_guest():
     form = CreateGuestForm()
     if form.validate_on_submit():
-        if (ems.getUserById(form.username.data) is not None):
+        if ems.userIdExists(form.username.data):
             return render_template('register.html', form = form, message = 'That username already exists')
-        elif (ems.getUserByEmail(form.email.data) is not None):
+        elif ems.userEmailExists(form.email.data):
             return render_template('register.html', form = form, message = 'That email already exists')
         else:
             guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
             return render_template('login.html',message="You have successfully registered.")
     return render_template('register.html', form = form)
-
 
 @app.route('/create_event',methods=['GET','POST'])
 @login_required
@@ -112,7 +111,7 @@ def moreInfo(eventType,eventId):
 @login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
-    presenters = ems.getStaff()
+    presenters = ems.getGuests()
     form = CreateSessionForm(presenters)
     if form.validate_on_submit():
         presenter = ems.getUserById(form.presenter.data)
@@ -192,7 +191,7 @@ def edit_event(eventType,eventId):
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    presenters = ems.getStaff()
+    presenters = ems.getGuests()
     form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''

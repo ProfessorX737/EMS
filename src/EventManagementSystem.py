@@ -145,6 +145,8 @@ class EventManagementSystem():
         return self.__studentManager.getUsers()
     def getStaff(self):
         return self.__staffManager.getUsers()
+    def getGuests(self):
+        return self.__guestManager.getUsers()
     def setStaff(self,staff):
         self.__staffManager.setUsers(staff)
     def setStudents(self,students):
@@ -175,6 +177,12 @@ class EventManagementSystem():
             return self.__guestManager.getUserById(zid)
         else:
             raise LoginException('User', 'Username does not exist')
+    def userIdExists(self,zid):
+        if self.__studentManager.getUserById(zid) is not None or\
+        self.__studentManager.getUserById(zid) is not None or\
+        self.__guestManager.getUserById(zid) is not None:
+            return True
+        return False
     def getUserByEmail(self,email):
         if self.__studentManager.getUserByEmail(email) is not None:
             return self.__studentManager.getUserByEmail(email)
@@ -182,6 +190,12 @@ class EventManagementSystem():
             return self.__staffManager.getUserByEmail(email)
         elif self.__guestManager.getUserByEmail(email) is not None:
             return self.__guestManager.getUserByEmail(email)       
+    def userEmailExists(self,zid):
+        if self.__studentManager.getUserByEmail(zid) is not None or\
+        self.__studentManager.getUserByEmail(zid) is not None or\
+        self.__guestManager.getUserByEmail(zid) is not None:
+            return True
+        return False
     def getUserType(self,zid):
         if self.__studentManager.getUserById(zid) is not None:
             return self.__studentManager.getUserType()
