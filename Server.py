@@ -14,4 +14,4 @@ ems = EventManagementSystem()
 
 @login_manager.user_loader
 def loadUser(userName):
-    return ems.getUser(userName)
+    return ems.getUserById(userName)

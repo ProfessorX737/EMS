@@ -17,8 +17,7 @@
         </div>
         <input type="submit" value="Login" >
     </form>
-    {{message}}
-
-
+    {% if message %} {{message}}<br> {% endif %} 
+    <a href="{{ url_for('register_guest') }}">Register Guest User</a>
 
 {% endblock %}
