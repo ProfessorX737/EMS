@@ -68,6 +68,8 @@ class Event:
         return self.__id
     def getConvener(self):
         return self.__convener
+    def getVenue(self):
+        return self.__venue
     def getVenueId(self):
         return self.__venue.getId()
     def getVenueName(self):

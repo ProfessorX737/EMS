@@ -115,7 +115,7 @@ def create_session(seminarId):
     presenters = ems.getStaff()
     form = CreateSessionForm(presenters)
     if form.validate_on_submit():
-        presenter = ems.getUser(form.presenter.data)
+        presenter = ems.getUserById(form.presenter.data)
         ems.addSession(current_user,seminarId,form.startDateTime.data,form.endDateTime.data,
         form.name.data,form.description.data,form.capacity.data,presenter)
         return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
@@ -200,7 +200,7 @@ def edit_session(eventType,eventId):
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_session.html',form=form,event=event,message=message)
-        presenter = ems.getUser(form.presenter.data)
+        presenter = ems.getUserById(form.presenter.data)
         ems.editSession(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
         form.description.data,presenter,form.capacity.data)
         return redirect(url_for('home'))

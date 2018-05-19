@@ -22,6 +22,13 @@ class Staff(User):
             self.__cancelledEvents[e.getId()] = e
     def addPostedCurrEvent(self,event):
         self.__postedCurrEvents[event.getId()] = event
+    def deletePostedEvent(self,eventId):
+        if eventId in self.__postedCurrEvents:
+            del self.__postedCurrEvents[eventId] 
+            return True
+        if eventId in self.__postedPastEvents:
+            del self.__postedPastEvents[eventId] 
+            return True
     def cancelPostedEvent(self,eventId):
         if eventId in self.__postedCurrEvents:
             self.__cancelledEvents.append(self.__postedCurrEvents[eventId])

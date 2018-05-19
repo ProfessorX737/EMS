@@ -97,7 +97,8 @@ class EventManagementSystem():
 
     def addSession(self,staff,seminarId,startDateTime,endDateTime,name,descr,capacity,presenter):
         seminar = self.getEvent(seminarId)
-        session = Session(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,seminar.getVenueName(),seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter)
+        session = Session(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,seminar.getVenue(),\
+        seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter,seminar.getFee(),seminar.getEarlyBirdEnd())
         self.__seminarManager.addSession(seminarId,session)
         staff.addPostedCurrEvent(session)
         self.__staffManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
@@ -128,9 +129,9 @@ class EventManagementSystem():
         session.setDescription(descr)
         session.setPresenter(presenter)
         session.setCapacity(capacity)
-        self.__staffManager.notifyRegistreesEventEdit(event.getId()) 
-        self.__studentManager.notifyRegistreesEventEdit(event.getId()) 
-        self.__guestManager.notifyRegistreesEventEdit(event.getId())
+        self.__staffManager.notifyRegistreesEventEdit(session.getId()) 
+        self.__studentManager.notifyRegistreesEventEdit(session.getId()) 
+        self.__guestManager.notifyRegistreesEventEdit(session.getId())
 
     def getCost(self,eventId,userId):
         if self.getUserType(userId) == "Guest":
@@ -219,7 +220,11 @@ class EventManagementSystem():
         self.__guestManager.cancelEvent(convener,eventId)
         self.__courseManager.cancelEvent(eventId)
         self.__seminarManager.cancelEvent(eventId)
-        convener.cancelPostedEvent(eventId)
+        if isinstance(event,Session):
+            convener.deletePostedEvent(eventId)
+        else:
+            convener.cancelPostedEvent(eventId)
+
     def checkPassword(self, user, password):
         if user.getPassword() != password:
             raise LoginException('Password','Invalid password')

@@ -26,6 +26,8 @@ class Seminar(Event):
     def deleteSession(self, sessionId):
         if sessionId in self.__sessions:
             del self.__sessions[sessionId]
+            return True
+        return False
     
     def isRegisteredToASession(self, userId):
         for s in self.__sessions.values():

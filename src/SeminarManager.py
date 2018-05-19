@@ -42,8 +42,8 @@ class SeminarManager(EventManager):
         if super().cancelEvent(eventId) == True:
             return True
         for seminar in super().getEvents():
-            seminar.deleteSession(eventId)
-            return True
+            if seminar.deleteSession(eventId):
+                return True
         return False
     
     def registerUserToSession(self,sessionId,user):
