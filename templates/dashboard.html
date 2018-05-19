@@ -6,7 +6,9 @@
     {% for currEvent in current_user.getCurrEvents() %}
     {% if currEvent.getClassName() != "Session" %}
     <div class="eventbox">
-        <a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventId=currEvent.getId())}}">{{currEvent.getName()}}</a><br/>
+        <h2>
+            <a href="{{ url_for('moreInfo',eventType=currEvent.getClassName(),eventId=currEvent.getId())}}">{{currEvent.getName()}}</a><br/>
+        </h2>
         Type: {{currEvent.getClassName()}}<br>
         Venue: {{currEvent.getVenueName()}}<br>
         Start: {{currEvent.getStartDateTime()}}
@@ -19,7 +21,9 @@
     {% for pastEvent in current_user.getPastEvents() %}
     {% if pastEvent.getClassName() != "Session" %}
     <div class="eventbox">
-        <a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventId=pastEvent.getId()) }}">{{pastEvent.getName()}}</a><br/>
+        <h2>
+            <a href="{{ url_for('moreInfo',eventType=pastEvent.getClassName(),eventId=pastEvent.getId()) }}">{{pastEvent.getName()}}</a><br/>
+        </h2>
         Type: {{pastEvent.getClassName()}}<br>
         Venue: {{pastEvent.getVenueName()}}<br>
         Start: {{pastEvent.getStartDateTime()}}
@@ -32,7 +36,9 @@
 <div class="flex">
     {% for postedCurrEvent in current_user.getPostedCurrEvents() %}
     <div class="eventbox">
-        <a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventId=postedCurrEvent.getId()) }}">{{postedCurrEvent.getName()}}</a><br/>
+        <h2>
+            <a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventId=postedCurrEvent.getId()) }}">{{postedCurrEvent.getName()}}</a><br/>
+        </h2>
         Type: {{postedCurrEvent.getClassName()}}<br>
         Venue: {{postedCurrEvent.getVenueName()}}<br>
         Start: {{postedCurrEvent.getStartDateTime()}}
@@ -43,7 +49,9 @@
 <div class="flex">
     {% for postedPastEvent in current_user.getPostedPastEvents() %}
     <div class="eventbox">
-        <a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventId=postedPastEvent.getId()) }}">{{postedPastEvent.getName()}}</a><br/>
+        <h2>
+            <a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventId=postedPastEvent.getId()) }}">{{postedPastEvent.getName()}}</a><br/>
+        </h2>
         Type: {{postedPastEvent.getClassName()}}<br>
         Venue: {{postedPastEvent.getVenueName()}}<br>
         Start: {{postedPastEvent.getStartDateTime()}}
@@ -54,7 +62,9 @@
 <div class="flex">
     {% for cancelledEvent in current_user.getCancelledEvents() %}
     <div class="eventbox">
-        <a href="{{ url_for('moreInfo',eventType=cancelledEvent.getClassName(),eventId=cancelledEvent.getId()) }}">{{cancelledEvent.getName()}}</a><br/>
+        <h2>
+            <a href="{{ url_for('moreInfo',eventType=cancelledEvent.getClassName(),eventId=cancelledEvent.getId()) }}">{{cancelledEvent.getName()}}</a><br/>
+        </h2>
         Type: {{cancelledEvent.getClassName()}}<br>
         Venue: {{cancelledEvent.getVenueName()}}<br>
         Start: {{cancelledEvent.getStartDateTime()}}

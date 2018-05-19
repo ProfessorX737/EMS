@@ -66,7 +66,9 @@
             {% for session in event.getSessions() %}
             <div class="eventbox">
                 {% if not session.getIsPending() %}
-                    <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
+                    <h2>
+                        <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
+                    </h2>
                     Presenter: {{session.getPresenterName()}}<br>
                     Start: {{session.getStartDateTime()}}<br>
                     {% if isOwner == false and current_user.isRegistered(session.getId()) == false %}
@@ -80,7 +82,10 @@
                     </form>
                     {% endif %}
                 {% else %}
-                    {{session.getName()}}
+                    <h2>
+                        {{session.getName()}}<br>
+                    </h2>
+                    <i>Pending</i> 
                 {% endif %}
             </div>
             {% endfor %}

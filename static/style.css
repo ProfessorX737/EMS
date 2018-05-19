@@ -59,8 +59,6 @@ table{
 /* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
     font-family: 'Montserrat', sans-serif;
-    position: fixed !important;
-    top: 0;
     margin-bottom: 0;
     border-radius: 0;
 }
@@ -111,7 +109,6 @@ footer {
 
   .eventbox::first-line {
     font-style: bold;
-    font-size: 20px;
   }
 
 /* # ========================CSS for Forms==================================================*/
