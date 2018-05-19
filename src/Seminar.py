@@ -6,9 +6,11 @@ class Seminar(Event):
         super().__init__(id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd)
         self.__sessions = {}
 
-    def addSession(self,sessionId,startDateTime,endDateTime,name,descr,capacity,presenter):
-        session = Session(self.getId(),sessionId,startDateTime,endDateTime,name,descr,self.getVenueName(),self.getConvener(),capacity,self.getDeregEnd(),presenter)
-        self.__sessions[sessionId] = session
+    def addSession(self,session):
+        self.__sessions[session.getId()] = session
+    # def addSession(self,sessionId,startDateTime,endDateTime,name,descr,capacity,presenter):
+    #     session = Session(self.getId(),sessionId,startDateTime,endDateTime,name,descr,self.getVenueName(),self.getConvener(),capacity,self.getDeregEnd(),presenter)
+    #     self.__sessions[sessionId] = session
     
     def getSessions(self):
         return self.__sessions.values()

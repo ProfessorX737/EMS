@@ -79,11 +79,12 @@ class EventManagementSystem():
             return True
         return False
 
-    def addSession(self,seminarId, startDateTime, endDateTime, name, descr, capacity, presenter):
+    def addSession(self,staff,seminarId,startDateTime,endDateTime,name,descr,capacity,presenter):
         seminar = self.getEvent(seminarId)
-        sessionId = self.__seminarManager.addSession(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,capacity,presenter)
+        session = Session(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,seminar.getVenueName(),seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter)
+        self.__seminarManager.addSession(seminarId,session)
+        staff.addPostedCurrEvent(session)
         self.__userManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
-        return True
 
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)

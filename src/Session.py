@@ -1,21 +1,6 @@
 from src.Event import Event
 from src.Period import *
 
-# class Session(Period):
-#     def __init__(self,id,startDateTime,endDateTime,name,descr,presenter):
-#         super().__init__(startDateTime,endDateTime,name,descr)                   # period
-#         self.__presenter = presenter           # Person
-#         self.__id = id
-    
-#     def getId(self):
-#         return self.__id
-    
-#     def getPresenter(self):
-#         return self.__presenter
-
-#     def setPresenter(self,presenter):
-#         self.__presenter = presenter
-
 class Session(Event):
     def __init__(self,seminarId,sessionId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,presenter):
         super().__init__(sessionId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd)
@@ -24,6 +9,10 @@ class Session(Event):
     
     def getPresenter(self):
         return self.__presenter
+    def getPresenterName(self):
+        return self.__presenter.getName()
+    def getPresenterId(self):
+        return self.__presenter.get_id()
     def getSeminarId(self):
         return self.__seminarId
 

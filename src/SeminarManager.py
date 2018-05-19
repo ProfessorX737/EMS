@@ -7,10 +7,9 @@ class SeminarManager(EventManager):
     def addSeminar(self,seminar):
         return self.addEvent(seminar)
 
-    # return session id
-    def addSession(self,seminarId,sessionId,startDateTime,endDateTime,name,descr,capacity,presenter):
+    def addSession(self,seminarId,session):
         seminar = self.getEvent(seminarId)
-        return seminar.addSession(sessionId,startDateTime,endDateTime,name,descr,capacity,presenter)
+        seminar.addSession(session)
     
     def getSession(self,sessionId):
         for seminar in super().getEvents():
@@ -41,10 +40,8 @@ class SeminarManager(EventManager):
 
     def cancelEvent(self,eventId):
         if super().cancelEvent(eventId) == True:
-            print("Cancelling seminar ==========")
             return True
         for seminar in super().getEvents():
-            print("Cancelling session ==========")
             seminar.deleteSession(eventId)
             return True
         return False

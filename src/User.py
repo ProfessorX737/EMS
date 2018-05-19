@@ -11,7 +11,7 @@ class User(UserMixin,Person):
         self.isAuthenticated = False
         self.isActive = False
         self.isAnonymous = False
-        self.__notifications[0] = "Welcome " + name
+        self.__notifications[0] = "Welcome to the event management system " + name
     def getPassword(self):
         return self.__password
     def getCurrEvents(self):

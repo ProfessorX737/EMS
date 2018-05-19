@@ -93,10 +93,12 @@ def moreInfo(eventType,eventId):
 @login_required        
 def create_session(seminarId):
     seminarId = int(seminarId)
-    form = CreateSessionForm()
+    presenters = ems.getStaff()
+    form = CreateSessionForm(presenters)
     if form.validate_on_submit():
-        ems.addSession(seminarId,form.startDateTime.data,form.endDateTime.data,
-        form.name.data,form.description.data,form.capacity.data,form.convener.data)
+        presenter = ems.getUser(form.presenter.data)
+        ems.addSession(current_user,seminarId,form.startDateTime.data,form.endDateTime.data,
+        form.name.data,form.description.data,form.capacity.data,presenter)
         return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType)
 
@@ -152,7 +154,8 @@ def edit_event(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
     venueNames = ems.getVenueNames()
-    form = NewStartUpForm(venueNames).getForm()
+    #form = NewStartUpForm(venueNames).getForm()
+    form = CreateEventForm(venueNames)
     form.fillDefault(event)
     message=''
     if form.validate_on_submit():
@@ -169,15 +172,17 @@ def edit_event(eventType,eventId):
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    form = CreateSessionForm()
+    presenters = ems.getStaff()
+    form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''
     if form.validate_on_submit():
         if (event.getNumAttendees() > form.capacity.data):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_session.html',form=form,event=event,message=message)
+        presenter = ems.getUser(form.presenter.data)
         ems.editSession(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
-        form.description.data,form.convener.data,form.capacity.data)
+        form.description.data,presenter,form.capacity.data)
         return redirect(url_for('home'))
     return render_template('edit_session.html',form=form,event=event,message=message)
 

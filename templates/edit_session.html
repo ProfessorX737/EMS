@@ -43,10 +43,10 @@
                 {% endif %}
             </tr>
             <tr>
-                <td>{{ form.convener.label }}:</td>
-                <td>{{ form.convener(value= form.convener.default) }} </td>
-                {% if form.convener.errors %}
-                <td class="errors">{% for error in form.convener.errors %} {{error}} {% endfor %}</td>
+                <td>{{ form.presenter.label }}:</td>
+                <td>{{ form.presenter(value= form.presenter.default) }} </td>
+                {% if form.presenter.errors %}
+                <td class="errors">{% for error in form.presenter.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
             <tr>

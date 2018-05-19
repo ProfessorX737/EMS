@@ -47,7 +47,14 @@
                 <div class="dropdown-content" style="left:0;">
                   {% for key,value in current_user.getNotificationsMap().items() %}
                     <form method="post" action="{{ url_for('delete_notification',path=request.path|quote_plus,id=key) }}">
-                      <p>{{value}}<input type="submit" value="X" ></p>
+                      <a>
+                        <table>
+                          <tr>
+                            <td style="width:70%">{{value}}</td>
+                            <td style="width:30%"><input type="submit" value="X"></td>
+                          </tr>
+                        </table>
+                      </a>
                     </form>
                   {% endfor %}
                 </div>

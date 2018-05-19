@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Edit Event</h1>
+<h1>Edit {{event.getClassName()}}</h1>
 <form method="post" action="{{ url_for('edit_event',eventType=event.getClassName(),eventId=event.getId()) }}">
     <div class="form">
         <table class="login-table">

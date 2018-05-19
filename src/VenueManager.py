@@ -4,11 +4,9 @@ class VenueManager():
     def __init__(self):
         self.__venues = {}
     def addVenue(self,name, loc, capacity):
-        if name not in self.__venues:
-            id = self._getUniqueVenueId()
-            venue = Venue(id,name,loc,capacity)
-            self.__venues[id] = venue
-            return True
+        id = self._getUniqueVenueId()
+        venue = Venue(id,name,loc,capacity)
+        self.__venues[id] = venue
     def removeVenue(self, venueId):
         del self.__venues[venueId]
     def getVenues(self):
