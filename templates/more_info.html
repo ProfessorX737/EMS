@@ -65,18 +65,22 @@
         <div class="flex">
             {% for session in event.getSessions() %}
             <div class="eventbox">
-                <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
-                Presenter: {{session.getPresenterName()}}<br>
-                Start: {{session.getStartDateTime()}}<br>
-                {% if isOwner == false and current_user.isRegistered(session.getId()) == false %}
-                <form method="post" action="{{ url_for('register_user',eventId=session.getId()) }}">
-                    <input type="submit" value="Register">
-                </form>
-                {% endif %}
-                {% if current_user.isRegistered(session.getId()) == true %}
-                <form method="post" action="{{ url_for('deregister_user',eventId=session.getId()) }}">
-                    <input type="submit" value="Deregister">
-                </form>
+                {% if not session.getIsPending() %}
+                    <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
+                    Presenter: {{session.getPresenterName()}}<br>
+                    Start: {{session.getStartDateTime()}}<br>
+                    {% if isOwner == false and current_user.isRegistered(session.getId()) == false %}
+                    <form method="post" action="{{ url_for('register_user',eventId=session.getId()) }}">
+                        <input type="submit" value="Register">
+                    </form>
+                    {% endif %}
+                    {% if current_user.isRegistered(session.getId()) == true %}
+                    <form method="post" action="{{ url_for('deregister_user',eventId=session.getId()) }}">
+                        <input type="submit" value="Deregister">
+                    </form>
+                    {% endif %}
+                {% else %}
+                    {{session.getName()}}
                 {% endif %}
             </div>
             {% endfor %}
