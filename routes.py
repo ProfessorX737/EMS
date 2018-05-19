@@ -76,12 +76,13 @@ def register_guest():
 @app.route('/create_event',methods=['GET','POST'])
 @login_required
 def create_event():
-    venueNames = ems.getVenueNames()
-    form = NewStartUpForm(venueNames).getForm()
+    venues = ems.getVenues()
+    form = NewStartUpForm(venues).getForm()
     message = ''
     if form.validate_on_submit():
         try:
             if (form.eventType.data == 'Course'):
+                print("venue id is ", form.venue.data)
                 ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
                 form.name.data,form.description.data,form.venue.data,form.convener.data,
                 form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
@@ -147,8 +148,8 @@ def deregister_user(eventId):
 def edit_event(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    venueNames = ems.getVenueNames()
-    form = NewStartUpForm(venueNames).getForm()
+    venues = ems.getVenues()
+    form = NewStartUpForm(venues).getForm()
     form.fillDefault(event)
     message=''
     if form.validate_on_submit():

@@ -64,8 +64,8 @@ class EventManagementSystem():
     def getSessions(self,eventId):
         return self.__seminarManager.getSessions(eventId)
 
-    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venueName, convener, capacity, deregEnd, fee, earlybirdEnd):
-        venue = self.__venueManager.getVenue(venueName)
+    def addCourse(self,staff,startDateTime, endDateTime, name, descr, venueId, convener, capacity, deregEnd, fee, earlybirdEnd):
+        venue = self.__venueManager.getVenue(venueId)
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         course = Course(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
@@ -75,8 +75,8 @@ class EventManagementSystem():
         else:
             raise ExistingEventException('Course', 'Course with this name already exists')
 
-    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venueName, convener, capacity, deregEnd, fee, earlybirdEnd):
-        venue = self.__venueManager.getVenue(venueName)
+    def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venueId, convener, capacity, deregEnd, fee, earlybirdEnd):
+        venue = self.__venueManager.getVenue(venueId)
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         seminar = Seminar(self.getUniqueEventId(),startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
@@ -181,7 +181,8 @@ class EventManagementSystem():
 # =========== Venue Manager methods =======================================================================================
     def addVenue(self, name, loc, capacity):
         try:
-            self.__venueManager.addVenue(name, loc, capacity)
+            venueId = self.__venueManager.getIdByName(name)
+            self.__venueManager.addVenue(venueId, name,loc, capacity)
         except ExistingVenueException as errmsg:
             raise errmsg
     def removeVenue(self, venueId):

@@ -42,6 +42,8 @@ class Event(Period):
         return self.__id
     def getConvener(self):
         return self.__convener
+    def getVenueId(self):
+        return self.__venue.getId()
     def getVenueName(self):
         return self.__venue.getName()
     def getCapacity(self):
