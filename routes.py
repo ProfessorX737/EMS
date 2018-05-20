@@ -76,19 +76,20 @@ def register_guest():
 @login_required
 def create_event():
     venues = ems.getVenues()
-    form = NewStartUpForm(venues).getForm()
+    #form = NewStartUpForm(venues).getForm()
+    form = CreateEventForm(venues)
     message = ''
     if form.validate_on_submit():
         try:
             if (form.eventType.data == 'Course'):
                 print("venue id is ", form.venue.data)
                 ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
-                form.name.data,form.description.data,form.venue.data,form.convener.data,
+                form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
                 form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
                 return redirect(url_for('home'))
             else:
                 ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
-                form.name.data,form.description.data,form.venue.data,form.convener.data,
+                form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
                 form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
                 return redirect(url_for('home'))
         except VenueCapacityException as errmsg:
@@ -103,9 +104,10 @@ def moreInfo(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
     isOwner = ems.isMyEvent(current_user.get_id(),eventId)
+    isPresenter = ems.isPresenterAtEvent(current_user.get_id(),eventId)
     fee = ems.getCost(eventId,current_user.get_id())
     # if staff check if this event is inside getPostedCurrEvents
-    return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,fee=fee)
+    return render_template('more_info.html',isOwner=isOwner,isPresenter=isPresenter,event=event,userType=userType,fee=fee)
 
 @app.route('/create_session/<seminarId>',methods=['GET','POST'])
 @login_required
@@ -171,16 +173,16 @@ def deregister_user(eventId):
 def edit_event(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    venueNames = ems.getVenueNames()
+    venues = ems.getVenues()
     #form = NewStartUpForm(venueNames).getForm()
-    form = CreateEventForm(venueNames)
+    form = CreateEventForm(venues)
     form.fillDefault(event)
+    form.eventType.data = event.getClassName()
     message=''
     if form.validate_on_submit():
         try:
-            ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,
-            form.name.data,form.description.data,form.venue.data,form.convener.data,
-            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
+            form.description.data,form.venue.data,form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
             return redirect(url_for('home'))
         except VenueCapacityException as errmsg:
             return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
@@ -209,7 +211,7 @@ def edit_session(eventType,eventId):
 @login_required        
 def cancel_event(eventType,eventId):
     eventId = int(eventId)
-    ems.cancelEvent(current_user,eventId)
+    ems.cancelEvent(eventId)
     return redirect(url_for('home'))
 
 @app.route('/delete_venue/<venueId>',methods=['GET','POST'])
@@ -242,6 +244,33 @@ def view_venues():
 def delete_notification(path,id):
     id = int(id)
     current_user.deleteNotification(id)
+    path = unquote_plus(path).strip("/")
+    return redirect(path)
+
+@app.route('/accept_notification/<path>/<id>',methods=['GET','POST'])
+def accept_notification(path,id):
+    id = int(id)
+    notif = current_user.getNotification(id)
+    event = ems.getEvent(notif.getEventId())
+    event.setIsPending(False)
+    current_user.addSession(event)
+    current_user.deleteNotification(id)
+    acceptNotification = DeletableNotification("{0} has accepted to be the presenter at '{1}' session".format(current_user.getName(),event.getName()))
+    convener = event.getConvener()
+    convener.addNotification(acceptNotification)
+    path = unquote_plus(path).strip("/")
+    return redirect(path)
+
+@app.route('/reject_notification/<path>/<id>',methods=['GET','POST'])
+def reject_notification(path,id):
+    id = int(id)
+    notif = current_user.getNotification(id)
+    event = ems.getEvent(notif.getEventId())
+    ems.cancelEvent(event.getId()) 
+    current_user.deleteNotification(id)
+    rejectNotification = DeletableNotification("{0} has rejected to be presenter at '{1}' session".format(current_user.getName(),event.getName()))
+    convener = event.getConvener()
+    convener.addNotification(rejectNotification)
     path = unquote_plus(path).strip("/")
     return redirect(path)
 

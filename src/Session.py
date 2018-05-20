@@ -18,7 +18,7 @@ class Session(Event):
         return self.__seminarId
     def getIsPending(self):
         return self.__isPending
-    def setIdPending(self, isPending):
+    def setIsPending(self, isPending):
         self.__isPending = isPending
     def setPresenter(self,presenter):
         self.__presenter = presenter

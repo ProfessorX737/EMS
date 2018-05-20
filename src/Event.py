@@ -68,6 +68,8 @@ class Event:
         return self.__id
     def getConvener(self):
         return self.__convener
+    def getConvenerName(self):
+        return self.__convener.getName()
     def getVenue(self):
         return self.__venue
     def getVenueId(self):
@@ -108,6 +110,14 @@ class Event:
         self.__fee = fee
     def cancelEvent(self):
         self.__isCancelled = True
+    def getStatus(self):
+        if self.isOpen():
+            return "Open"
+        elif self.isCancelled():
+            return "Cancelled"
+        else:
+            return "Closed"
+
     
     @abc.abstractmethod
     def getClassName(self):

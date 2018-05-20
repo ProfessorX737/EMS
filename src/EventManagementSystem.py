@@ -12,6 +12,7 @@ from src.exceptions.LoginException import *
 from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
+from src.Notification import *
 import datetime
 
 class EventManagementSystem():
@@ -52,14 +53,33 @@ class EventManagementSystem():
         self.__courseManager.deregisterUser(eventId,userID)
     def deregisterUserFromSession(self,eventId,userID):
         self.__seminarManager.deregisterUserFromSession(eventId,userID)
+    # returns true if the user is the convener of the event
     def isMyEvent(self,zid,eventId):
-        user = self.__staffManager.getUserById(zid)
-        if not isinstance(user,Staff):
+        try:
+            user = self.getUserById(zid)
+        except LoginException:
             return False
-        for e in self.getPostedCurrEvents(user):
-            if eventId == e.getId():
+        else:
+            if user.isMyEvent(eventId):
                 return True
         return False
+    # returns true if the user is the presenter of the session or a presenter at the seminar
+    def isPresenterAtEvent(self,userId,eventId):
+        try:
+            user = self.getUserById(userId)
+        except LoginException:
+            return False
+        else:
+            event = self.getEvent(eventId)
+            if event is None:
+                return False
+            if isinstance(event,Session):
+                if event.getPresenterId() == userId:
+                    return True
+            if isinstance(event,Seminar):
+                return event.isPresenterOfASession(userId)
+        return False
+
     def getEvent(self,eventId):
         event = self.__courseManager.getEvent(eventId)
         if event is None:
@@ -101,15 +121,17 @@ class EventManagementSystem():
         seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter,seminar.getFee(),seminar.getEarlyBirdEnd())
         self.__seminarManager.addSession(seminarId,session)
         staff.addPostedCurrEvent(session)
-        self.__staffManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
-        self.__studentManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
-        self.__guestManager.notifyRegistreesNewSession(seminarId,seminar.getName(),name)
+        guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(staff.getName(),name),session.getId())
+        presenter.addNotification(guestRequestNotification)
+        # newSessionNotification = DeletableNotification("A new session '{0}' was added to '{1}' seminar".format(name,seminar.getName()))
+        # self.notifyRegistrees(seminarId,newSessionNotification)
 
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
         self.__courseManager.deleteEvent(eventId)
     
     def editEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd):
+        oldEventName = event.getName()
         event.setStartDateTime(startDateTime)
         event.setEndDateTime(endDateTime)
         event.setName(name)
@@ -118,20 +140,30 @@ class EventManagementSystem():
         event.setConvener(convener)
         event.setCapacity(capacity)
         event.setDeregEnd(deregEnd)
-        self.__staffManager.notifyRegistreesEventEdit(event.getId()) 
-        self.__studentManager.notifyRegistreesEventEdit(event.getId()) 
-        self.__guestManager.notifyRegistreesEventEdit(event.getId())
+        if(oldEventName == name):
+            changedNameNotification = DeletableNotification("'{0}' event was renamed '{1}'".format(oldEventName,name))
+            self.notifyRegistrees(event.getId(),changedNameNotification)
+        eventEditedNotification = DeletableNotification("The event details of '{0}' were edited".format(name))
+        self.notifyRegistrees(event.getId(),eventEditedNotification)
+
+    def notifyRegistrees(self,eventId,notification):
+        self.__staffManager.notifyRegistrees(eventId,notification) 
+        self.__studentManager.notifyRegistrees(eventId,notification) 
+        self.__guestManager.notifyRegistrees(eventId,notification) 
     
     def editSession(self,session,startDateTime,endDateTime,name,descr,presenter,capacity):
+        oldSessionName = session.getName()
         session.setStartDateTime(startDateTime)
         session.setEndDateTime(endDateTime)
         session.setName(name)
         session.setDescription(descr)
         session.setPresenter(presenter)
         session.setCapacity(capacity)
-        self.__staffManager.notifyRegistreesEventEdit(session.getId()) 
-        self.__studentManager.notifyRegistreesEventEdit(session.getId()) 
-        self.__guestManager.notifyRegistreesEventEdit(session.getId())
+        if(oldSessionName == name):
+            changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(oldEventName,name))
+            self.notifyRegistrees(session.getId(),changedNameNotification)
+        sessionEditedNotification = DeletableNotification("The session details of '{0}' were edited".format(name))
+        self.notifyRegistrees(session.getId(),sessionEditedNotification)
 
     def getCost(self,eventId,userId):
         if self.getUserType(userId) == "Guest":
@@ -227,13 +259,14 @@ class EventManagementSystem():
     def getVenueNames(self):
         return self.__venueManager.getVenueNames()
 # ============ mixed methods ===============================================================================================
-    def cancelEvent(self,convener,eventId):
+    def cancelEvent(self,eventId):
         event = self.getEvent(eventId)
-        self.__studentManager.cancelEvent(convener,eventId)
-        self.__staffManager.cancelEvent(convener,eventId)
-        self.__guestManager.cancelEvent(convener,eventId)
+        self.__studentManager.cancelEvent(eventId)
+        self.__staffManager.cancelEvent(eventId)
+        self.__guestManager.cancelEvent(eventId)
         self.__courseManager.cancelEvent(eventId)
         self.__seminarManager.cancelEvent(eventId)
+        convener = event.getConvener()
         if isinstance(event,Session):
             convener.deletePostedEvent(eventId)
         else:
@@ -251,7 +284,7 @@ class EventManagementSystem():
             id = id + 1
         return id
 
-    def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd,fee,earlybirdEnd):
+    def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,capacity,deregEnd,fee,earlybirdEnd):
         venue = self.__venueManager.getVenue(venueName)
         try:
             event.setStartDateTime(startDateTime)
@@ -259,7 +292,6 @@ class EventManagementSystem():
             event.setName(name)
             event.setDescription(descr)
             event.setVenue(venue)
-            event.setConvener(convener)
             event.setCapacity(capacity)
             event.setDeregEnd(deregEnd)
             event.setFee(fee)

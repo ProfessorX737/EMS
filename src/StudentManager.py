@@ -37,10 +37,13 @@ class StudentManager(UserManager):
         if userID in self.__students:
             student = self.__students.get(userID)
             student.removeRegisteredEvent(eventId)
-    def cancelEvent(self,convener,eventId):
+    def cancelEvent(self,eventId):
         for s in self.__students.values():
             s.cancelRegisteredEvent(eventId)
-        # convener.cancelPostedEvent(eventId)
+    def notifyRegistrees(self,eventId,notification):
+        for student in self.__students.values():
+            if student.isRegistered(eventId):
+                student.addNotification(notification)
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
         for student in self.__students.values():
             if student.isRegistered(seminarId):

@@ -22,7 +22,9 @@ class UserManager(ABC):
         pass
     def removeRegisteredEvent(self,userID,eventId):
         pass
-    def cancelEvent(self,convener,eventId):
+    def cancelEvent(self,eventId):
+        pass
+    def notifyRegistrees(self,eventId,notification):
         pass
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
         pass

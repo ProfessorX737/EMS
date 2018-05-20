@@ -38,3 +38,12 @@ class Staff(User):
             self.__cancelledEvents.append(self.__postedPastEvents[eventId])
             del self.__postedPastEvents[eventId] 
             return True
+    def isMyEvent(self,eventId):
+        if eventId in self.__postedCurrEvents:
+            return True
+        if eventId in self.__postedPastEvents:
+            return True
+        if eventId in self.__cancelledEvents:
+            return True
+        return False
+        

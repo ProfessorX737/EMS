@@ -1,5 +1,7 @@
 from src.Person import *
 from flask_login import UserMixin
+from src.Notification import *
+
 class User(UserMixin,Person):
     def __init__(self,name,zid,email,password):
         Person.__init__(self,name,email)
@@ -11,7 +13,8 @@ class User(UserMixin,Person):
         self.isAuthenticated = False
         self.isActive = False
         self.isAnonymous = False
-        self.__notifications[0] = "Welcome to the event management system " + name
+        welcomeMessage = DeletableNotification("Welcome to the Event Management System " + name)
+        self.__notifications[0] = welcomeMessage
     def getPassword(self):
         return self.__password
     def getCurrEvents(self):
@@ -73,6 +76,10 @@ class User(UserMixin,Person):
         return id
     def addNotification(self,notification):
         self.__notifications[self.getUniqueNotificationID()] = notification
+    def getNotification(self,id):
+        if id in self.__notifications:
+            return self.__notifications[id]
+        return None
     def getRegisteredEventName(self,id):
         if id in self.__currEvents:
             return self.__currEvents[id].getName()
@@ -85,3 +92,5 @@ class User(UserMixin,Person):
         if eventId in self.__pastEvents:
             return self.__pastEvents.get(eventId)
         return None
+    def isMyEvent(self, eventId):
+        return False

@@ -36,10 +36,13 @@ class GuestManager(UserManager):
         if userID in self.__guest:
             guest = self.__guest.get(userID)
             guest.removeRegisteredEvent(eventId)
-    def cancelEvent(self,convener,eventId):
+    def cancelEvent(self,eventId):
         for s in self.__guest.values():
             s.cancelRegisteredEvent(eventId)
-        # convener.cancelPostedEvent(eventId)
+    def notifyRegistrees(self,eventId,notification):
+        for guest in self.__guest.values():
+            if guest.isRegistered(eventId):
+                guest.addNotification(notification)
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
         for guest in self.__guest.values():
             if guest.isRegistered(seminarId):

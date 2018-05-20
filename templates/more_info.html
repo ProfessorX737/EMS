@@ -13,7 +13,7 @@
 <h2> Description </h2>
     {{event.getDescription()}}
 <h2> Presenter </h2>
-{{event.getConvener()}}
+{{event.getConvenerName()}}
 <h2> Venue </h2>
 {{event.getVenueName()}}
 <h2> Capacity </h2>
@@ -32,7 +32,7 @@
 {% if not event.isCancelled() %}
     {% if event.isFull() %}
     {% else %}
-        {% if isOwner == false and current_user.isRegistered(event.getId()) == false and event.getClassName() != "Seminar" %}
+        {% if isOwner == false and isPresenter == false and current_user.isRegistered(event.getId()) == false and event.getClassName() != "Seminar" %}
         <form method="post" action="{{ url_for('register_user',eventId=event.getId()) }}">
             <p><input type="submit" value="Register" ></p>
         </form>
@@ -53,9 +53,9 @@
                 <p><input type="submit" value="Edit Session" ></p>
             </form>
         {% endif %}
-            <form method="post" action="{{ url_for('cancel_event',eventType=event.getClassName(),eventId=event.getId()) }}">
-                <p><input type="submit" value="Cancel {{event.getClassName()}}" ></p>
-            </form>
+        <form method="post" action="{{ url_for('cancel_event',eventType=event.getClassName(),eventId=event.getId()) }}">
+            <p><input type="submit" value="Cancel {{event.getClassName()}}" ></p>
+        </form>
     {% endif %}
     {% if event.getClassName() == 'Seminar' %}
         {% if isOwner == true %}
@@ -71,7 +71,7 @@
                     </h2>
                     Presenter: {{session.getPresenterName()}}<br>
                     Start: {{session.getStartDateTime()}}<br>
-                    {% if isOwner == false and current_user.isRegistered(session.getId()) == false %}
+                    {% if isOwner == false and isPresenter == false and current_user.isRegistered(session.getId()) == false %}
                     <form method="post" action="{{ url_for('register_user',eventId=session.getId()) }}">
                         <input type="submit" value="Register">
                     </form>

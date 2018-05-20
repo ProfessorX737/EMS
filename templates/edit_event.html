@@ -8,10 +8,6 @@
                 <td class="error"> {% if message %} {{message}} {% endif %}</td>
             </tr>
             <tr>
-                <td>{{ form.eventType.label }}:</td>
-                <td>{{ form.eventType }}</td>
-            </tr>
-            <tr>
                 <td>{{ form.name.label }}:</td>
                 <td>{{ form.name(value=form.name.default) }} </td>
                 {% if form.name.errors %}
@@ -51,13 +47,6 @@
                 <td>{{ form.venue(value = form.venue.default) }} </td>
                 {% if form.venue.errors %}
                 <td class="errors">{% for error in form.venue.errors %} {{error}} {% endfor %}</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>{{ form.convener.label }}:</td>
-                <td>{{ form.convener(value= form.convener.default) }} </td>
-                {% if form.convener.errors %}
-                <td class="errors">{% for error in form.convener.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
             <tr>

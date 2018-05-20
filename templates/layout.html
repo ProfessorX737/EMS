@@ -49,17 +49,21 @@
               <div class="dropdown" style="float:left;">
                 <button class="dropbtn">{{current_user.getNotificationsMap().values()|length}} Notifications</button>
                 <div class="dropdown-content" style="left:0;">
-                  {% for key,value in current_user.getNotificationsMap().items() %}
-                    <form method="post" action="{{ url_for('delete_notification',path=request.path|quote_plus,id=key) }}">
-                      <a>
-                        <table>
-                          <tr>
-                            <td style="width:70%">{{value}}</td>
-                            <td style="width:30%"><input type="submit" value="X"></td>
-                          </tr>
-                        </table>
-                      </a>
-                    </form>
+                  {% for id,notification in current_user.getNotificationsMap().items() %}
+                    <a>
+                      <table>
+                        <tr>
+                          <td style="width:70%">{{notification.getMessage()}}</td>
+                          <td style="width:30%">
+                            {% for route,label in notification.getRouteLabelMap().items() %}
+                              <form method="post" action="{{ url_for(route,path=request.path|quote_plus,id=id) }}">
+                              <div style="padding-top:2px;"><input type="submit" value={{label}}></div>
+                              </form>
+                            {% endfor %}
+                          </td>
+                        </tr>
+                      </table>
+                    </a>
                   {% endfor %}
                 </div>
               </div>

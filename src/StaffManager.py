@@ -35,10 +35,13 @@ class StaffManager(UserManager):
         if userID in self.__staff:
             staff = self.__staff.get(userID)
             staff.removeRegisteredEvent(eventId)
-    def cancelEvent(self,convener,eventId):
+    def cancelEvent(self,eventId):
         for s in self.__staff.values():
             s.cancelRegisteredEvent(eventId)
-        # convener.cancelPostedEvent(eventId)
+    def notifyRegistrees(self,eventId,notification):
+        for staff in self.__staff.values():
+            if staff.isRegistered(eventId):
+                staff.addNotification(notification)
     def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
         for staff in self.__staff.values():
             if staff.isRegistered(seminarId):

@@ -31,10 +31,26 @@
     {% endif %}
     {% endfor %}
 </div>
+{% if userType == 'Guest' %}
+<h2> My Sessions </h2>
+<div class="flex">
+    {% for session in current_user.getSessions() %}
+        <div class = "eventbox">
+            <h2>
+                <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
+            </h2>
+            Venue: {{session.getVenueName()}}<br>
+            Status: {{session.getStatus()}}<br>
+            Start: {{session.getStartDateTime()}}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 {%if userType == 'Staff'%}
 <h2> Posted Open Events </h2>
 <div class="flex">
     {% for postedCurrEvent in current_user.getPostedCurrEvents() %}
+    {% if postedCurrEvent.getClassName() != "Session" %}
     <div class="eventbox">
         <h2>
             <a href="{{ url_for('moreInfo',eventType=postedCurrEvent.getClassName(),eventId=postedCurrEvent.getId()) }}">{{postedCurrEvent.getName()}}</a><br/>
@@ -43,11 +59,13 @@
         Venue: {{postedCurrEvent.getVenueName()}}<br>
         Start: {{postedCurrEvent.getStartDateTime()}}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 <h2> Posted Past Events </h2>
 <div class="flex">
     {% for postedPastEvent in current_user.getPostedPastEvents() %}
+    {% if postedPastEvent.getClassName() != "Session" %}
     <div class="eventbox">
         <h2>
             <a href="{{ url_for('moreInfo',eventType=postedPastEvent.getClassName(),eventId=postedPastEvent.getId()) }}">{{postedPastEvent.getName()}}</a><br/>
@@ -56,6 +74,7 @@
         Venue: {{postedPastEvent.getVenueName()}}<br>
         Start: {{postedPastEvent.getStartDateTime()}}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 <h2> Cancelled Events </h2>

@@ -34,3 +34,9 @@ class Seminar(Event):
             if s.hasAttendee(userId):
                 return True
         return False
+    
+    def isPresenterOfASession(self,userId):
+        for s in self.__sessions.values():
+            if s.getPresenterId() == userId:
+                return True
+        return False
