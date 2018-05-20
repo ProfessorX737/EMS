@@ -1,11 +1,11 @@
 import datetime
 from src.Period import *
 from src.User import *
+from src.exceptions.VenueCapacityException import *
 import abc
 
-class Event(Period):
+class Event:
     def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
-        super().__init__(startDateTime,endDateTime,name,descr)
         self.__id = id
         self.__venue = venue
         self.__convener = convener
@@ -13,9 +13,30 @@ class Event(Period):
         self.__deregEnd = deregEnd
         self.__isCancelled = False
         self.__attendees = {}
+        self.__name = name                     # String
+        self.__descr = descr                   # String
+        self.__startDateTime = startDateTime   # datetime
+        self.__endDateTime = endDateTime       # datetime
         self.__fee = fee
         self.__earlybirdEnd = earlybirdEnd
 
+    def getName(self):
+        return self.__name
+    def getDescription(self):
+        return self.__descr
+    def getStartDateTime(self):
+        return self.__startDateTime
+    def getEndDateTime(self):
+        return self.__endDateTime
+
+    def setName(self, name):
+        self.__name = name
+    def setDescription(self, descr):
+        self.__descr = descr
+    def setStartDateTime(self, startDateTime):
+        self.__startDateTime = startDateTime
+    def setEndDateTime(self, endDateTime):
+        self.__endDateTime = endDateTime
 
     def addAttendee(self, user):
         if not self.isFull():
@@ -24,7 +45,12 @@ class Event(Period):
         for attendee in attendeeList:
             self.__attendees[attendee.get_id()] = attendee
     def removeAttendee(self,userID):
-        del self.__attendees[userID]
+        if userID in self.__attendees:
+            del self.__attendees[userID]
+    def hasAttendee(self,userID):
+        if userID in self.__attendees:
+            return True
+        return False
 
     def isCancelled(self):
         return self.__isCancelled
@@ -42,8 +68,14 @@ class Event(Period):
         return self.__id
     def getConvener(self):
         return self.__convener
-    def getVenueName(self):
+    def getConvenerName(self):
+        return self.__convener.getName()
+    def getVenue(self):
         return self.__venue
+    def getVenueId(self):
+        return self.__venue.getId()
+    def getVenueName(self):
+        return self.__venue.getName()
     def getCapacity(self):
         return self.__capacity
     def getDeregEnd(self):
@@ -62,7 +94,10 @@ class Event(Period):
     def getFee(self):
         return self.__fee
     def setCapacity(self,capacity):
-        self.__capacity = capacity
+        if capacity > self.__venue.getMaxCapacity():
+            raise VenueCapacityException('Capacity','New event capacity > Venue capacity')
+        else:
+            self.__capacity = capacity
     def setDeregEnd(self,deregEnd):
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
@@ -75,6 +110,14 @@ class Event(Period):
         self.__fee = fee
     def cancelEvent(self):
         self.__isCancelled = True
+    def getStatus(self):
+        if self.isOpen():
+            return "Open"
+        elif self.isCancelled():
+            return "Cancelled"
+        else:
+            return "Closed"
+
     
     @abc.abstractmethod
     def getClassName(self):

@@ -20,8 +20,8 @@ class CreateEventForm(Form):
     deregEnd = DateTimeField('Deregister Period End', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired("Please enter the end of deregistration period."), LessThan('startDateTime', 'dereg < start')])
     earlybirdEnd = DateTimeField('Earlybird Period End', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired("Please enter the end of earlybird period."), LessThan('startDateTime', 'earlybird< start')])
     fee = IntegerField('Registration Fee', validators=[validators.DataRequired("Please enter valid registration fee.")])
-    convener = StringField('Convener Name', validators=[validators.DataRequired("Please enter event convener's name.")])
-    venue = SelectField('Venue')
+    #convener = StringField('Convener Name', validators=[validators.DataRequired("Please enter event convener's name.")])
+    venue = SelectField('Venue',coerce=int)
     capacity = IntegerField('Capacity', validators=[validators.DataRequired("Please enter valid event capacity.")])
     submit = SubmitField('Create Event', validators=(validators.Optional(),))
 
@@ -29,7 +29,7 @@ class CreateEventForm(Form):
     def createPairs(self, venues):
         pairs = []
         for venue in venues:
-            pairs.append((venue,venue))
+            pairs.append((venue.getId(),venue.getName()))
         return pairs
 
     def __init__(self,venues, *args, **kwargs):
@@ -37,12 +37,13 @@ class CreateEventForm(Form):
         self.venue.choices = self.createPairs(venues)
 
     def fillDefault(self,event):
+        self.eventType.default = (event.getClassName(),event.getClassName())
         self.name.default = event.getName()
         self.description.default = event.getDescription()
         self.startDateTime.default = event.getStartDateTime().strftime("%Y-%m-%d %H:%M")
         self.endDateTime.default = event.getEndDateTime().strftime("%Y-%m-%d %H:%M") 
-        self.venue.default = (event.getVenueName(), event.getVenueName())
-        self.convener.default = event.getConvener()  
+        self.venue.default = (event.getVenueId(), event.getVenueName())
+        #self.convener.default = event.getConvener()  
         self.capacity.default = event.getCapacity()
         self.deregEnd.default = event.getDeregEnd().strftime("%Y-%m-%d %H:%M")
         self.fee.default = event.getFee()

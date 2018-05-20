@@ -5,7 +5,7 @@
     <div class="form">
         <table class="login-table">
             <tr>
-                <td class="error"> {% if message %} {{message}} {% endif %}</td>
+                <td class="error">  {{message}} </td>
             </tr>
             <tr>
                 <td>{{ form.eventType.label }}:</td>
@@ -30,13 +30,6 @@
                 <td>{{ form.venue }}</td>
                 {% if form.venue.errors %}
                 <td class="errors">{% for error in form.venue.errors %} {{error}} {% endfor %}</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>{{ form.convener.label }}:</td>
-                <td>{{ form.convener }}</td>
-                {% if form.convener.errors %}
-                <td class="errors">{% for error in form.convener.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
             <tr>

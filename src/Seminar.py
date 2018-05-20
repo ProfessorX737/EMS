@@ -6,17 +6,37 @@ class Seminar(Event):
         super().__init__(id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd)
         self.__sessions = {}
 
-    def addSession(self,id,startDateTime,endDateTime,name,descr,presenter):
-        session = Session(id,startDateTime,endDateTime,name,descr,presenter)
-        self.__sessions[id] = session
+    def addSession(self,session):
+        self.__sessions[session.getId()] = session
     
     def getSessions(self):
         return self.__sessions.values()
+
+    def getSession(self,sessionId):
+        return self.__sessions.get(sessionId)
     
     def getClassName(self):
         return "Seminar"
-    
+
     def containsSessionId(self,id):
         if id in self.__sessions:
             return True
+        return False
+
+    def deleteSession(self, sessionId):
+        if sessionId in self.__sessions:
+            del self.__sessions[sessionId]
+            return True
+        return False
+    
+    def isRegisteredToASession(self, userId):
+        for s in self.__sessions.values():
+            if s.hasAttendee(userId):
+                return True
+        return False
+    
+    def isPresenterOfASession(self,userId):
+        for s in self.__sessions.values():
+            if s.getPresenterId() == userId:
+                return True
         return False

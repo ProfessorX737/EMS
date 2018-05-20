@@ -25,7 +25,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">EMS</a>
+      {% if current_user.is_authenticated %}
+      <a class="navbar-brand" href="{{url_for('home')}}">EMS</a>
+      {% else %}
+      <a class="navbar-brand" href="{{url_for('login')}}">EMS</a>
+      {% endif %}
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -45,10 +49,21 @@
               <div class="dropdown" style="float:left;">
                 <button class="dropbtn">{{current_user.getNotificationsMap().values()|length}} Notifications</button>
                 <div class="dropdown-content" style="left:0;">
-                  {% for key,value in current_user.getNotificationsMap().items() %}
-                    <form method="post" action="{{ url_for('delete_notification',path=request.path|quote_plus,id=key) }}">
-                      <p>{{value}}<input type="submit" value="X" ></p>
-                    </form>
+                  {% for id,notification in current_user.getNotificationsMap().items() %}
+                    <a>
+                      <table>
+                        <tr>
+                          <td style="width:70%">{{notification.getMessage()}}</td>
+                          <td style="width:30%">
+                            {% for route,label in notification.getRouteLabelMap().items() %}
+                              <form method="post" action="{{ url_for(route,path=request.path|quote_plus,id=id) }}">
+                              <div style="padding-top:2px;"><input type="submit" value={{label}}></div>
+                              </form>
+                            {% endfor %}
+                          </td>
+                        </tr>
+                      </table>
+                    </a>
                   {% endfor %}
                 </div>
               </div>

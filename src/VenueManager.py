@@ -1,19 +1,30 @@
 from src.Venue import *
-
+from src.exceptions.ExistingVenueException import *
 class VenueManager():
     def __init__(self):
         self.__venues = {}
-    def addVenue(self,name, loc, capacity):
-        if name not in self.__venues:
+    def addVenue(self,id,name, loc, capacity):
+        if id not in self.__venues:
             id = self._getUniqueVenueId()
             venue = Venue(id,name,loc,capacity)
             self.__venues[id] = venue
             return True
+        else:
+            raise ExistingVenueException('Venue','Venue with this name already exists')
+    def getIdByName(self,name):
+        for v in self.__venues.values():
+            if v.getName() == name:
+                return v.getId()
+        return None
+            
     def removeVenue(self, venueId):
         del self.__venues[venueId]
     def getVenues(self):
-        print(self.__venues.values())
         return self.__venues.values()
+    def getVenue(self,venueId):
+        if venueId in self.__venues:
+            return self.__venues[venueId]
+        return None
     def getVenueNames(self):
         venueNames = []
         for v in self.__venues.values():

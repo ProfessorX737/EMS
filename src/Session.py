@@ -1,16 +1,26 @@
+from src.Event import Event
 from src.Period import *
 
-class Session(Period):
-    def __init__(self,id,startDateTime,endDateTime,name,descr,presenter):
-        super().__init__(startDateTime,endDateTime,name,descr)                   # period
-        self.__presenter = presenter           # Person
-        self.__id = id
-    
-    def getId(self):
-        return self.__id
+class Session(Event):
+    def __init__(self,seminarId,sessionId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,presenter,fee,earlybird):
+        super().__init__(sessionId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybird)
+        self.__seminarId = seminarId           # Integer
+        self.__presenter = presenter           # Guest
+        self.__isPending = True
     
     def getPresenter(self):
         return self.__presenter
-
+    def getPresenterName(self):
+        return self.__presenter.getName()
+    def getPresenterId(self):
+        return self.__presenter.get_id()
+    def getSeminarId(self):
+        return self.__seminarId
+    def getIsPending(self):
+        return self.__isPending
+    def setIsPending(self, isPending):
+        self.__isPending = isPending
     def setPresenter(self,presenter):
         self.__presenter = presenter
+    def getClassName(self):
+        return "Session"
