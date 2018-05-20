@@ -258,6 +258,9 @@ def accept_notification(path,id):
     acceptNotification = DeletableNotification("{0} has accepted to be the presenter at '{1}' session".format(current_user.getName(),event.getName()))
     convener = event.getConvener()
     convener.addNotification(acceptNotification)
+    seminar = ems.getEvent(event.getSeminarId())
+    newSessionNotification = DeletableNotification("A new session '{0}' was added to '{1}' seminar".format(event.getName(),seminar.getName()))
+    ems.notifyRegistrees(seminar.getId(),newSessionNotification)
     path = unquote_plus(path).strip("/")
     return redirect(path)
 

@@ -26,9 +26,5 @@ class UserManager(ABC):
         pass
     def notifyRegistrees(self,eventId,notification):
         pass
-    def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
-        pass
-    def notifyRegistreesEventEdit(self, eventId):
-        pass             
     def changeRegisteredEvent(self,oldEventId,editedEvent):
         pass

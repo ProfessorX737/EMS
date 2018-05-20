@@ -123,24 +123,27 @@ class EventManagementSystem():
         staff.addPostedCurrEvent(session)
         guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(staff.getName(),name),session.getId())
         presenter.addNotification(guestRequestNotification)
-        # newSessionNotification = DeletableNotification("A new session '{0}' was added to '{1}' seminar".format(name,seminar.getName()))
-        # self.notifyRegistrees(seminarId,newSessionNotification)
 
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
         self.__courseManager.deleteEvent(eventId)
-    
-    def editEvent(self,event,startDateTime,endDateTime,name,descr,venueName,convener,capacity,deregEnd):
+
+    def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,capacity,deregEnd,fee,earlybirdEnd):
         oldEventName = event.getName()
-        event.setStartDateTime(startDateTime)
-        event.setEndDateTime(endDateTime)
-        event.setName(name)
-        event.setDescription(descr)
-        event.setVenue(venueName)
-        event.setConvener(convener)
-        event.setCapacity(capacity)
-        event.setDeregEnd(deregEnd)
-        if(oldEventName == name):
+        venue = self.__venueManager.getVenue(venueName)
+        try:
+            event.setStartDateTime(startDateTime)
+            event.setEndDateTime(endDateTime)
+            event.setName(name)
+            event.setDescription(descr)
+            event.setVenue(venue)
+            event.setCapacity(capacity)
+            event.setDeregEnd(deregEnd)
+            event.setFee(fee)
+            event.setEarlyBirdEnd(earlybirdEnd)       
+        except VenueCapacityException as errmsg:
+            raise errmsg
+        if(oldEventName != name):
             changedNameNotification = DeletableNotification("'{0}' event was renamed '{1}'".format(oldEventName,name))
             self.notifyRegistrees(event.getId(),changedNameNotification)
         eventEditedNotification = DeletableNotification("The event details of '{0}' were edited".format(name))
@@ -159,8 +162,8 @@ class EventManagementSystem():
         session.setDescription(descr)
         session.setPresenter(presenter)
         session.setCapacity(capacity)
-        if(oldSessionName == name):
-            changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(oldEventName,name))
+        if(oldSessionName != name):
+            changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(oldSessionName,name))
             self.notifyRegistrees(session.getId(),changedNameNotification)
         sessionEditedNotification = DeletableNotification("The session details of '{0}' were edited".format(name))
         self.notifyRegistrees(session.getId(),sessionEditedNotification)
@@ -283,18 +286,3 @@ class EventManagementSystem():
         while self.__courseManager.containsEventId(id) or self.__seminarManager.containsEventId(id):
             id = id + 1
         return id
-
-    def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,capacity,deregEnd,fee,earlybirdEnd):
-        venue = self.__venueManager.getVenue(venueName)
-        try:
-            event.setStartDateTime(startDateTime)
-            event.setEndDateTime(endDateTime)
-            event.setName(name)
-            event.setDescription(descr)
-            event.setVenue(venue)
-            event.setCapacity(capacity)
-            event.setDeregEnd(deregEnd)
-            event.setFee(fee)
-            event.setEarlyBirdEnd(earlybirdEnd)       
-        except VenueCapacityException as errmsg:
-            raise errmsg

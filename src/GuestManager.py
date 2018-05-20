@@ -43,14 +43,6 @@ class GuestManager(UserManager):
         for guest in self.__guest.values():
             if guest.isRegistered(eventId):
                 guest.addNotification(notification)
-    def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
-        for guest in self.__guest.values():
-            if guest.isRegistered(seminarId):
-                guest.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
-    def notifyRegistreesEventEdit(self, eventId):
-        for guest in self.__guest.values():
-            if guest.isRegistered(eventId):
-                guest.addNotification("The details of '{0}' event were changed".format(guest.getRegisteredEventName(eventId))) 
     def changeRegisteredEvent(self,oldEventId,editedEvent):
         for guest in self.__guest.values():
             if guest.isRegistered(oldEventId):

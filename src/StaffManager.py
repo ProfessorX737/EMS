@@ -42,14 +42,6 @@ class StaffManager(UserManager):
         for staff in self.__staff.values():
             if staff.isRegistered(eventId):
                 staff.addNotification(notification)
-    def notifyRegistreesNewSession(self,seminarId, seminarName, sessionName):
-        for staff in self.__staff.values():
-            if staff.isRegistered(seminarId):
-                staff.addNotification("A new session '{0}' was added to '{1}' seminar".format(sessionName,seminarName))
-    def notifyRegistreesEventEdit(self, eventId):
-        for staff in self.__staff.values():
-            if staff.isRegistered(eventId):
-                staff.addNotification("The details of '{0}' event were changed".format(staff.getRegisteredEventName(eventId))) 
     def changeRegisteredEvent(self,oldEventId,editedEvent):
         for staff in self.__staff.values():
             if staff.isRegistered(oldEventId):
