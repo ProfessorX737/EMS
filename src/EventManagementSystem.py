@@ -117,9 +117,13 @@ class EventManagementSystem():
 
     def addSession(self,staff,seminarId,startDateTime,endDateTime,name,descr,capacity,presenter):
         seminar = self.getEvent(seminarId)
+        venue = seminar.getVenue()
+        if (venue.getMaxCapacity() < capacity):
+            raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
         session = Session(seminarId,self.getUniqueEventId(),startDateTime,endDateTime,name,descr,seminar.getVenue(),\
         seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter,seminar.getFee(),seminar.getEarlyBirdEnd())
-        self.__seminarManager.addSession(seminarId,session)
+        if not self.__seminarManager.addSession(seminarId,session):
+            raise ExistingEventException('Session', 'Session in this seminar, with this name already exists')
         staff.addPostedCurrEvent(session)
         guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(staff.getName(),name),session.getId())
         presenter.addNotification(guestRequestNotification)
@@ -169,9 +173,13 @@ class EventManagementSystem():
         self.notifyRegistrees(session.getId(),sessionEditedNotification)
 
     def getCost(self,eventId,userId):
+        user = self.getUserById(userId)
         if self.getUserType(userId) == "Guest":
-            event = self.getEvent(eventId)
-            return event.getCost()
+            if self.__seminarManager.isSessionPresenter(eventId,userId) is True:
+                return 0
+            else:
+                event = self.getEvent(eventId)
+                return event.getCost()
         else:
             return 0
 

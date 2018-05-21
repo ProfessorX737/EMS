@@ -115,12 +115,18 @@ def create_session(seminarId):
     seminarId = int(seminarId)
     presenters = ems.getGuests()
     form = CreateSessionForm(presenters)
-    if form.validate_on_submit():
-        presenter = ems.getUserById(form.presenter.data)
-        ems.addSession(current_user,seminarId,form.startDateTime.data,form.endDateTime.data,
-        form.name.data,form.description.data,form.capacity.data,presenter)
-        return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
-    return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType)
+    message = ''
+    try:
+        if form.validate_on_submit():
+            presenter = ems.getUserById(form.presenter.data)
+            ems.addSession(current_user,seminarId,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.capacity.data,presenter)
+            return redirect(url_for('moreInfo',eventType='Seminar',eventId=seminarId))
+    except VenueCapacityException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    except ExistingEventException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType,message=message)
 
 @app.route('/register/<eventId>',methods=['GET','POST'])
 @login_required

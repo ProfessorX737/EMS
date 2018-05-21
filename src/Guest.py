@@ -12,8 +12,8 @@ class Guest(User):
         return None
     def getSessions(self):
         return self.__sessions.values()
-    def isMyEvent(self,eventId):
-        return False
+    # def isMyEvent(self,eventId):
+        # return False
         # if eventId in self.__sessions:
         #     return True
         # return False

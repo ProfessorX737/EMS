@@ -35,11 +35,13 @@ class EventManager:
             if not event.isOpen():
                 pastEvents.append(event)
                 currentEvents.remove(event)
+    def containsEventName(self,eventName):
+        for e in self.getEvents():
+            if e.getName() == eventName:
+                return True
+        return False
     def addEvent(self, event):
-        # if (event.getName() not in self.__events):
-        #   event.getCapacity() <= event.getVenueName().getMaxCapacity()):
-            # self.__events[event.getName()] = event
-        if event.getId() not in self.__events:
+        if event.getId() not in self.__events and not self.containsEventName(event.getName()):
             self.__events[event.getId()] = event
             return True
         return False

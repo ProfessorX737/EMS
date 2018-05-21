@@ -9,7 +9,10 @@ class SeminarManager(EventManager):
 
     def addSession(self,seminarId,session):
         seminar = self.getEvent(seminarId)
-        seminar.addSession(session)
+        if not self.containsSessionName(seminarId, session.getName()):
+            seminar.addSession(session)
+            return True
+        return False
     
     def getSession(self,sessionId):
         for seminar in super().getEvents():
@@ -53,8 +56,24 @@ class SeminarManager(EventManager):
         session.addAttendee(user)
         return True
     
-    def deregisterUserFromSession(self,sessionId,userID):
+    def deregisterUserFromSession(self,sessionId,userId):
         session = self.getSession(sessionId)
         if session is None:
             return False
-        session.removeAttendee(userID)
+        session.removeAttendee(userId)
+
+    def isSessionPresenter(self,seminarId,userId):
+        seminar = self.getEvent(seminarId)
+        if seminar is None:
+            return False
+        for session in seminar.getSessions():
+            if session.getPresenterId() == userId:
+                return True
+        return False
+
+    def containsSessionName(self,seminarId,sessionName):
+        seminar = self.getEvent(seminarId)
+        for s in seminar.getSessions():
+            if s.getName() == sessionName:
+                return True
+        return False

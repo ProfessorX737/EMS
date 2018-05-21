@@ -5,6 +5,9 @@
     <div class="form">
             <table class="login-table">
                 <tr>
+                    <td class="error">  {{message}} </td>
+                </tr>
+                <tr>
                     <td>{{ form.name.label }}:</td>
                     <td>{{ form.name }}</td>
                     {% if form.name.errors %}
