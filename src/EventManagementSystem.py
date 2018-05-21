@@ -294,3 +294,8 @@ class EventManagementSystem():
         while self.__courseManager.containsEventId(id) or self.__seminarManager.containsEventId(id):
             id = id + 1
         return id
+    def getUniquePeriodIdForVenue(self, venueId):
+        id = 0
+        while self.__venueManager.venueContainsPeriodId(venueId,id):
+            id = id + 1
+        return id

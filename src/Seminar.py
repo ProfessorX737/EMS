@@ -12,6 +12,9 @@ class Seminar(Event):
     def getSessions(self):
         return self.__sessions.values()
 
+    def getSessionIds(self):
+        return self.__sessions
+
     def getSession(self,sessionId):
         return self.__sessions.get(sessionId)
     
@@ -25,10 +28,11 @@ class Seminar(Event):
 
     def deleteSession(self, sessionId):
         if sessionId in self.__sessions:
+            self.cancelPeriod(sessionId)
             del self.__sessions[sessionId]
             return True
         return False
-    
+
     def isRegisteredToASession(self, userId):
         for s in self.__sessions.values():
             if s.hasAttendee(userId):

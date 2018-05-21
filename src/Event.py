@@ -2,11 +2,14 @@ import datetime
 from src.Period import *
 from src.User import *
 from src.exceptions.VenueCapacityException import *
+from src.Period import *
 import abc
 
 class Event:
-    def __init__(self,id,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
-        self.__id = id
+    def __init__(self,eventId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
+        self.__id = eventId
+        # self.__periodId = periodId
+        self.__period = Period(startDateTime,endDateTime,eventId)
         self.__venue = venue
         self.__convener = convener
         self.__capacity = capacity
@@ -15,28 +18,30 @@ class Event:
         self.__attendees = {}
         self.__name = name                     # String
         self.__descr = descr                   # String
-        self.__startDateTime = startDateTime   # datetime
-        self.__endDateTime = endDateTime       # datetime
+        # self.__startDateTime = startDateTime   # datetime
+        # self.__endDateTime = endDateTime       # datetime
         self.__fee = fee
         self.__earlybirdEnd = earlybirdEnd
+        venue.addPeriod(self.__period)
 
     def getName(self):
         return self.__name
     def getDescription(self):
         return self.__descr
     def getStartDateTime(self):
-        return self.__startDateTime
+        return self.__period.getStartDateTime()
     def getEndDateTime(self):
-        return self.__endDateTime
-
+        return self.__period.getEndDateTime()
+    def getPeriodId(self):
+        return self.__period.getId()
     def setName(self, name):
         self.__name = name
     def setDescription(self, descr):
         self.__descr = descr
     def setStartDateTime(self, startDateTime):
-        self.__startDateTime = startDateTime
+        self.__period.setStartDateTime(startDateTime)
     def setEndDateTime(self, endDateTime):
-        self.__endDateTime = endDateTime
+        self.__period.setEndDateTime(endDateTime)
 
     def addAttendee(self, user):
         if not self.isFull():
@@ -118,7 +123,6 @@ class Event:
         else:
             return "Closed"
 
-    
     @abc.abstractmethod
     def getClassName(self):
         pass

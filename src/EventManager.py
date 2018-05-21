@@ -23,9 +23,15 @@ class EventManager:
             if event.isOpen():
                 currentEvents.append(event)
         return currentEvents
+    def cancelPeriod(self,eventId):
+        event = self.getEvent(eventId)
+        venue = event.getVenue()
+        print("deleting period ", eventId)
+        venue.deletePeriod(eventId)
     def cancelEvent(self,eventId):
         if eventId in self.__events:
             self.__events.get(eventId).cancelEvent()
+            self.cancelPeriod(eventId)
             return True
         return False
     def refreshEvents(self,user):
@@ -37,7 +43,7 @@ class EventManager:
                 currentEvents.remove(event)
     def containsEventName(self,eventName):
         for e in self.getEvents():
-            if e.getName() == eventName:
+            if e.getName() == eventName and not e.isCancelled():
                 return True
         return False
     def addEvent(self, event):

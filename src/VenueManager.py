@@ -32,6 +32,11 @@ class VenueManager():
         return venueNames
     def getFreeTimes(self, venueId):
         return self.__venues[venueId].getFreePeriods()
+    def venueContainsPeriodId(self,venueId,periodId):
+        venue = self.__venues[venueId]
+        if periodId in venue.getPeriodIds():
+            return True
+        return False
     def _getUniqueVenueId(self):
         id = 0
         while id in self.__venues:

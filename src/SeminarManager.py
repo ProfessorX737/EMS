@@ -41,8 +41,18 @@ class SeminarManager(EventManager):
             return True
         return False
 
+    def cancelSessionPeriods(self,eventId):
+        seminar = self.getEvent(eventId)
+        for session in seminar.getSessions():
+            venue = session.getVenue()
+            print("deleting period ", eventId)
+            venue.deletePeriod(session.getId())
+            # super().cancelEvent(session.getId())        
+
     def cancelEvent(self,eventId):
         if super().cancelEvent(eventId) == True:
+            print("cancelling seminar")
+            self.cancelSessionPeriods(eventId)
             return True
         for seminar in super().getEvents():
             if seminar.deleteSession(eventId):

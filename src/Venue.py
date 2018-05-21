@@ -5,6 +5,7 @@ class Venue:
         self._id = id
         self._location = location
         self._maxCapacity = maxCapacity
+        self._periods = {}
     def getId(self):
         return self._id
     def getName(self):
@@ -19,6 +20,19 @@ class Venue:
         self._location = location
     def setMaxCapacity(self,maxCapacity):
         self._maxCapacity = maxCapacity
+    def getPeriodIds(self):
+        return self._periods
+    def getPeriods(self):
+        return self._periods.values()
+    def addPeriod(self,period):
+        if period.getId() not in self._periods:
+            self._periods[period.getId()] = period
+            return True
+        return False
+    def deletePeriod(self,periodId):
+        if periodId in self._periods:
+            del self._periods[periodId]
+
         
 
 
