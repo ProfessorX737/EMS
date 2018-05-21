@@ -26,7 +26,6 @@ class EventManager:
     def cancelPeriod(self,eventId):
         event = self.getEvent(eventId)
         venue = event.getVenue()
-        print("deleting period ", eventId)
         venue.deletePeriod(eventId)
     def cancelEvent(self,eventId):
         if eventId in self.__events:
