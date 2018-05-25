@@ -7,9 +7,7 @@ class GuestManager(UserManager):
     def __init__(self):
         super().__init__()
     def addUser(self,name,zID,email,password,role):
-        if zID not in self.__users:
-            user = Guest(name,zID,email,password)
-            self.__users[user.get_id()] = user
-            return True
+        user = Guest(name,zID,email,password)
+        super().addUser(user)
     def getUserType(self):
         return "Guest"

@@ -1,4 +1,4 @@
-from src.user import *
+from src.User import *
 from src.Staff import *
 from src.Guest import *
 from abc import ABC
@@ -11,9 +11,8 @@ class UserManager(ABC):
     def setUsers(self,users):
         for u in users:
             self.__users[u.get_id()] = u
-    def addUser(self,name,zID,email,password,role):
-        if zID not in self.__users:
-            user = user(name,zID,email,password)
+    def addUser(self,user):
+        if user.get_id() not in self.__users:
             self.__users[user.get_id()] = user
             return True
         return False
