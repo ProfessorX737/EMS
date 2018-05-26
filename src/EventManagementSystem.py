@@ -13,6 +13,7 @@ from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
+from src.exceptions.RegistrationException import *
 from src.Notification import *
 import datetime
 
@@ -60,6 +61,25 @@ class EventManagementSystem():
         self.__courseManager.deregisterUser(eventId,userID)
     def deregisterUserFromSession(self,eventId,userID):
         self.__seminarManager.deregisterUserFromSession(eventId,userID)
+
+    def registerUser(self,eventId,userId):
+        event = self.getEvent(eventId)
+        user = self.getUserById(userId)
+        if isinstance(event,Course):
+            self.registerUserToCourse(eventId,user)
+            self.addRegisteredEvent(userId,event)
+        if isinstance(event,Seminar):
+            if not event.isRegisteredToASession(userId):
+                raise RegistrationException("session","To register you must be registered to at least one session")
+            self.registerUserToSeminar(eventId,user)
+            self.addRegisteredEvent(userId,event)
+        if isinstance(event,Session):
+            self.registerUserToSession(eventId,user)
+            self.registerUserToSeminar(event.getSeminarId(),user)
+            seminar = self.getEvent(event.getSeminarId())
+            self.addRegisteredEvent(userId,seminar)
+            self.addRegisteredEvent(userId,event)
+
     # returns true if the user is the convener of the event
     def isMyEvent(self,zid,eventId):
         try:

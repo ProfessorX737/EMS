@@ -8,11 +8,14 @@ import pytest
 
 curr_sem = ems.getSessions
 
+class TestRegisterToEvent(object):
+    def setup_method(self):
+        self.system = bootstrap_system()
+
 def create_period(self, year, month, date, hr, min):
     date_format = "%Y-%m-%d %H:%M"
     date = datetime.strptime("%d-%d-%d %d:%d"%(year, month, date, hr, min), date_format)
     return
-
 
 ##########GUEST EVENT REGISTRATION
 # Tests for seminar registration

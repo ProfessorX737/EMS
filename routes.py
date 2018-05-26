@@ -17,6 +17,7 @@ from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
+from src.exceptions.RegistrationException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -132,21 +133,27 @@ def create_session(seminarId):
 def register_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    if isinstance(event,Course):
-        ems.registerUserToCourse(eventId,copy.copy(current_user))
-        ems.addRegisteredEvent(current_user.get_id(),event)
-    if isinstance(event,Seminar):
-        if not event.isRegisteredToASession(current_user.get_id()):
-            isOwner = ems.isMyEvent(current_user.get_id(),eventId)
-            return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg="To register you must be registered to at least one session")
-        ems.registerUserToSeminar(eventId,copy.copy(current_user))
-        ems.addRegisteredEvent(current_user.get_id(),event)
+    # if isinstance(event,Course):
+    #     ems.registerUserToCourse(eventId,copy.copy(current_user))
+    #     ems.addRegisteredEvent(current_user.get_id(),event)
+    # if isinstance(event,Seminar):
+    #     if not event.isRegisteredToASession(current_user.get_id()):
+    #         isOwner = ems.isMyEvent(current_user.get_id(),eventId)
+    #         return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg="To register you must be registered to at least one session")
+    #     ems.registerUserToSeminar(eventId,copy.copy(current_user))
+    #     ems.addRegisteredEvent(current_user.get_id(),event)
+    # if isinstance(event,Session):
+    #     ems.registerUserToSession(eventId,copy.copy(current_user))
+    #     ems.registerUserToSeminar(event.getSeminarId(), copy.copy(current_user))
+    #     seminar = ems.getEvent(event.getSeminarId())
+    #     ems.addRegisteredEvent(current_user.get_id(),seminar) 
+    #     ems.addRegisteredEvent(current_user.get_id(),event)
+    try:
+        ems.registerUser(eventId,current_user.get_id())
+    except RegistrationException as errmsg:
+        return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg=errmsg.args[1])
+
     if isinstance(event,Session):
-        ems.registerUserToSession(eventId,copy.copy(current_user))
-        ems.registerUserToSeminar(event.getSeminarId(), copy.copy(current_user))
-        seminar = ems.getEvent(event.getSeminarId())
-        ems.addRegisteredEvent(current_user.get_id(),seminar) 
-        ems.addRegisteredEvent(current_user.get_id(),event)
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
 
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))

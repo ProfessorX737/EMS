@@ -45,6 +45,7 @@
         </form>
         {% endif %}
     {% endif %}
+    <div class="error">{{regErrorMsg}}</div>
     {% if isOwner == true %}
         {% if event.getClassName() != "Session" %}
             <form method="post" action="{{ url_for('edit_event',eventType=event.getClassName(),eventId=event.getId()) }}">
