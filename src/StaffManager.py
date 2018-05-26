@@ -14,6 +14,6 @@ class StaffManager(UserManager):
         return staff.getPostedPastEvents()
     def getCancelledEvents(self,staff):
         return staff.getCancelledEvents()
-    def addUser(self,name,zID,email,password,role):
-        user = Staff(name,zID,email,password)
+    def addUser(self,name,userId,email,password,role):
+        user = Staff(name,userId,email,password)
         super().addUser(user)

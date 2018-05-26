@@ -16,9 +16,9 @@ class UserManager(ABC):
             self.__users[user.get_id()] = user
             return True
         return False
-    def getUserById(self,zid):
-        if zid in self.__users:
-            return self.__users.get(zid)
+    def getUserById(self,userId):
+        if userId in self.__users:
+            return self.__users.get(userId)
         else:
             return None
     def getUserByEmail(self,email):

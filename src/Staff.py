@@ -2,8 +2,8 @@ from src.User import *
 from src.Presenter import *
 
 class Staff(Presenter):
-    def __init__(self,name,zid,email,password):
-        super().__init__(name,zid,email,password)
+    def __init__(self,name,userId,email,password):
+        super().__init__(name,userId,email,password)
         self.__postedCurrEvents = {}
         self.__postedPastEvents = {}
         self.__cancelledEvents = []

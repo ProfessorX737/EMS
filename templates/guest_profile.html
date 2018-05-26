@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Guest Speaker Profile</h1>
+<div>Full Name : {{current_user.getName()}}</div>
+<div>Email : {{current_user.getEmail()}}</div>
+{% if current_user.getSessions() %}
+<div>Sessions you are speaking at:</div>
+<div class="flex">
+    {% for session in current_user.getSessions() %}
+        <div class = "eventbox">
+            <h2>
+                <a href="{{ url_for('moreInfo',eventType=session.getClassName(),eventId=session.getId()) }}">{{session.getName()}}</a><br/>
+            </h2>
+            Venue: {{session.getVenueName()}}<br>
+            Status: {{session.getStatus()}}<br>
+            Start: {{session.getStartDateTime()}}
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<div>No sessions you are currently speaking at</div>
+{% endif %}
+
+
+{% endblock %}

@@ -3,11 +3,11 @@ from flask_login import UserMixin
 from src.Notification import *
 
 class User(UserMixin):
-    def __init__(self,name,zid,email,password):
+    def __init__(self,name,userId,email,password):
         self.__name = name
         self.__email = email
         self.__email = email
-        self.__zid = zid
+        self.__userId = userId
         self.__password = password
         self.__currEvents = {}
         self.__pastEvents = {}
@@ -31,11 +31,11 @@ class User(UserMixin):
         return self.__email
     # Flask login module required functions
     def get_id(self):
-        return self.__zid
+        return self.__userId
     def setName(self,name):
         self.__name = name
-    def setId(self,zid):
-        self.__zid = zid
+    def setId(self,userId):
+        self.__userId = userId
     def setEmail(self,email):
         self.__email = email
     def setPassword(self,password):

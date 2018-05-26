@@ -35,6 +35,10 @@ class Seminar(Event):
             capacity = capacity + session.getCapacity()
         return capacity
 
+    def cancelPeriod(self,eventId):
+        venue = self.getVenue()
+        venue.deletePeriod(eventId)
+
     def deleteSession(self, sessionId):
         if sessionId in self.__sessions:
             self.cancelPeriod(sessionId)

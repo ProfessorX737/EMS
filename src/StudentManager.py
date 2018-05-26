@@ -7,8 +7,8 @@ from src.UserManager import *
 class StudentManager(UserManager):
     def __init__(self):
         super().__init__()
-    def addUser(self,name,zID,email,password,role):
-        user = Student(name,zID,email,password)
+    def addUser(self,name,userId,email,password,role):
+        user = Student(name,userId,email,password)
         super().addUser(user)
     def getUserType(self):
         return "Student"
