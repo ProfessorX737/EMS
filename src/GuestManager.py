@@ -8,6 +8,6 @@ class GuestManager(UserManager):
         super().__init__()
     def addUser(self,name,zID,email,password,role):
         user = Guest(name,zID,email,password)
-        super().addUser(user)
+        return super().addUser(user)
     def getUserType(self):
         return "Guest"

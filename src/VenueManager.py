@@ -8,7 +8,7 @@ class VenueManager():
             id = self._getUniqueVenueId()
             venue = Venue(id,name,loc,capacity)
             self.__venues[id] = venue
-            return True
+            return venue
         else:
             raise ExistingVenueException('Venue','Venue with this name already exists')
     def getIdByName(self,name):

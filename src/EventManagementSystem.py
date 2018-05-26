@@ -12,6 +12,7 @@ from src.exceptions.LoginException import *
 from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
+from src.exceptions.UserExistsException import *
 from src.Notification import *
 import datetime
 
@@ -205,12 +206,15 @@ class EventManagementSystem():
     def getCancelledEvents(self,staff):
         return self.__staffManager.getCancelledEvents(staff)
     def addUser(self,name,zID,email,password,role):
-        if (role == 'trainee'):
-            return self.__studentManager.addUser(name,zID,email,password,role)
-        elif (role == 'trainer'):
-            return self.__staffManager.addUser(name,zID,email,password,role)
-        elif (role == 'guest'):
-            return self.__guestManager.addUser(name,zID,email,password,role)
+        try:
+            if (role == 'trainee'):
+                return self.__studentManager.addUser(name,zID,email,password,role)
+            elif (role == 'trainer'):
+                return self.__staffManager.addUser(name,zID,email,password,role)
+            elif (role == 'guest'):
+                return self.__guestManager.addUser(name,zID,email,password,role)
+        except UserExistsException as errMsg:
+            raise errMsg
     def getUserById(self,zid):
         if self.__studentManager.getUserById(zid) is not None:
             return self.__studentManager.getUserById(zid)
@@ -258,7 +262,7 @@ class EventManagementSystem():
     def addVenue(self, name, loc, capacity):
         try:
             venueId = self.__venueManager.getIdByName(name)
-            self.__venueManager.addVenue(venueId, name,loc, capacity)
+            return self.__venueManager.addVenue(venueId, name,loc, capacity)
         except ExistingVenueException as errmsg:
             raise errmsg
     def removeVenue(self, venueId):

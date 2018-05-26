@@ -1,6 +1,7 @@
 from src.User import *
 from src.Staff import *
 from src.Guest import *
+from src.exceptions.UserExistsException import *
 from abc import ABC
 from datetime import datetime
 class UserManager(ABC):
@@ -12,10 +13,13 @@ class UserManager(ABC):
         for u in users:
             self.__users[u.get_id()] = u
     def addUser(self,user):
-        if user.get_id() not in self.__users:
+        if user.get_id() in self.__users:
+            raise UserExistsException("User","User with this userId already exists")
+        elif self.getUserByEmail(user.getEmail()) is not None:
+            raise UserExistsException("User","User with this email already exists")
+        else:
             self.__users[user.get_id()] = user
-            return True
-        return False
+           return user
     def getUserById(self,zid):
         if zid in self.__users:
             return self.__users.get(zid)

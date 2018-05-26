@@ -16,6 +16,7 @@ from src.exceptions.LoginException import *
 from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
+from src.exceptions.UserExistsException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -63,13 +64,11 @@ def dashboard():
 def register_guest():
     form = CreateGuestForm()
     if form.validate_on_submit():
-        if ems.userIdExists(form.username.data):
-            return render_template('register.html', form = form, message = 'That username already exists')
-        elif ems.userEmailExists(form.email.data):
-            return render_template('register.html', form = form, message = 'That email already exists')
-        else:
+        try:
             guest = ems.addUser(form.name.data, form.username.data, form.email.data, form.password.data, 'guest')
             return render_template('login.html',message="You have successfully registered.")
+        except UserExistsException as errMsg:
+            return render_template('register.html', form = form, message = errMsg.args[1])
     return render_template('register.html', form = form)
 
 @app.route('/create_event',methods=['GET','POST'])
