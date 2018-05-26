@@ -26,6 +26,10 @@ class Seminar(Event):
             return True
         return False
 
+    def cancelPeriod(self,eventId):
+        venue = self.getVenue()
+        venue.deletePeriod(eventId)
+
     def deleteSession(self, sessionId):
         if sessionId in self.__sessions:
             self.cancelPeriod(sessionId)
