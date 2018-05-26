@@ -65,7 +65,7 @@ class Event:
         else:
             return True
     def isFull(self):
-        if len(self.__attendees.values()) >= self.__capacity:
+        if len(self.__attendees.values()) >= self.getCapacity():
             return True
         return False
     

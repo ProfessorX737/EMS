@@ -80,6 +80,23 @@ class EventManagementSystem():
             self.addRegisteredEvent(userId,seminar)
             self.addRegisteredEvent(userId,event)
 
+    def deregisterUser(self,eventId,userId):
+        event = self.getEvent(eventId)
+        self.removeRegisteredEvent(userId,eventId)
+        if isinstance(event,Course):
+            self.deregisterUserFromCourse(eventId,userId)
+        if isinstance(event,Seminar):
+            self.deregisterUserFromSeminar(eventId,userId)
+            for session in event.getSessions():
+                self.deregisterUserFromSession(session.getId(),userId)
+                self.removeRegisteredEvent(userId,session.getId())
+        if isinstance(event,Session):
+            self.deregisterUserFromSession(eventId,userId)
+            seminar = self.getEvent(event.getSeminarId())
+            if not seminar.isRegisteredToASession(userId):
+                self.deregisterUserFromSeminar(event.getSeminarId(),userId)
+                self.removeRegisteredEvent(userId,event.getSeminarId())
+
     # returns true if the user is the convener of the event
     def isMyEvent(self,userId,eventId):
         try:

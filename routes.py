@@ -163,29 +163,12 @@ def create_session(seminarId):
 def register_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    # if isinstance(event,Course):
-    #     ems.registerUserToCourse(eventId,copy.copy(current_user))
-    #     ems.addRegisteredEvent(current_user.get_id(),event)
-    # if isinstance(event,Seminar):
-    #     if not event.isRegisteredToASession(current_user.get_id()):
-    #         isOwner = ems.isMyEvent(current_user.get_id(),eventId)
-    #         return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg="To register you must be registered to at least one session")
-    #     ems.registerUserToSeminar(eventId,copy.copy(current_user))
-    #     ems.addRegisteredEvent(current_user.get_id(),event)
-    # if isinstance(event,Session):
-    #     ems.registerUserToSession(eventId,copy.copy(current_user))
-    #     ems.registerUserToSeminar(event.getSeminarId(), copy.copy(current_user))
-    #     seminar = ems.getEvent(event.getSeminarId())
-    #     ems.addRegisteredEvent(current_user.get_id(),seminar) 
-    #     ems.addRegisteredEvent(current_user.get_id(),event)
     try:
         ems.registerUser(eventId,current_user.get_id())
     except RegistrationException as errmsg:
         return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg=errmsg.args[1])
-
     if isinstance(event,Session):
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
-
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
@@ -193,20 +176,8 @@ def register_user(eventId):
 def deregister_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    ems.removeRegisteredEvent(current_user.get_id(),eventId)
-    if isinstance(event,Course):
-        ems.deregisterUserFromCourse(eventId,current_user.get_id())
-    if isinstance(event,Seminar):
-        ems.deregisterUserFromSeminar(eventId,current_user.get_id())
-        for session in event.getSessions():
-            ems.deregisterUserFromSession(session.getId(),current_user.get_id())
-            ems.removeRegisteredEvent(current_user.get_id(),session.getId())
+    ems.deregisterUser(eventId,current_user.get_id())
     if isinstance(event,Session):
-        ems.deregisterUserFromSession(eventId,current_user.get_id())
-        seminar = ems.getEvent(event.getSeminarId())
-        if not seminar.isRegisteredToASession(current_user.get_id()):
-            ems.deregisterUserFromSeminar(event.getSeminarId(),current_user.get_id())
-            ems.removeRegisteredEvent(current_user.get_id(),event.getSeminarId())
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
