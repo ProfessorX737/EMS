@@ -72,6 +72,11 @@ def register_guest():
             return render_template('login.html',message="You have successfully registered.")
     return render_template('register.html', form = form)
 
+@app.route('/speaker_profile',methods=['GET','POST'])
+@login_required
+def speaker_profile():
+    return render_template('guest_profile.html',userType=userType)
+
 @app.route('/create_event',methods=['GET','POST'])
 @login_required
 def create_event():
@@ -105,8 +110,6 @@ def moreInfo(eventType,eventId):
     event = ems.getEvent(eventId)
     isOwner = ems.isMyEvent(current_user.get_id(),eventId)
     isPresenter = ems.isPresenterAtEvent(current_user.get_id(),eventId)
-    if isinstance(event,Session):
-        isPresenter = ems.isPresenterAtEvent(current_user.get_id(),event.getSeminarId())
     fee = ems.getCost(eventId,current_user.get_id())
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,isPresenter=isPresenter,event=event,userType=userType,fee=fee)
@@ -115,9 +118,7 @@ def moreInfo(eventType,eventId):
 @login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
-    presenters = []
-    presenters.extend(ems.getGuests())
-    presenters.extend(ems.getStaff())
+    presenters = ems.getGuests()
     form = CreateSessionForm(presenters)
     message = ''
     try:
@@ -150,7 +151,7 @@ def register_user(eventId):
         ems.registerUserToSession(eventId,copy.copy(current_user))
         ems.registerUserToSeminar(event.getSeminarId(), copy.copy(current_user))
         seminar = ems.getEvent(event.getSeminarId())
-        ems.addRegisteredEvent(current_user.get_id(),seminar) 
+        ems.addRegisteredEvent(current_user.get_id(),seminar)
         ems.addRegisteredEvent(current_user.get_id(),event)
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
 
@@ -167,7 +168,7 @@ def deregister_user(eventId):
     if isinstance(event,Seminar):
         ems.deregisterUserFromSeminar(eventId,current_user.get_id())
         for session in event.getSessions():
-            ems.deregisterUserFromSession(session.getId(),current_user.get_id())      
+            ems.deregisterUserFromSession(session.getId(),current_user.get_id())
             ems.removeRegisteredEvent(current_user.get_id(),session.getId())
     if isinstance(event,Session):
         ems.deregisterUserFromSession(eventId,current_user.get_id())
@@ -179,7 +180,7 @@ def deregister_user(eventId):
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/edit_event/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def edit_event(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -199,13 +200,11 @@ def edit_event(eventType,eventId):
     return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/edit_session/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    presenters = []
-    presenters.extend(ems.getGuests())
-    presenters.extend(ems.getStaff())
+    presenters = ems.getGuests()
     form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''
@@ -220,7 +219,7 @@ def edit_session(eventType,eventId):
     return render_template('edit_session.html',form=form,event=event,message=message)
 
 @app.route('/cancel_event/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def cancel_event(eventType,eventId):
     eventId = int(eventId)
     ems.cancelEvent(eventId)
@@ -240,7 +239,7 @@ def create_venue():
     message = ''
     if form.validate_on_submit():
         try:
-            ems.addVenue(form.name.data,form.location.data,form.capacity.data) 
+            ems.addVenue(form.name.data,form.location.data,form.capacity.data)
             return redirect(url_for('view_venues'))
         except ExistingVenueException as errmsg:
             message = errmsg.args[1]
@@ -281,7 +280,7 @@ def reject_notification(path,id):
     id = int(id)
     notif = current_user.getNotification(id)
     event = ems.getEvent(notif.getEventId())
-    ems.cancelEvent(event.getId()) 
+    ems.cancelEvent(event.getId())
     current_user.deleteNotification(id)
     rejectNotification = DeletableNotification("{0} has rejected to be presenter at '{1}' session".format(current_user.getName(),event.getName()))
     convener = event.getConvener()

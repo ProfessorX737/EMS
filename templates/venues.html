@@ -6,7 +6,7 @@
     <div class="flex">
         {% for venue in venues %}
         <div class="eventbox">
-        <h2>{{venue.getName()}} </br></h2>
+        {{venue.getName()}} </br>
         Location: {{venue.getLocation()}} </br>
         Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}
@@ -24,7 +24,7 @@
         {%endfor%}
     </div><br>
 {% else %}
-<h1> No current venues yet, add one! </h1>
+<h1> No current venues yet, staff must add one! </h1>
 {% endif %}
 
 {% if userType == 'Staff' %}
