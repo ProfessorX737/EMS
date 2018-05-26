@@ -6,7 +6,7 @@
     <div class="flex">
         {% for venue in venues %}
         <div class="eventbox">
-        {{venue.getName()}} </br>
+        <h2>{{venue.getName()}} </br></h2>
         Location: {{venue.getLocation()}} </br>
         Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}

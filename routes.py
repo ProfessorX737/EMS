@@ -105,6 +105,8 @@ def moreInfo(eventType,eventId):
     event = ems.getEvent(eventId)
     isOwner = ems.isMyEvent(current_user.get_id(),eventId)
     isPresenter = ems.isPresenterAtEvent(current_user.get_id(),eventId)
+    if isinstance(event,Session):
+        isPresenter = ems.isPresenterAtEvent(current_user.get_id(),event.getSeminarId())
     fee = ems.getCost(eventId,current_user.get_id())
     # if staff check if this event is inside getPostedCurrEvents
     return render_template('more_info.html',isOwner=isOwner,isPresenter=isPresenter,event=event,userType=userType,fee=fee)
@@ -113,7 +115,9 @@ def moreInfo(eventType,eventId):
 @login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     message = ''
     try:
@@ -199,7 +203,9 @@ def edit_event(eventType,eventId):
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''

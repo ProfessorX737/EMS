@@ -10,6 +10,8 @@ class Session(Event):
     
     def getPresenter(self):
         return self.__presenter
+    def notifyPresenter(self,notification):
+        self.__presenter.addNotification(notification)
     def getPresenterName(self):
         return self.__presenter.getName()
     def getPresenterId(self):

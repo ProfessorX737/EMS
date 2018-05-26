@@ -1,5 +1,7 @@
 from src.User import *
-class Staff(User):
+from src.Presenter import *
+
+class Staff(Presenter):
     def __init__(self,name,zid,email,password):
         super().__init__(name,zid,email,password)
         self.__postedCurrEvents = {}
