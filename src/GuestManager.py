@@ -6,8 +6,8 @@ from datetime import datetime
 class GuestManager(UserManager):
     def __init__(self):
         super().__init__()
-    def addUser(self,name,zID,email,password,role):
-        user = Guest(name,zID,email,password)
+    def addUser(self,name,userId,email,password,role):
+        user = Guest(name,userId,email,password)
         super().addUser(user)
     def getUserType(self):
         return "Guest"

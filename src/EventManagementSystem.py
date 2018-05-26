@@ -54,9 +54,9 @@ class EventManagementSystem():
     def deregisterUserFromSession(self,eventId,userID):
         self.__seminarManager.deregisterUserFromSession(eventId,userID)
     # returns true if the user is the convener of the event
-    def isMyEvent(self,zid,eventId):
+    def isMyEvent(self,userId,eventId):
         try:
-            user = self.getUserById(zid)
+            user = self.getUserById(userId)
         except LoginException:
             return False
         else:
@@ -222,26 +222,26 @@ class EventManagementSystem():
         return self.__staffManager.getPostedPastEvents(staff)
     def getCancelledEvents(self,staff):
         return self.__staffManager.getCancelledEvents(staff)
-    def addUser(self,name,zID,email,password,role):
+    def addUser(self,name,userId,email,password,role):
         if (role == 'trainee'):
-            return self.__studentManager.addUser(name,zID,email,password,role)
+            return self.__studentManager.addUser(name,userId,email,password,role)
         elif (role == 'trainer'):
-            return self.__staffManager.addUser(name,zID,email,password,role)
+            return self.__staffManager.addUser(name,userId,email,password,role)
         elif (role == 'guest'):
-            return self.__guestManager.addUser(name,zID,email,password,role)
-    def getUserById(self,zid):
-        if self.__studentManager.getUserById(zid) is not None:
-            return self.__studentManager.getUserById(zid)
-        elif self.__staffManager.getUserById(zid) is not None:
-            return self.__staffManager.getUserById(zid)
-        elif self.__guestManager.getUserById(zid) is not None:
-            return self.__guestManager.getUserById(zid)
+            return self.__guestManager.addUser(name,userId,email,password,role)
+    def getUserById(self,userId):
+        if self.__studentManager.getUserById(userId) is not None:
+            return self.__studentManager.getUserById(userId)
+        elif self.__staffManager.getUserById(userId) is not None:
+            return self.__staffManager.getUserById(userId)
+        elif self.__guestManager.getUserById(userId) is not None:
+            return self.__guestManager.getUserById(userId)
         else:
             raise LoginException('User', 'Username does not exist')
-    def userIdExists(self,zid):
-        if self.__studentManager.getUserById(zid) is not None or\
-        self.__studentManager.getUserById(zid) is not None or\
-        self.__guestManager.getUserById(zid) is not None:
+    def userIdExists(self,userId):
+        if self.__studentManager.getUserById(userId) is not None or\
+        self.__studentManager.getUserById(userId) is not None or\
+        self.__guestManager.getUserById(userId) is not None:
             return True
         return False
     def getUserByEmail(self,email):
@@ -251,18 +251,18 @@ class EventManagementSystem():
             return self.__staffManager.getUserByEmail(email)
         elif self.__guestManager.getUserByEmail(email) is not None:
             return self.__guestManager.getUserByEmail(email)       
-    def userEmailExists(self,zid):
-        if self.__studentManager.getUserByEmail(zid) is not None or\
-        self.__studentManager.getUserByEmail(zid) is not None or\
-        self.__guestManager.getUserByEmail(zid) is not None:
+    def userEmailExists(self,userId):
+        if self.__studentManager.getUserByEmail(userId) is not None or\
+        self.__studentManager.getUserByEmail(userId) is not None or\
+        self.__guestManager.getUserByEmail(userId) is not None:
             return True
         return False
-    def getUserType(self,zid):
-        if self.__studentManager.getUserById(zid) is not None:
+    def getUserType(self,userId):
+        if self.__studentManager.getUserById(userId) is not None:
             return self.__studentManager.getUserType()
-        elif self.__staffManager.getUserById(zid) is not None:
+        elif self.__staffManager.getUserById(userId) is not None:
             return self.__staffManager.getUserType()
-        elif self.__guestManager.getUserById(zid) is not None:
+        elif self.__guestManager.getUserById(userId) is not None:
             return self.__guestManager.getUserType()
     def addRegisteredEvent(self,userID,event):
         self.__staffManager.addRegisteredEvent(userID,event)
