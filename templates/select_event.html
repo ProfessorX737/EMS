@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Select an Event</h1>
+<form method="post" action="/create_event">
+    <div class="form">
+        <table class="login-table">
+            <tr>
+                <td>{{ form.csrf_token }}</td>
+                <td> <div style="margin-top: 10px">{{ form.makeCourse }} </div> </td>
+            </tr>   
+            <tr>
+                <td>{{ form.csrf_token }}</td>
+                <td> <div style="margin-top: 10px">{{ form.makeSeminar }} </div> </td>
+            </tr>   
+        </table>
+        
+    </div>
+</form>
+
+{% endblock %}
