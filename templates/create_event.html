@@ -1,15 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>Event Creation</h1>
-<form method="post" action="/create_event">
+<form method="post" action={{action}}>
     <div class="form">
         <table class="login-table">
             <tr>
                 <td class="error">  {{message}} </td>
-            </tr>
-            <tr>
-                <td>{{ form.eventType.label }}:</td>
-                <td>{{ form.eventType }}</td>
             </tr>
             <tr>
                 <td>{{ form.name.label }}:</td>
@@ -32,13 +28,15 @@
                 <td class="errors">{% for error in form.venue.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
+            {% if action != "/create_seminar" %}
             <tr>
                 <td>{{ form.capacity.label }}:</td>
-                <td>{{ form.capacity}}</td>
+                <td>{{ form.capacity }}</td>
                 {% if form.capacity.errors %}
                 <td class="errors">{% for error in form.capacity.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>
+            {% endif %}
             <tr>
                 <td style="white-space: nowrap">{{ form.startDateTime.label }}:</td>
                 <td>{{ form.startDateTime(placeholder='yyyy-mm-dd HH:MM') }} </td>
@@ -81,7 +79,6 @@
         </table>
         
     </div>
-    <td>{{ form.eventType }}</td>
        
 </form>
 

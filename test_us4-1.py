@@ -12,6 +12,16 @@ class TestRegisterToEvent(object):
     def setup_method(self):
         self.system = bootstrap_system()
 
+    # This test was validated on the client side
+    def test_registration_to_closed_event():
+        pass
+
+    def test_open_registered_event_in_users_open_events_list():
+        pass
+    
+    def test_past_registered_event_in_users_past_event_list():
+        pass
+
 def create_period(self, year, month, date, hr, min):
     date_format = "%Y-%m-%d %H:%M"
     date = datetime.strptime("%d-%d-%d %d:%d"%(year, month, date, hr, min), date_format)

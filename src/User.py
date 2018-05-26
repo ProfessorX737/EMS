@@ -2,10 +2,12 @@ from src.Person import *
 from flask_login import UserMixin
 from src.Notification import *
 
-class User(UserMixin,Person):
-    def __init__(self,name,zid,email,password):
-        Person.__init__(self,name,email)
-        self.__zid = zid
+class User(UserMixin):
+    def __init__(self,name,userId,email,password):
+        self.__name = name
+        self.__email = email
+        self.__email = email
+        self.__userId = userId
         self.__password = password
         self.__currEvents = {}
         self.__pastEvents = {}
@@ -23,13 +25,17 @@ class User(UserMixin,Person):
         return self.__pastEvents.values()
     def getNotificationsMap(self):
         return self.__notifications
+    def getName(self):
+        return self.__name
+    def getEmail(self):
+        return self.__email
     # Flask login module required functions
     def get_id(self):
-        return self.__zid
+        return self.__userId
     def setName(self,name):
         self.__name = name
-    def setId(self,zid):
-        self.__zid = zid
+    def setId(self,userId):
+        self.__userId = userId
     def setEmail(self,email):
         self.__email = email
     def setPassword(self,password):

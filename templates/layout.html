@@ -41,6 +41,9 @@
             <li><a href="{{url_for('create_event')}}">Create Event</a></li>
           {% endif %}
           <li><a href="{{url_for('view_venues')}}">Venues</a></li>
+          {% if userType == 'Guest' %}
+            <li><a href="{{url_for('speaker_profile')}}">My Profile</a></li>
+          {% endif %}
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">

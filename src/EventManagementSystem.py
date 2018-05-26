@@ -81,9 +81,9 @@ class EventManagementSystem():
             self.addRegisteredEvent(userId,event)
 
     # returns true if the user is the convener of the event
-    def isMyEvent(self,zid,eventId):
+    def isMyEvent(self,userId,eventId):
         try:
-            user = self.getUserById(zid)
+            user = self.getUserById(userId)
         except LoginException:
             return False
         else:
@@ -152,8 +152,12 @@ class EventManagementSystem():
         if not self.__seminarManager.addSession(seminarId,session):
             raise ExistingEventException('Session', 'Session in this seminar, with this name already exists')
         staff.addPostedCurrEvent(session)
-        guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(staff.getName(),name),session.getId())
-        presenter.addNotification(guestRequestNotification)
+        # if you are making the session and set the presenter to be yourself then you automatically accept the request
+        if staff.get_id() != presenter.get_id():
+            guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(staff.getName(),name),session.getId())
+            presenter.addNotification(guestRequestNotification)
+        else:
+            session.setIsPending(False)
 
     def deleteEvent(self,eventId):
         self.__seminarManager.deleteEvent(eventId)
@@ -186,18 +190,32 @@ class EventManagementSystem():
         self.__guestManager.notifyRegistrees(eventId,notification) 
     
     def editSession(self,session,startDateTime,endDateTime,name,descr,presenter,capacity):
-        oldSessionName = session.getName()
+        if session.getName() != name:
+            changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(session.getName(),name))
+            self.notifyRegistrees(session.getId(),changedNameNotification)
+        sessionEditedNotification = DeletableNotification("The session details of '{0}' were edited".format(name))
+        self.notifyRegistrees(session.getId(),sessionEditedNotification)
+        # if the new presenter does not equal to the old presenter
+        if presenter.get_id() != session.getPresenterId():
+            # if the old presenter is you, you do not need to be notified because you are editing the session
+            if session.getConvenerId() != session.getPresenterId():
+                # if the session is still pending, the presenter has not yet accepted the request so tailor the message
+                if(session.getIsPending() == False):
+                    changedPresenterNotification = DeletableNotification("You are no longer the presenter of '{0}' session".format(session.getName()))
+                else:
+                    changedPresenterNotification = DeletableNotification("You are not asked to be the presenter for '{0}' session anymore".format(session.getName()))
+                session.notifyPresenter(changedPresenterNotification)
+            # if you changed the presenter to be yourself, then you also don't need to be notified
+            if session.getConvenerId() != presenter.get_id():
+                guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(session.getConvenerName(),name),session.getId())
+                presenter.addNotification(guestRequestNotification)
+                session.setIsPending(True)
         session.setStartDateTime(startDateTime)
         session.setEndDateTime(endDateTime)
         session.setName(name)
         session.setDescription(descr)
         session.setPresenter(presenter)
         session.setCapacity(capacity)
-        if(oldSessionName != name):
-            changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(oldSessionName,name))
-            self.notifyRegistrees(session.getId(),changedNameNotification)
-        sessionEditedNotification = DeletableNotification("The session details of '{0}' were edited".format(name))
-        self.notifyRegistrees(session.getId(),sessionEditedNotification)
 
     def getCost(self,eventId,userId):
         user = self.getUserById(userId)
@@ -250,31 +268,43 @@ class EventManagementSystem():
             return self.__guestManager.getUserById(zid)
         else:
             raise LoginException('User', 'Username does not exist')
-    def userIdExists(self,zid):
-        if self.__studentManager.getUserById(zid) is not None or\
-        self.__studentManager.getUserById(zid) is not None or\
-        self.__guestManager.getUserById(zid) is not None:
+    def userIdExists(self,userId):
+        if self.__studentManager.getUserById(userId) is not None or\
+        self.__studentManager.getUserById(userId) is not None or\
+        self.__guestManager.getUserById(userId) is not None:
             return True
         return False
+    def getUser(self, identifier):
+        try:
+            user = self.getUserById(identifier)
+            return user
+        except LoginException as errMsg:
+            try:
+                user = self.getUserByEmail(identifier)
+                return user
+            except LoginException as errMsg:
+                raise errMsg    
     def getUserByEmail(self,email):
         if self.__studentManager.getUserByEmail(email) is not None:
             return self.__studentManager.getUserByEmail(email)
         elif self.__staffManager.getUserByEmail(email) is not None:
             return self.__staffManager.getUserByEmail(email)
         elif self.__guestManager.getUserByEmail(email) is not None:
-            return self.__guestManager.getUserByEmail(email)       
-    def userEmailExists(self,zid):
-        if self.__studentManager.getUserByEmail(zid) is not None or\
-        self.__studentManager.getUserByEmail(zid) is not None or\
-        self.__guestManager.getUserByEmail(zid) is not None:
+            return self.__guestManager.getUserByEmail(email)
+        else:
+            raise LoginException('User','Username does not exist')       
+    def userEmailExists(self,userId):
+        if self.__studentManager.getUserByEmail(userId) is not None or\
+        self.__studentManager.getUserByEmail(userId) is not None or\
+        self.__guestManager.getUserByEmail(userId) is not None:
             return True
         return False
-    def getUserType(self,zid):
-        if self.__studentManager.getUserById(zid) is not None:
+    def getUserType(self,userId):
+        if self.__studentManager.getUserById(userId) is not None:
             return self.__studentManager.getUserType()
-        elif self.__staffManager.getUserById(zid) is not None:
+        elif self.__staffManager.getUserById(userId) is not None:
             return self.__staffManager.getUserType()
-        elif self.__guestManager.getUserById(zid) is not None:
+        elif self.__guestManager.getUserById(userId) is not None:
             return self.__guestManager.getUserType()
     def addRegisteredEvent(self,userID,event):
         self.__staffManager.addRegisteredEvent(userID,event)

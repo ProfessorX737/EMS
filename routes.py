@@ -12,6 +12,7 @@ from src.forms.CreateEventForm import *
 from src.forms.CreateSessionForm import *
 from src.forms.CreateVenueForm import *
 from src.forms.CreateGuestForm import *
+from src.forms.SelectEventForm import *
 from src.exceptions.LoginException import *
 from src.exceptions.VenueCapacityException import *
 from src.exceptions.ExistingEventException import *
@@ -37,10 +38,10 @@ except OSError as e:
 @app.route('/',methods=['GET','POST'])
 def login():
     if (request.method == 'POST'):
-        zid = request.form.get('zid','')
+        userId = request.form.get('zid','')
         password = request.form.get('password','')
         try:
-            user = ems.getUserById(zid)
+            user = ems.getUser(userId)
             ems.checkPassword(user,password)
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
@@ -72,31 +73,58 @@ def register_guest():
             return render_template('register.html', form = form, message = errMsg.args[1])
     return render_template('register.html', form = form)
 
+@app.route('/speaker_profile',methods=['GET','POST'])
+@login_required
+def speaker_profile():
+    return render_template('guest_profile.html',userType=userType)
+
 @app.route('/create_event',methods=['GET','POST'])
 @login_required
 def create_event():
+    form = SelectEventForm()
+    if form.validate_on_submit():
+        if form.makeCourse.data == True:
+            return redirect(url_for('create_course'))
+        elif form.makeSeminar.data == True:
+            return redirect(url_for('create_seminar'))
+    return render_template('select_event.html',form=form)
+
+@app.route('/create_course',methods=['GET','POST'])
+@login_required
+def create_course():
     venues = ems.getVenues()
-    #form = NewStartUpForm(venues).getForm()
     form = CreateEventForm(venues)
     message = ''
     if form.validate_on_submit():
         try:
-            if (form.eventType.data == 'Course'):
-                print("venue id is ", form.venue.data)
-                ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
-                form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
-                form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
-                return redirect(url_for('home'))
-            else:
-                ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
-                form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
-                form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
-                return redirect(url_for('home'))
+            ems.addCourse(current_user,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
+            form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            return redirect(url_for('home'))
         except VenueCapacityException as errmsg:
-            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1])
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
         except ExistingEventException as errmsg:
-            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1])
-    return render_template('create_event.html', form = form, userType=userType, message=message)
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
+    return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_course")
+
+@app.route('/create_seminar',methods=['GET','POST'])
+@login_required
+def create_seminar():
+    venues = ems.getVenues()
+    form = CreateEventForm(venues)
+    del form.capacity
+    message = ''
+    if form.validate_on_submit():
+        try:
+            ems.addSeminar(current_user,form.startDateTime.data,form.endDateTime.data,
+            form.name.data,form.description.data,form.venue.data,copy.copy(current_user),
+            0,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            return redirect(url_for('home'))
+        except VenueCapacityException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
+        except ExistingEventException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
+    return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_seminar")
 
 @app.route("/more/<eventType>/<eventId>",methods=['GET','POST'])
 @login_required
@@ -113,7 +141,9 @@ def moreInfo(eventType,eventId):
 @login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     message = ''
     try:
@@ -169,7 +199,7 @@ def deregister_user(eventId):
     if isinstance(event,Seminar):
         ems.deregisterUserFromSeminar(eventId,current_user.get_id())
         for session in event.getSessions():
-            ems.deregisterUserFromSession(session.getId(),current_user.get_id())      
+            ems.deregisterUserFromSession(session.getId(),current_user.get_id())
             ems.removeRegisteredEvent(current_user.get_id(),session.getId())
     if isinstance(event,Session):
         ems.deregisterUserFromSession(eventId,current_user.get_id())
@@ -181,7 +211,7 @@ def deregister_user(eventId):
     return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
 
 @app.route('/edit_event/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def edit_event(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
@@ -201,11 +231,13 @@ def edit_event(eventType,eventId):
     return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/edit_session/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''
@@ -220,7 +252,7 @@ def edit_session(eventType,eventId):
     return render_template('edit_session.html',form=form,event=event,message=message)
 
 @app.route('/cancel_event/<eventType>/<eventId>',methods=['GET','POST'])
-@login_required        
+@login_required
 def cancel_event(eventType,eventId):
     eventId = int(eventId)
     ems.cancelEvent(eventId)
@@ -240,7 +272,7 @@ def create_venue():
     message = ''
     if form.validate_on_submit():
         try:
-            ems.addVenue(form.name.data,form.location.data,form.capacity.data) 
+            ems.addVenue(form.name.data,form.location.data,form.capacity.data)
             return redirect(url_for('view_venues'))
         except ExistingVenueException as errmsg:
             message = errmsg.args[1]
@@ -281,7 +313,7 @@ def reject_notification(path,id):
     id = int(id)
     notif = current_user.getNotification(id)
     event = ems.getEvent(notif.getEventId())
-    ems.cancelEvent(event.getId()) 
+    ems.cancelEvent(event.getId())
     current_user.deleteNotification(id)
     rejectNotification = DeletableNotification("{0} has rejected to be presenter at '{1}' session".format(current_user.getName(),event.getName()))
     convener = event.getConvener()
