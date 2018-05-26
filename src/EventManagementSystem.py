@@ -244,13 +244,25 @@ class EventManagementSystem():
         self.__guestManager.getUserById(userId) is not None:
             return True
         return False
+    def getUser(self, identifier):
+        try:
+            user = self.getUserById(identifier)
+            return user
+        except LoginException as errMsg:
+            try:
+                user = self.getUserByEmail(identifier)
+                return user
+            except LoginException as errMsg:
+                raise errMsg    
     def getUserByEmail(self,email):
         if self.__studentManager.getUserByEmail(email) is not None:
             return self.__studentManager.getUserByEmail(email)
         elif self.__staffManager.getUserByEmail(email) is not None:
             return self.__staffManager.getUserByEmail(email)
         elif self.__guestManager.getUserByEmail(email) is not None:
-            return self.__guestManager.getUserByEmail(email)       
+            return self.__guestManager.getUserByEmail(email)
+        else:
+            raise LoginException('User','Username does not exist')       
     def userEmailExists(self,userId):
         if self.__studentManager.getUserByEmail(userId) is not None or\
         self.__studentManager.getUserByEmail(userId) is not None or\

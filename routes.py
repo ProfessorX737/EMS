@@ -35,10 +35,10 @@ except OSError as e:
 @app.route('/',methods=['GET','POST'])
 def login():
     if (request.method == 'POST'):
-        zid = request.form.get('zid','')
+        userId = request.form.get('zid','')
         password = request.form.get('password','')
         try:
-            user = ems.getUserById(zid)
+            user = ems.getUser(userId)
             ems.checkPassword(user,password)
             login_user(user)
             # Store user type globally after user logs in so we can keep track if they are Staff or Student
