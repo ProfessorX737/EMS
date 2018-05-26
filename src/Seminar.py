@@ -17,6 +17,9 @@ class Seminar(Event):
 
     def getSession(self,sessionId):
         return self.__sessions.get(sessionId)
+
+    def getNumSessions(self):
+        return len(self.__sessions.values())
     
     def getClassName(self):
         return "Seminar"
@@ -25,6 +28,12 @@ class Seminar(Event):
         if id in self.__sessions:
             return True
         return False
+    
+    def getCapacity(self):
+        capacity = 0
+        for session in self.__sessions.values():
+            capacity = capacity + session.getCapacity()
+        return capacity
 
     def deleteSession(self, sessionId):
         if sessionId in self.__sessions:

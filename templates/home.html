@@ -11,6 +11,16 @@
                 <h2>
                     <a href="{{ url_for('moreInfo',eventType='Course',eventId=seminar.getId()) }}">{{seminar.getName()}}<br></a>
                 </h2>
+                {% if seminar.getNumSessions() > 0 %}
+                    Remaining Seats: <br>
+                    <ul>
+                    {% for session in seminar.getSessions() %}
+                        <li>{{session.getName()}} : {{session.getCapacity() - session.getNumAttendees()}}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                <i>Currently no sessions</i><br>
+                {% endif %}
                 Venue: {{seminar.getVenueName()}}<br>
                 Start: {{seminar.getStartDateTime()}}
             </div>
@@ -25,6 +35,7 @@
                 <h2>
                     <a href="{{ url_for('moreInfo',eventType='Course',eventId=course.getId()) }}">{{course.getName()}}<br></a>
                 </h2>
+                Remaining Seats: {{course.getCapacity() - course.getNumAttendees()}}<br>
                 Venue: {{course.getVenueName()}}<br>
                 Start: {{course.getStartDateTime()}}
             </div>
