@@ -141,7 +141,9 @@ def moreInfo(eventType,eventId):
 @login_required
 def create_session(seminarId):
     seminarId = int(seminarId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     message = ''
     try:
@@ -227,7 +229,9 @@ def edit_event(eventType,eventId):
 def edit_session(eventType,eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    presenters = ems.getGuests()
+    presenters = []
+    presenters.extend(ems.getGuests())
+    presenters.extend(ems.getStaff())
     form = CreateSessionForm(presenters)
     form.fillDefault(event)
     message=''
