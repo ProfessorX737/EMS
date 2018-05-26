@@ -16,4 +16,8 @@ class StaffManager(UserManager):
         return staff.getCancelledEvents()
     def addUser(self,name,zID,email,password,role):
         user = Staff(name,zID,email,password)
-        super().addUser(user)
+        try:
+            user = super().addUser(user)
+            return user
+        except UserExistsException as errMsg:
+            raise errMsg

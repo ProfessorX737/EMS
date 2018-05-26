@@ -19,7 +19,7 @@ class UserManager(ABC):
             raise UserExistsException("User","User with this email already exists")
         else:
             self.__users[user.get_id()] = user
-           return user
+        return user
     def getUserById(self,zid):
         if zid in self.__users:
             return self.__users.get(zid)

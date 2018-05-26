@@ -25,6 +25,12 @@ class EventManagementSystem():
         self.__guestManager = GuestManager()
         self.__venueManager = VenueManager()
 
+    def getStudentManager(self):
+        return self.__studentManager
+    def getStaffManager(self):
+        return self.__staffManager
+    def getGuestManager(self):
+        return self.__guestManager
 # ========== EventManager Methods ====================================================================
     def getEvents(self):
         events = []

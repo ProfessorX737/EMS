@@ -8,6 +8,11 @@ class GuestManager(UserManager):
         super().__init__()
     def addUser(self,name,zID,email,password,role):
         user = Guest(name,zID,email,password)
-        return super().addUser(user)
+        try:
+            print("ADDING USER")
+            user = super().addUser(user)
+            return user
+        except UserExistsException as errMsg:
+            raise errMsg
     def getUserType(self):
         return "Guest"
