@@ -249,8 +249,17 @@ def edit_session(eventType,eventId):
             message='new capacity must be >= current number of attendees'
             return render_template('edit_session.html',form=form,event=event,message=message)
         presenter = ems.getUserById(form.presenter.data)
-        ems.editSession(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
-        form.description.data,presenter,form.capacity.data)
+        try:
+            ems.editSession(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
+            form.description.data,presenter,form.capacity.data)
+        except VenueCapacityException as errmsg:
+                return render_template('edit_session.html',form=form,event=event,message=errmsg.args[1])
+        except ExistingEventException as errmsg:
+                return render_template('edit_session.html',form=form,event=event,message=errmsg.args[1])
+        except SessionDateTimeException as errmsg:
+                return render_template('edit_session.html',form=form,event=event,message=errmsg.args[1])
+        except OverlappingBookingException as errmsg:
+                return render_template('edit_session.html',form=form,event=event,message=errmsg.args[1])
         return redirect(url_for('home'))
     return render_template('edit_session.html',form=form,event=event,message=message)
 

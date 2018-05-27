@@ -18,6 +18,7 @@ from src.exceptions.SessionDateTimeException import *
 from src.exceptions.OverlappingBookingException import *
 from src.exceptions.InvalidEventDateException import *
 from src.Notification import *
+from src.Period import *
 import datetime
 
 class EventManagementSystem():
@@ -259,6 +260,23 @@ class EventManagementSystem():
         self.__guestManager.notifyRegistrees(eventId,notification) 
     
     def editSession(self,session,startDateTime,endDateTime,name,descr,presenter,capacity):
+        seminar = self.getEvent(session.getSeminarId())
+        venue = seminar.getVenue()
+        if (venue.getMaxCapacity() < capacity):
+            raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
+        if (startDateTime < seminar.getStartDateTime()):
+            raise SessionDateTimeException('StartDateTime', 'Session start date time must be >= seminar start date time')
+        if (endDateTime > seminar.getEndDateTime()):
+            raise SessionDateTimeException('EndDateTime', 'Session end date time must be <= seminar end date time')
+        oldStartDateTime = session.getStartDateTime()
+        oldEndDateTime = session.getEndDateTime()
+        session.setStartDateTime(startDateTime)
+        session.setEndDateTime(endDateTime)
+        if seminar.sessionPeriodOverlaps(session.getPeriod()):
+            session.setStartDateTime(oldStartDateTime)
+            session.setEndDateTime(oldEndDateTime)
+            raise OverlappingBookingException('Session', 'Session time overlaps with previous booking at this venue') 
+
         if session.getName() != name:
             changedNameNotification = DeletableNotification("'{0}' session was renamed '{1}'".format(session.getName(),name))
             self.notifyRegistrees(session.getId(),changedNameNotification)
@@ -279,8 +297,8 @@ class EventManagementSystem():
                 guestRequestNotification = AcceptRejectNotification("{0} has asked you to be the presenter to '{1}' session".format(session.getConvenerName(),name),session.getId())
                 presenter.addNotification(guestRequestNotification)
                 session.setIsPending(True)
-        session.setStartDateTime(startDateTime)
-        session.setEndDateTime(endDateTime)
+        # session.setStartDateTime(startDateTime)
+        # session.setEndDateTime(endDateTime)
         session.setName(name)
         session.setDescription(descr)
         session.setPresenter(presenter)
