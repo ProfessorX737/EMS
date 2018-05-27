@@ -3,6 +3,7 @@ from src.Guest import *
 from src.client import *
 import pytest
 
+# this file tests the underlying guest manager class that is used by the main event management system
 class TestGuestManagerForGuestRegistration(object):
     def setup_method(self):
         self.guestManager = bootstrap_system().getGuestManager()
