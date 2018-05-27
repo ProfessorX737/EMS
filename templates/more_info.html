@@ -11,7 +11,9 @@
 <h2> End of Early Bird prices: </h2>
 {{event.getEarlyBirdEnd()}}
 <h2> Description </h2>
-    {{event.getDescription()}}
+    <textarea rows="4" cols="50" readonly>
+        {{event.getDescription()}}
+    </textarea>
 <h2> Presenter </h2>
 {{event.getConvenerName()}}
 <h2> Venue </h2>
