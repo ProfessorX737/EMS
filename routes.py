@@ -211,11 +211,17 @@ def edit_event(eventType,eventId):
     form = CreateEventForm(venues)
     form.fillDefault(event)
     form.eventType.data = event.getClassName()
+    if isinstance(event,Seminar):
+        del form.capacity
     message=''
     if form.validate_on_submit():
         try:
-            ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
-            form.description.data,form.venue.data,form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            if isinstance(event,Seminar):
+                ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,form.name.data,\
+                form.description.data,form.venue.data,0,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
+            else:
+                ems.setEvent(event,form.startDateTime.data,form.endDateTime.data,form.name.data,form.description.data,\
+                form.venue.data,form.capacity.data,form.deregEnd.data,form.fee.data,form.earlybirdEnd.data)
             return redirect(url_for('home'))
         except VenueCapacityException as errmsg:
             return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
