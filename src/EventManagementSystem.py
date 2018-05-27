@@ -199,7 +199,7 @@ class EventManagementSystem():
         venue = seminar.getVenue()
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
-        if (startDateTime <= seminar.getStartDateTime()):
+        if (startDateTime < seminar.getStartDateTime()):
             raise SessionDateTimeException('StartDateTime', 'Session start date time > seminar start date time')
         if (endDateTime > seminar.getEndDateTime()):
             raise SessionDateTimeException('EndDateTime', 'Session end date time <= seminar end date time')
