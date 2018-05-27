@@ -16,6 +16,7 @@ from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
 from src.exceptions.SessionDateTimeException import *
 from src.exceptions.OverlappingBookingException import *
+from src.exceptions.InvalidEventDateException import *
 from src.Notification import *
 import datetime
 
@@ -161,13 +162,15 @@ class EventManagementSystem():
         course = Course(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         try:
             course.addPeriod()
+            if self.__courseManager.addCourse(course):
+                staff.addPostedCurrEvent(course)
+            else:
+                raise ExistingEventException('Course', 'Course with this name already exists')
+            return id
         except OverlappingBookingException as errMsg:
             raise errMsg
-        if self.__courseManager.addCourse(course):
-            staff.addPostedCurrEvent(course)
-        else:
-            raise ExistingEventException('Course', 'Course with this name already exists')
-        return id
+        except InvalidEventDateException as errMsg:
+            raise errMsg
 
     # adds a seminar to the seminar manager, returns the id generated for the new seminar
     def addSeminar(self,staff,startDateTime, endDateTime, name, descr, venueId, convener, capacity, deregEnd, fee, earlybirdEnd):
@@ -178,13 +181,15 @@ class EventManagementSystem():
         seminar = Seminar(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         try:
             seminar.addPeriod()
+            if self.__seminarManager.addSeminar(seminar):
+                staff.addPostedCurrEvent(seminar)
+            else:
+                raise ExistingEventException('Seminar', 'Seminar with this name already exists')
+            return id
         except OverlappingBookingException as errMsg:
             raise errMsg
-        if self.__seminarManager.addSeminar(seminar):
-            staff.addPostedCurrEvent(seminar)
-        else:
-            raise ExistingEventException('Seminar', 'Seminar with this name already exists')
-        return id
+        except InvalidEventDateException as errMsg:
+            raise errMsg
 
     # adds a session to a seminar in the seminar manager, returns the id generated for the session which is unique among\
     # courses and seminars

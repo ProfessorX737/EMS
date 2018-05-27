@@ -22,6 +22,7 @@ from src.exceptions.RegistrationException import *
 from src.exceptions.SessionDateTimeException import *
 from src.exceptions.OverlappingBookingException import *
 from src.exceptions.RegistrationException import *
+from src.exceptions.InvalidEventDateException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -110,6 +111,8 @@ def create_course():
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
         except OverlappingBookingException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
+        except InvalidEventDateException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_course")
 
 @app.route('/create_seminar',methods=['GET','POST'])
@@ -130,6 +133,8 @@ def create_seminar():
         except ExistingEventException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
         except OverlappingBookingException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
+        except InvalidEventDateException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_seminar")
 

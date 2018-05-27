@@ -1,5 +1,6 @@
 import datetime
 from src.Seminar import *
+from src.exceptions.InvalidEventDateException import *
 class EventManager:
     def __init__(self):
         self.__events = {}
@@ -46,6 +47,10 @@ class EventManager:
                 return True
         return False
     def addEvent(self, event):
+        print("start date time is ",event.getStartDateTime(),datetime.datetime.now())
+        if event.getStartDateTime() < datetime.datetime.now():
+            print("here")
+            raise InvalidEventDateException('StartDateTime','StartDateTime >= Current Date Time')
         if event.getId() not in self.__events and not self.containsEventName(event.getName()):
             self.__events[event.getId()] = event
             return True

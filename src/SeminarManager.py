@@ -1,11 +1,15 @@
 from src.EventManager import *
 from src.Seminar import *
 from src.Session import Session
+from src.exceptions.InvalidEventDateException import *
 class SeminarManager(EventManager):
     def __init__(self):
         super().__init__()
     def addSeminar(self,seminar):
-        return self.addEvent(seminar)
+        try:
+            return self.addEvent(seminar)
+        except InvalidEventDateException as errMsg:
+            raise errMsg
 
     def addSession(self,seminarId,session):
         seminar = self.getEvent(seminarId)
