@@ -8,7 +8,7 @@ from src.client import *
 from src.exceptions.RegistrationException import *
 import pytest
 
-class TestRegisterToEvent(object):
+class TestRegisterGuestToSeminar(object):
     def setup_method(self):
         self.system = bootstrap_system()
         # add some users
@@ -171,7 +171,7 @@ class TestRegisterToEvent(object):
         self.system.registerUser(self.pastEarlyBirdCurrSessionId, self.guestId2)
         assert self.system.getCost(self.pastEarlyBirdCurrSessionId, self.guestId2) == 2
 
-    def test_earybird_discount_as_guest(self):
+    def test_earlybird_discount_as_guest(self):
         # test for course
         course = self.system.getEvent(self.currCourseId)
         self.system.registerUser(self.currCourseId, self.guestId)
@@ -200,3 +200,5 @@ class TestRegisterToEvent(object):
         seminar = self.system.getEvent(self.currSessionId)
         self.system.registerUser(self.currSessionId, self.studentId2)
         assert self.system.getCost(self.currSeminarId, self.studentId2) == 0
+
+    

@@ -38,7 +38,6 @@ class Venue:
         return False
     def deletePeriod(self,periodId):
         if periodId in self._periods:
-            "deleting period id"
             del self._periods[periodId]
 
         

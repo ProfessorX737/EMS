@@ -7,7 +7,7 @@ from src.Period import *
 from src.exceptions.InvalidEventDateException import *
 import abc
 
-class Event:
+class Event():
     def __init__(self,eventId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
         self.__id = eventId
         self.__period = Period(startDateTime,endDateTime,eventId)
@@ -143,5 +143,4 @@ class Event:
     @abc.abstractmethod
     def getClassName(self):
         pass
-
     
