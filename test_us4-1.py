@@ -71,66 +71,66 @@ class TestRegisterToEvent(object):
         self.system.cancelEvent(self.cancelledSeminarId)
         self.system.cancelEvent(self.cancelledCourseId)
     
-    def test_invalid_registration_to_closed_event(self):
+    def test_invalid_registration_to_closed_event_as_guest(self):
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.pastCourseId,self.studentId)
+            self.system.registerUser(self.pastCourseId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.pastSessionId,self.studentId)
+            self.system.registerUser(self.pastSessionId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.pastSeminarId,self.studentId)
+            self.system.registerUser(self.pastSeminarId,self.guestId2)
 
-    def test_valid_reg_and_dereg_to_open_event(self):
+    def test_valid_reg_and_dereg_to_open_event_as_guest(self):
 
         course = self.system.getEvent(self.currCourseId)
         seminar = self.system.getEvent(self.currSeminarId)
         session = self.system.getEvent(self.currSessionId)
 
         # test that the user is registered after the registration
-        self.system.registerUser(self.currCourseId,self.studentId)
-        assert self.student.isRegistered(self.currCourseId) == True
-        self.system.registerUser(self.currSessionId,self.studentId)
-        assert self.student.isRegistered(self.currSessionId) == True
-        self.system.registerUser(self.currSeminarId,self.studentId)
+        self.system.registerUser(self.currCourseId,self.guestId2)
+        assert self.guest2.isRegistered(self.currCourseId) == True
+        self.system.registerUser(self.currSessionId,self.guestId2)
+        assert self.guest2.isRegistered(self.currSessionId) == True
+        self.system.registerUser(self.currSeminarId,self.guestId2)
             # testing valid registration to seminar when registered to a session
-        assert self.student.isRegistered(self.currSeminarId) == True
+        assert self.guest2.isRegistered(self.currSeminarId) == True
         # test that the events contain the user after registration
-        assert course.hasAttendee(self.studentId) == True
-        assert seminar.hasAttendee(self.studentId) == True
-        assert seminar.hasAttendee(self.studentId) == True
+        assert course.hasAttendee(self.guestId2) == True
+        assert seminar.hasAttendee(self.guestId2) == True
+        assert seminar.hasAttendee(self.guestId2) == True
 
         # test deregistration
-        self.system.deregisterUser(self.currCourseId,self.studentId)
-        self.system.deregisterUser(self.currSeminarId,self.studentId)
+        self.system.deregisterUser(self.currCourseId,self.guestId2)
+        self.system.deregisterUser(self.currSeminarId,self.guestId2)
         # test that the user is no longer registered after deregistration
-        assert self.student.isRegistered(self.currCourseId) == False
-        assert self.student.isRegistered(self.currSeminarId) == False
-        assert self.student.isRegistered(self.currSessionId) == False
+        assert self.guest2.isRegistered(self.currCourseId) == False
+        assert self.guest2.isRegistered(self.currSeminarId) == False
+        assert self.guest2.isRegistered(self.currSessionId) == False
         # test the events do not contain the user after registration
-        assert course.hasAttendee(self.studentId) == False
-        assert seminar.hasAttendee(self.studentId) == False
-        assert seminar.hasAttendee(self.studentId) == False
+        assert course.hasAttendee(self.guestId2) == False
+        assert seminar.hasAttendee(self.guestId2) == False
+        assert seminar.hasAttendee(self.guestId2) == False
 
-    def test_invalid_registration_to_cancelled_event(self):
+    def test_invalid_registration_to_cancelled_event_as_guest(self):
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.cancelledCourseId,self.studentId)
+            self.system.registerUser(self.cancelledCourseId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.cancelledSeminarId,self.studentId)
+            self.system.registerUser(self.cancelledSeminarId,self.guestId2)
 
-    def test_invalid_deregistration_after_deregEnd(self):
+    def test_invalid_deregistration_after_deregEnd_as_guest(self):
         
-        self.system.registerUser(self.pastDeregCurrCourseId,self.studentId)
-        self.system.registerUser(self.pastDeregCurrSessionId,self.studentId)
-        self.system.registerUser(self.pastDeregCurrSeminarId,self.studentId)
-        assert self.student.isRegistered(self.pastDeregCurrCourseId) == True
-        assert self.student.isRegistered(self.pastDeregCurrSessionId) == True
-        assert self.student.isRegistered(self.pastDeregCurrSeminarId) == True
+        self.system.registerUser(self.pastDeregCurrCourseId,self.guestId2)
+        self.system.registerUser(self.pastDeregCurrSessionId,self.guestId2)
+        self.system.registerUser(self.pastDeregCurrSeminarId,self.guestId2)
+        assert self.guest2.isRegistered(self.pastDeregCurrCourseId) == True
+        assert self.guest2.isRegistered(self.pastDeregCurrSessionId) == True
+        assert self.guest2.isRegistered(self.pastDeregCurrSeminarId) == True
 
         with pytest.raises(RegistrationException):
-            self.system.deregisterUser(self.pastDeregCurrCourseId,self.studentId)
+            self.system.deregisterUser(self.pastDeregCurrCourseId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.deregisterUser(self.pastDeregCurrSessionId,self.studentId)
+            self.system.deregisterUser(self.pastDeregCurrSessionId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.deregisterUser(self.pastDeregCurrSeminarId,self.studentId)
+            self.system.deregisterUser(self.pastDeregCurrSeminarId,self.guestId2)
         
     def test_invalid_registration_as_convener(self):
         with pytest.raises(RegistrationException):
@@ -138,11 +138,11 @@ class TestRegisterToEvent(object):
         with pytest.raises(RegistrationException):
             self.system.registerUser(self.currSessionId,self.staffId)
     
-    def test_invalid_registration_as_speaker(self):
+    def test_invalid_registration_as_speaker_guest(self):
         with pytest.raises(RegistrationException):
             self.system.registerUser(self.currSessionId,self.guestId)
 
-    def test_invalid_registration_to_full_event(self):
+    def test_invalid_registration_to_full_event_as_guest(self):
         # create full event
         startDateTime = create_period("2019-01-11 11:00") # future date
         endDateTime = create_period("2019-01-11 12:00")   # future date
@@ -153,13 +153,13 @@ class TestRegisterToEvent(object):
         self.fullSessionId = self.system.addSession(self.staff,self.fullSeminarId,startDateTime,endDateTime,"fullSessionId","desc",0,self.guest)
 
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.fullSessionId,self.studentId)
+            self.system.registerUser(self.fullSessionId,self.guestId2)
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.fullCourseId,self.studentId)
+            self.system.registerUser(self.fullCourseId,self.guestId2)
 
-    def test_invalid_registration_to_seminar_without_registering_to_a_session(self):
+    def test_invalid_registration_to_seminar_without_registering_to_a_session_as_guest(self):
         with pytest.raises(RegistrationException):
-            self.system.registerUser(self.currSeminarId, self.studentId)
+            self.system.registerUser(self.currSeminarId, self.guestId2)
     
     def test_total_registration_fee_is_applied_for_guest(self):
         # test for course
