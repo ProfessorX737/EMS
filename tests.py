@@ -238,6 +238,7 @@ class TestRegisterGuestToSeminar(object):
         pass
 
 
+# this class tests the guest registration for the main event management system. 
 class TestGuestRegistration(object):
     def setup_method(self):
         self.system = bootstrap_system()
@@ -287,7 +288,7 @@ class TestGuestRegistration(object):
         self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
         user = self.system.getUser("guestuser1")
         assert self.system.checkPassword(user,"pass") == True
-        
+
     def test_guest_user_should_not_be_able_to_login_after_invalid_registration_with_username(self):
         with pytest.raises(LoginException):    
             try:
@@ -312,6 +313,7 @@ class TestGuestRegistration(object):
                 self.system.checkPassword(user,"pass")
 
 
+# this file tests the underlying guest manager class that is used by the main event management system
 class TestGuestManagerForGuestRegistration(object):
     def setup_method(self):
         self.guestManager = bootstrap_system().getGuestManager()
