@@ -35,8 +35,6 @@ class Venue:
                 and p.getEndDateTime() >= period.getStartDateTime():
                 return True
         return False
-            # (StartA <= EndB) and (EndA >= StartB)
-
     def deletePeriod(self,periodId):
         if periodId in self._periods:
             del self._periods[periodId]
