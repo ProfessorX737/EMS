@@ -405,6 +405,8 @@ class EventManagementSystem():
         if isinstance(event,Seminar):
             for session in event.getSessions():
                 presenter = session.getPresenter()
+                deletedSeminarNotification = DeletableNotification("'{0}' seminar was cancelled".format(event.getName()))
+                presenter.addNotification(deletedSeminarNotification)
                 presenter.deleteSession(session.getId())
         convener = event.getConvener()
         if isinstance(event,Session):
