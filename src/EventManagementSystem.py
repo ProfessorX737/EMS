@@ -161,14 +161,14 @@ class EventManagementSystem():
         id = self.getUniqueEventId()
         course = Course(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         try:
-            course.addPeriod()
+            if venue.overlaps(course.getPeriod()):
+                raise OverlappingBookingException('Event', 'Overlapping booking time with previously booked event at this venue')
             if self.__courseManager.addCourse(course):
+                venue.addPeriod(course.getPeriod())
                 staff.addPostedCurrEvent(course)
             else:
                 raise ExistingEventException('Course', 'Course with this name already exists')
             return id
-        except OverlappingBookingException as errMsg:
-            raise errMsg
         except InvalidEventDateException as errMsg:
             raise errMsg
 
@@ -180,14 +180,14 @@ class EventManagementSystem():
         id = self.getUniqueEventId()
         seminar = Seminar(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
         try:
-            seminar.addPeriod()
+            if venue.overlaps(seminar.getPeriod()):
+                raise OverlappingBookingException('Event', 'Overlapping booking time with previously booked event at this venue')  
             if self.__seminarManager.addSeminar(seminar):
+                venue.addPeriod(seminar.getPeriod())
                 staff.addPostedCurrEvent(seminar)
             else:
                 raise ExistingEventException('Seminar', 'Seminar with this name already exists')
             return id
-        except OverlappingBookingException as errMsg:
-            raise errMsg
         except InvalidEventDateException as errMsg:
             raise errMsg
 
@@ -198,8 +198,8 @@ class EventManagementSystem():
         venue = seminar.getVenue()
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
-        if (startDateTime < seminar.getStartDateTime()):
-            raise SessionDateTimeException('StartDateTime', 'Session start date time >= seminar start date time')
+        if (startDateTime <= seminar.getStartDateTime()):
+            raise SessionDateTimeException('StartDateTime', 'Session start date time > seminar start date time')
         if (endDateTime > seminar.getEndDateTime()):
             raise SessionDateTimeException('EndDateTime', 'Session end date time <= seminar end date time')
         id = self.getUniqueEventId()
@@ -225,6 +225,8 @@ class EventManagementSystem():
     def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,capacity,deregEnd,fee,earlybirdEnd):
         oldEventName = event.getName()
         venue = self.__venueManager.getVenue(venueName)
+        if self.__courseManager.containsEventName(event.getId(),name):
+            raise ExistingEventException('Name','Event with this name already exists')
         try:
             event.setStartDateTime(startDateTime)
             event.setEndDateTime(endDateTime)
@@ -236,6 +238,10 @@ class EventManagementSystem():
             event.setFee(fee)
             event.setEarlyBirdEnd(earlybirdEnd)       
         except VenueCapacityException as errmsg:
+            raise errmsg
+        except OverlappingBookingException as errmsg:
+            raise errmsg
+        except InvalidEventDateException as errmsg:
             raise errmsg
         if(oldEventName != name):
             changedNameNotification = DeletableNotification("'{0}' event was renamed '{1}'".format(oldEventName,name))

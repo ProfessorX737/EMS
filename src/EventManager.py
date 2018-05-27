@@ -41,17 +41,22 @@ class EventManager:
             if not event.isOpen():
                 pastEvents.append(event)
                 currentEvents.remove(event)
-    def containsEventName(self,eventName):
+    def containsEventName(self,eventId,eventName):
         for e in self.getEvents():
-            if e.getName() == eventName and not e.isCancelled():
+            if e.getName() == eventName and not e.isCancelled() and e.getId() != eventId:
                 return True
         return False
     def addEvent(self, event):
-        if event.getStartDateTime() < datetime.datetime.now():
-            raise InvalidEventDateException('StartDateTime','StartDateTime >= Current Date Time')
-        if event.getId() not in self.__events and not self.containsEventName(event.getName()):
-            self.__events[event.getId()] = event
-            return True
+        if event.getStartDateTime() <= datetime.datetime.now():
+            raise InvalidEventDateException('StartDateTime','StartDateTime > Current Date Time')
+        if event.getDeregEnd() <= datetime.datetime.now():
+            raise InvalidEventDateException('Deregister period','deregister period > Current Date Time')
+        if event.getEarlyBirdEnd() <= datetime.datetime.now():
+            raise InvalidEventDateException('Early bird registration','Early bird registration > Current Date Time')        
+        if event.getId() not in self.__events:
+            if not self.containsEventName(event.getId(),event.getName()):
+                self.__events[event.getId()] = event
+                return True
         return False
     def deleteEvent(self,eventId):
         if eventId in self.__events:

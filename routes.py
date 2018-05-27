@@ -219,6 +219,12 @@ def edit_event(eventType,eventId):
             return redirect(url_for('home'))
         except VenueCapacityException as errmsg:
             return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
+        except ExistingEventException as errmsg:
+            return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
+        except OverlappingBookingException as errmsg:
+            return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
+        except InvalidEventDateException as errmsg:
+            return render_template('edit_event.html',form=form,event=event,message=errmsg.args[1])
     return render_template('edit_event.html',form=form,event=event,message=message)
 
 @app.route('/edit_session/<eventType>/<eventId>',methods=['GET','POST'])

@@ -31,12 +31,14 @@ class Venue:
         return False
     def overlaps(self,period):
         for p in self.getPeriods():
+            print(p)
             if p.getStartDateTime() <= period.getEndDateTime() \
                 and p.getEndDateTime() >= period.getStartDateTime():
                 return True
         return False
     def deletePeriod(self,periodId):
         if periodId in self._periods:
+            "deleting period id"
             del self._periods[periodId]
 
         

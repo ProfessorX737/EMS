@@ -4,6 +4,7 @@ from src.User import *
 from src.exceptions.VenueCapacityException import *
 from src.exceptions.OverlappingBookingException import *
 from src.Period import *
+from src.exceptions.InvalidEventDateException import *
 import abc
 
 class Event:
@@ -39,6 +40,8 @@ class Event:
     def setDescription(self, descr):
         self.__descr = descr
     def setStartDateTime(self, startDateTime):
+        if startDateTime <= datetime.datetime.now():
+            raise InvalidEventDateException('startDateTime','startdatetime > current date time')
         self.__period.setStartDateTime(startDateTime)
     def setEndDateTime(self, endDateTime):
         self.__period.setEndDateTime(endDateTime)
@@ -109,12 +112,21 @@ class Event:
         else:
             self.__capacity = capacity
     def setDeregEnd(self,deregEnd):
+        if deregEnd <= datetime.datetime.now():
+            raise InvalidEventDateException('Deregister period','Deregister period > current date time')
         self.__deregEnd = deregEnd
     def setVenue(self, venue):
+        self.__venue.deletePeriod(self.__period.getId())
+        if venue.overlaps(self.__period):
+            raise OverlappingBookingException('Event', 'Overlapping booking time with previously booked event at this venue')
+        venue.addPeriod(self.__period)
         self.__venue = venue
+
     def setConvener(self, convenerName):
         self.__convener = convenerName
     def setEarlyBirdEnd(self, earlybirdEnd):
+        if earlybirdEnd <= datetime.datetime.now():
+            raise InvalidEventDateException('Early bird registration','Earlybird registration > current date time')
         self.__earlybirdEnd = earlybirdEnd
     def setFee(self,fee):
         self.__fee = fee
@@ -131,9 +143,5 @@ class Event:
     @abc.abstractmethod
     def getClassName(self):
         pass
-
-    def addPeriod(self):
-        if not self.__venue.addPeriod(self.__period):
-            raise OverlappingBookingException('Event', 'Overlapping booking time with previously booked event at this venue')
 
     
