@@ -64,11 +64,14 @@ class Event:
             return False
         else:
             return True
+    def isPastDeregEnd(self):
+        if self.getDeregEnd() < datetime.datetime.now():
+            return True
+        return False
     def isFull(self):
         if len(self.__attendees.values()) >= self.getCapacity():
             return True
         return False
-    
     def getId(self):
         return self.__id
     def getConvener(self):
