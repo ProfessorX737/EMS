@@ -91,7 +91,7 @@ def create_event():
             return redirect(url_for('create_course'))
         elif form.makeSeminar.data == True:
             return redirect(url_for('create_seminar'))
-    return render_template('select_event.html',form=form)
+    return render_template('select_event.html',form=form,userType=userType)
 
 @app.route('/create_course',methods=['GET','POST'])
 @login_required
