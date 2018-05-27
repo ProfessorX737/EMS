@@ -57,3 +57,10 @@ class Seminar(Event):
             if s.getPresenterId() == userId:
                 return True
         return False
+
+    def sessionPeriodOverlaps(self,period):
+        for s in self.getSessions():
+            if s.getStartDateTime() <= period.getEndDateTime() \
+                and s.getEndDateTime() >= period.getStartDateTime():
+                return True
+        return False

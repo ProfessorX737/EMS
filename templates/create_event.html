@@ -68,7 +68,7 @@
             <tr>
                 <td>{{ form.fee.label }}:</td>
                 <td>{{ form.fee}}</td>
-                {% if form.capacity.errors %}
+                {% if form.fee.errors %}
                 <td class="errors">{% for error in form.fee.errors %} {{error}} {% endfor %}</td>
                 {% endif %}
             </tr>               

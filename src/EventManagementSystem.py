@@ -14,6 +14,8 @@ from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
+from src.exceptions.SessionDateTimeException import *
+from src.exceptions.OverlappingBookingException import *
 from src.Notification import *
 import datetime
 
@@ -157,6 +159,10 @@ class EventManagementSystem():
             raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         id = self.getUniqueEventId()
         course = Course(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
+        try:
+            course.addPeriod()
+        except OverlappingBookingException as errMsg:
+            raise errMsg
         if self.__courseManager.addCourse(course):
             staff.addPostedCurrEvent(course)
         else:
@@ -170,6 +176,10 @@ class EventManagementSystem():
             raise VenueCapacityException('Capacity','Venue Capacity is less than event capacity')
         id = self.getUniqueEventId()
         seminar = Seminar(id,startDateTime, endDateTime, name, descr, venue, convener, capacity, deregEnd, fee, earlybirdEnd)
+        try:
+            seminar.addPeriod()
+        except OverlappingBookingException as errMsg:
+            raise errMsg
         if self.__seminarManager.addSeminar(seminar):
             staff.addPostedCurrEvent(seminar)
         else:
@@ -183,9 +193,15 @@ class EventManagementSystem():
         venue = seminar.getVenue()
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
+        if (startDateTime < seminar.getStartDateTime()):
+            raise SessionDateTimeException('StartDateTime', 'Session start date time >= seminar start date time')
+        if (endDateTime > seminar.getEndDateTime()):
+            raise SessionDateTimeException('EndDateTime', 'Session end date time <= seminar end date time')
         id = self.getUniqueEventId()
         session = Session(seminarId,id,startDateTime,endDateTime,name,descr,seminar.getVenue(),\
         seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter,seminar.getFee(),seminar.getEarlyBirdEnd())
+        if seminar.sessionPeriodOverlaps(session.getPeriod()):
+            raise OverlappingBookingException('Session', 'Session time overlaps with previous booking at this venue') 
         if not self.__seminarManager.addSession(seminarId,session):
             raise ExistingEventException('Session', 'Session in this seminar, with this name already exists')
         staff.addPostedCurrEvent(session)

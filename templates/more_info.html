@@ -2,6 +2,7 @@
 {% block body %}
 
 <h1>{{event.getName()}}</h1>
+<td class="error"> {% if message %} {{message}} {% endif %}</td>
 <h2> Start: </h2>
 {{event.getStartDateTime()}}
 <h2> End: </h2>
@@ -11,7 +12,9 @@
 <h2> End of Early Bird prices: </h2>
 {{event.getEarlyBirdEnd()}}
 <h2> Description </h2>
-    {{event.getDescription()}}
+    <textarea rows="4" cols="50" readonly>
+        {{event.getDescription()}}
+    </textarea>
 <h2> Presenter </h2>
 {{event.getConvenerName()}}
 <h2> Venue </h2>

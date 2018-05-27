@@ -19,6 +19,9 @@ from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
+from src.exceptions.SessionDateTimeException import *
+from src.exceptions.OverlappingBookingException import *
+from src.exceptions.RegistrationException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -105,6 +108,8 @@ def create_course():
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
         except ExistingEventException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
+        except OverlappingBookingException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_course")
 
 @app.route('/create_seminar',methods=['GET','POST'])
@@ -123,6 +128,8 @@ def create_seminar():
         except VenueCapacityException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
         except ExistingEventException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
+        except OverlappingBookingException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_seminar")
 
@@ -156,6 +163,10 @@ def create_session(seminarId):
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     except ExistingEventException as errmsg:
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    except SessionDateTimeException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    except OverlappingBookingException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType,message=message)
 
 @app.route('/register/<eventId>',methods=['GET','POST'])
@@ -166,20 +177,24 @@ def register_user(eventId):
     try:
         ems.registerUser(eventId,current_user.get_id())
     except RegistrationException as errmsg:
-        return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg=errmsg.args[1])
+        return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,message=errmsg.args[1])
     if isinstance(event,Session):
-        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId(),message=None))
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId,message=None))
 
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
 @login_required
 def deregister_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    ems.deregisterUser(eventId,current_user.get_id())
+    try:
+        ems.deregisterUser(eventId,current_user.get_id())
+    except RegistrationException as errmsg:
+        print("here error message is ",errmsg.args)
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId,message=errmsg.args[1]))
     if isinstance(event,Session):
-        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId(),message=None))
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId, message=None))
 
 @app.route('/edit_event/<eventType>/<eventId>',methods=['GET','POST'])
 @login_required

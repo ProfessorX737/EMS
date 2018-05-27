@@ -9,7 +9,6 @@ class GuestManager(UserManager):
     def addUser(self,name,zID,email,password,role):
         user = Guest(name,zID,email,password)
         try:
-            print("ADDING USER")
             user = super().addUser(user)
             return user
         except UserExistsException as errMsg:
