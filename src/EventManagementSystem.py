@@ -14,6 +14,7 @@ from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
+from src.exceptions.SessionDateTimeException import *
 from src.Notification import *
 import datetime
 
@@ -183,6 +184,10 @@ class EventManagementSystem():
         venue = seminar.getVenue()
         if (venue.getMaxCapacity() < capacity):
             raise VenueCapacityException('Capacity','Venue Capacity is less than session capacity')
+        if (startDateTime < seminar.getStartDateTime()):
+            raise SessionDateTimeException('StartDateTime', 'Session start date time >= seminar start date time')
+        if (endDateTime > seminar.getEndDateTime()):
+            raise SessionDateTimeException('EndDateTime', 'Session end date time <= seminar end date time')
         id = self.getUniqueEventId()
         session = Session(seminarId,id,startDateTime,endDateTime,name,descr,seminar.getVenue(),\
         seminar.getConvener(),capacity,seminar.getDeregEnd(),presenter,seminar.getFee(),seminar.getEarlyBirdEnd())
