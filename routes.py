@@ -19,6 +19,7 @@ from src.exceptions.ExistingEventException import *
 from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
+from src.exceptions.SessionDateTimeException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -155,6 +156,8 @@ def create_session(seminarId):
     except VenueCapacityException as errmsg:
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     except ExistingEventException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    except SessionDateTimeException as errmsg:
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType,message=message)
 
