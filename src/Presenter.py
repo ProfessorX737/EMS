@@ -10,5 +10,12 @@ class Presenter(User):
         if sessionId in self.__sessions:
             return self.__sessions[sessionId]
         return None
+    def isPresenter(self,sessionId):
+        if sessionId in self.__sessions:
+            return True
+        return False
     def getSessions(self):
         return self.__sessions.values()
+    def deleteSession(self,sessionId):
+        if sessionId in self.__sessions:
+            del self.__sessions[sessionId]
