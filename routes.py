@@ -20,6 +20,7 @@ from src.exceptions.ExistingVenueException import *
 from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
 from src.exceptions.SessionDateTimeException import *
+from src.exceptions.OverlappingBookingException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -106,6 +107,8 @@ def create_course():
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
         except ExistingEventException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
+        except OverlappingBookingException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_course")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_course")
 
 @app.route('/create_seminar',methods=['GET','POST'])
@@ -124,6 +127,8 @@ def create_seminar():
         except VenueCapacityException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
         except ExistingEventException as errmsg:
+            return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
+        except OverlappingBookingException as errmsg:
             return render_template('create_event.html', form = form, userType=userType, message=errmsg.args[1], action="/create_seminar")
     return render_template('create_event.html', form = form, userType=userType, message=message, action="/create_seminar")
 
@@ -158,6 +163,8 @@ def create_session(seminarId):
     except ExistingEventException as errmsg:
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     except SessionDateTimeException as errmsg:
+            return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
+    except OverlappingBookingException as errmsg:
             return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType, message=errmsg.args[1])
     return render_template('create_session.html',seminarId=seminarId,form=form,userType=userType,message=message)
 

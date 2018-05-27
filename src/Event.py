@@ -2,13 +2,13 @@ import datetime
 from src.Period import *
 from src.User import *
 from src.exceptions.VenueCapacityException import *
+from src.exceptions.OverlappingBookingException import *
 from src.Period import *
 import abc
 
 class Event:
     def __init__(self,eventId,startDateTime,endDateTime,name,descr,venue,convener,capacity,deregEnd,fee,earlybirdEnd):
         self.__id = eventId
-        # self.__periodId = periodId
         self.__period = Period(startDateTime,endDateTime,eventId)
         self.__venue = venue
         self.__convener = convener
@@ -18,11 +18,9 @@ class Event:
         self.__attendees = {}
         self.__name = name                     # String
         self.__descr = descr                   # String
-        # self.__startDateTime = startDateTime   # datetime
-        # self.__endDateTime = endDateTime       # datetime
         self.__fee = fee
         self.__earlybirdEnd = earlybirdEnd
-        venue.addPeriod(self.__period)
+
 
     def getName(self):
         return self.__name
@@ -34,6 +32,8 @@ class Event:
         return self.__period.getEndDateTime()
     def getPeriodId(self):
         return self.__period.getId()
+    def getPeriod(self):
+        return self.__period
     def setName(self, name):
         self.__name = name
     def setDescription(self, descr):
@@ -132,5 +132,8 @@ class Event:
     def getClassName(self):
         pass
 
+    def addPeriod(self):
+        if not self.__venue.addPeriod(self.__period):
+            raise OverlappingBookingException('Event', 'Overlapping booking time with previously booked event at this venue')
 
     

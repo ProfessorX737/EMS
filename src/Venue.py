@@ -25,10 +25,18 @@ class Venue:
     def getPeriods(self):
         return self._periods.values()
     def addPeriod(self,period):
-        if period.getId() not in self._periods:
+        if period.getId() not in self._periods and not self.overlaps(period):
             self._periods[period.getId()] = period
             return True
         return False
+    def overlaps(self,period):
+        for p in self.getPeriods():
+            if p.getStartDateTime() <= period.getEndDateTime() \
+                and p.getEndDateTime() >= period.getStartDateTime():
+                return True
+        return False
+            # (StartA <= EndB) and (EndA >= StartB)
+
     def deletePeriod(self,periodId):
         if periodId in self._periods:
             del self._periods[periodId]
