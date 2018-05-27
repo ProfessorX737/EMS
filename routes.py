@@ -177,10 +177,10 @@ def register_user(eventId):
     try:
         ems.registerUser(eventId,current_user.get_id())
     except RegistrationException as errmsg:
-        return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,regErrorMsg=errmsg.args[1])
+        return render_template('more_info.html',isOwner=isOwner,event=event,userType=userType,message=errmsg.args[1])
     if isinstance(event,Session):
-        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId(),message=None))
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId,message=None))
 
 @app.route('/deregister/<eventId>',methods=['GET','POST'])
 @login_required
@@ -190,6 +190,7 @@ def deregister_user(eventId):
     try:
         ems.deregisterUser(eventId,current_user.get_id())
     except RegistrationException as errmsg:
+        print("here error message is ",errmsg.args)
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId,message=errmsg.args[1]))
     if isinstance(event,Session):
         return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId(),message=None))
