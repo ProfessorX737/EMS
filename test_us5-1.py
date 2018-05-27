@@ -52,17 +52,23 @@ class TestGuestRegistration(object):
         self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
         user = self.system.getUser("guestuser1")
         assert self.system.checkPassword(user,"pass") == True
-    def test_guest_user_should_not_be_able_to_login_after_invalid_registration_with_username(self)
+    def test_guest_user_should_not_be_able_to_login_after_invalid_registration_with_username(self):
         with pytest.raises(LoginException):    
-            self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
-            user = self.system.getUser("guestuser1")
-            self.system.checkPassword(user,"pass")
+            try:
+                self.system.addUser("full name","guestuser","test2@mail.com","pass","guest")  
+                self.system.addUser("full name","guestuser1","test2@mail.com","pass","guest")
+            except UserExistsException:
+                user = self.system.getUser("guestuser1")
+                self.system.checkPassword(user,"pass")
     def test_guest_user_should_be_able_to_login_after_valid_registration_with_email(self):
         self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
         user = self.system.getUser("test1@mail.com")
         assert self.system.checkPassword(user,"pass") == True
     def test_guest_user_should_not_be_able_to_login_after_invalid_registration_with_email(self):
-        with pytest.raises(LoginException):    
-            self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
-            user = self.system.getUser("test1@mail.com")
-            self.system.checkPassword(user,"pass")
+        with pytest.raises(LoginException):  
+            try:
+                self.system.addUser("full name","guestuser1","test2@mail.com","pass","guest")  
+                self.system.addUser("full name","guestuser1","test1@mail.com","pass","guest")
+            except UserExistsException:
+                user = self.system.getUser("test1@mail.com")
+                self.system.checkPassword(user,"pass")
