@@ -375,6 +375,10 @@ class EventManagementSystem():
         self.__guestManager.cancelEvent(eventId)
         self.__courseManager.cancelEvent(eventId)
         self.__seminarManager.cancelEvent(eventId)
+        if isinstance(event,Seminar):
+            for session in event.getSessions():
+                presenter = session.getPresenter()
+                presenter.deleteSession(session.getId())
         convener = event.getConvener()
         if isinstance(event,Session):
             convener.deletePostedEvent(eventId)
