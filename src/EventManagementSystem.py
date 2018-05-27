@@ -225,8 +225,12 @@ class EventManagementSystem():
     def setEvent(self,event,startDateTime,endDateTime,name,descr,venueName,capacity,deregEnd,fee,earlybirdEnd):
         oldEventName = event.getName()
         venue = self.__venueManager.getVenue(venueName)
-        if self.__courseManager.containsEventName(event.getId(),name):
-            raise ExistingEventException('Name','Event with this name already exists')
+        if isinstance(event,Course):
+            if self.__courseManager.containsEventName(event.getId(),name):
+                raise ExistingEventException('Name','Event with this name already exists')
+        elif isinstance(event,Seminar):
+            if self.__seminarManager.containsEventName(event.getId(),name):
+                raise ExistingEventException('Name','Event with this name already exists')
         try:
             event.setStartDateTime(startDateTime)
             event.setEndDateTime(endDateTime)
