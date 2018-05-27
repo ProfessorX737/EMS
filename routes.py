@@ -21,6 +21,7 @@ from src.exceptions.UserExistsException import *
 from src.exceptions.RegistrationException import *
 from src.exceptions.SessionDateTimeException import *
 from src.exceptions.OverlappingBookingException import *
+from src.exceptions.RegistrationException import *
 from Server import app, ems, loadUser
 from urllib.parse import quote_plus, unquote_plus
 app.jinja_env.filters['quote_plus'] = quote_plus
@@ -186,10 +187,13 @@ def register_user(eventId):
 def deregister_user(eventId):
     eventId = int(eventId)
     event = ems.getEvent(eventId)
-    ems.deregisterUser(eventId,current_user.get_id())
+    try:
+        ems.deregisterUser(eventId,current_user.get_id())
+    except RegistrationException as errmsg:
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId,message=errmsg.args[1]))
     if isinstance(event,Session):
-        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId()))
-    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId))
+        return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=event.getSeminarId(),message=None))
+    return redirect(url_for('moreInfo',eventType=event.getClassName(),eventId=eventId, message=None))
 
 @app.route('/edit_event/<eventType>/<eventId>',methods=['GET','POST'])
 @login_required
