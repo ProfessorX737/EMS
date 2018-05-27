@@ -11,9 +11,7 @@
         Capacity: {{venue.getMaxCapacity()}}</br>
         {% if userType == 'Staff' %}
             {% if venue.getPeriods() %}
-                {% for period in venue.getPeriods() %}
-                    {{period.getId()}}
-                {% endfor %}
+
             {% else %}
                 <form method="post" action="{{ url_for('delete_venue',venueId=venue.getId()) }}">
                     <p><input type="submit" value="Remove Venue"></p>
